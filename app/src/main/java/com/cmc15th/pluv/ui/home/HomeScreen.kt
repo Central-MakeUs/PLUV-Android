@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
@@ -27,6 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +39,55 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.cmc15th.pluv.R
+
+@Composable
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+) {
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val playlistItems = listOf(
+        "https://picsum.photos/140",
+        "https://picsum.photos/140",
+        "https://picsum.photos/140",
+        "https://picsum.photos/140",
+        "https://picsum.photos/140",
+    )
+
+    Column(
+        modifier = modifier.verticalScroll(scrollState)
+    ) {
+        Text(
+            text = stringResource(id = R.string.app_name),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = colorResource(id = R.color.app_logo_color)
+        )
+        Spacer(modifier = Modifier.size(19.dp))
+        MigrationMethodColumn(
+            modifier = Modifier
+                .fillMaxWidth(),
+            onDirectClick = {},
+            onScreenShotClick = {}
+        )
+        Spacer(modifier = Modifier.size(50.dp))
+        PlayListRowArea(
+            context = context,
+            title = R.string.migrated_play_list,
+            playlistItems = playlistItems,
+            modifier = Modifier.fillMaxWidth(),
+            onAddClick = {}
+        )
+        Spacer(modifier = Modifier.size(45.dp))
+        PlayListRowArea(
+            context = context,
+            title = R.string.saved_play_list,
+            playlistItems = playlistItems,
+            modifier = Modifier.fillMaxWidth(),
+            onAddClick = {}
+        )
+    }
+}
 
 @Composable
 fun PlayListRowArea(
