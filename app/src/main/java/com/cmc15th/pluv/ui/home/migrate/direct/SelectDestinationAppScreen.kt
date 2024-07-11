@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
-import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiState.PlayListApp
+import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.ui.home.getAppNameRes
+import com.cmc15th.pluv.ui.home.getSelectedIconRes
 
 @Composable
 fun SelectDestinationAppScreen(
@@ -76,49 +78,18 @@ fun SelectedAppItem(
         verticalArrangement = Arrangement.Center
     ) {
         Icon(
-            painter = painterResource(id = playListApp.selectedIcon),
-            contentDescription = "${playListApp.appName} selectedIcon",
+            painter = painterResource(id = playListApp.getSelectedIconRes()),
+            contentDescription = "${playListApp.name} selectedIcon",
             tint = Color.Unspecified,
             modifier = Modifier.size(88.dp)
         )
         Spacer(modifier = Modifier.size(7.dp))
         Text(
-            text = stringResource(id = playListApp.appName),
+            text = stringResource(id = playListApp.getAppNameRes()),
             fontSize = 14.sp,
             color = colorResource(id = R.color.sub_title_gray_color)
         )
     }
-//    Column(
-//        modifier = modifier,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Box(
-//            modifier = Modifier
-//                .size(88.dp)
-//                .background(Color.Blue, RoundedCornerShape(24.dp)),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            Box(
-//                modifier = Modifier
-//                    .size(74.dp)
-//                    .background(Color.Gray, RoundedCornerShape(19.dp)),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Icon(
-//                    painter = painterResource(id = playListApp.appIcon),
-//                    contentDescription = "${playListApp.appName} icon",
-//                    tint = Color.Unspecified, // Use original icon colors
-//                    modifier = Modifier
-//                        .size(60.dp)
-//                )
-//            }
-//        }
-//        Spacer(modifier = Modifier.size(6.dp))
-//        Text(
-//            text = stringResource(id = playListApp.appName),
-//            fontSize = 14.sp
-//        )
-//    }
 }
 
 

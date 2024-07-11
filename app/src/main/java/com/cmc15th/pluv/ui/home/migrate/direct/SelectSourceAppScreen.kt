@@ -25,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
-import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiState.PlayListApp
+import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.ui.home.getAppIconRes
+import com.cmc15th.pluv.ui.home.getAppNameRes
 
 @Composable
 fun SelectSourceAppScreen(
@@ -67,7 +69,8 @@ fun SelectAppColumn(
     ) {
         items(playListApps) { appItem ->
             SelectAppItem(
-                playListApp = appItem,
+                appLogo = appItem.getAppIconRes(),
+                appName = appItem.getAppNameRes(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 36.dp, vertical = 20.dp)
@@ -79,7 +82,8 @@ fun SelectAppColumn(
 
 @Composable
 fun SelectAppItem(
-    playListApp: PlayListApp,
+    appLogo: Int,
+    appName: Int,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -87,15 +91,15 @@ fun SelectAppItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = playListApp.appIcon),
-            contentDescription = "${playListApp.appName} icon",
+            painter = painterResource(id = appLogo),
+            contentDescription = "$appName icon",
             tint = Color.Unspecified,
             modifier = Modifier
                 .size(60.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
-            text = stringResource(id = playListApp.appName),
+            text = stringResource(id = appName),
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
         )
