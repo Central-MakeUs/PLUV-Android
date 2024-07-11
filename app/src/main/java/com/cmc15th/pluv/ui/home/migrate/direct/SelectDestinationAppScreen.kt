@@ -52,7 +52,7 @@ fun SelectDestinationAppScreen(
         SelectAppColumn(
             playListApps = state.value.destinationApps,
             onClick = {
-                viewModel.setSelectedDestinationApp(it)
+                viewModel.setEvent(DirectMigrationUiEvent.SelectDestinationApp(it))
                 navigateToExecute()
             }
         )

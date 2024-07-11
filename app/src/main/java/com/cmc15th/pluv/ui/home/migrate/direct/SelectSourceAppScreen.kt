@@ -51,7 +51,7 @@ fun SelectSourceAppScreen(
                 .fillMaxWidth()
                 .wrapContentHeight(),
             onClick = {
-                viewModel.setSelectedSourceApp(it)
+                viewModel.setEvent(DirectMigrationUiEvent.SelectSourceApp(it))
                 navigateToDestination()
             }
         )
