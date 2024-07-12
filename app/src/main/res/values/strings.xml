@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">PLUV</string>
+    <string name="email_login">이메일로 로그인하기</string>
+    <string name="kakao_login">카카오로 로그인하기</string>
+    <string name="migration_direct">직접 옮기기</string>
+    <string name="migration_screenshot">스크린샷으로 옮기기</string>
+    <string name="migrated_play_list">옮긴 플레이리스트</string>
+    <string name="show_more">더보기</string>
+    <string name="saved_play_list">저장한 플레이리스트</string>
+    <string name="select_source_app">어디에서\n\플레이리스트를 불러올까요?</string>
+    <string name="ask_migrate_playlist">플레이리스트를 옮길까요?</string>
+    <string name="spotify">스포티파이</string>
+    <string name="apple_music">애플뮤직</string>
+    <string name="youtube_music">유튜브뮤직</string>
+    <string name="empty" />
+    <string name="melon">멜론</string>
+    <string name="destiniation_app_name">%s으로</string>
 </resources>
