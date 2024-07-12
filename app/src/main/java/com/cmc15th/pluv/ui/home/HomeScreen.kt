@@ -43,6 +43,7 @@ import com.cmc15th.pluv.R
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    navigateToDirectMigration: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -69,7 +70,9 @@ fun HomeScreen(
         MigrationMethodColumn(
             modifier = Modifier
                 .fillMaxWidth(),
-            onDirectClick = {},
+            onDirectClick = {
+                navigateToDirectMigration()
+            },
             onScreenShotClick = {}
         )
         Spacer(modifier = Modifier.size(50.dp))
