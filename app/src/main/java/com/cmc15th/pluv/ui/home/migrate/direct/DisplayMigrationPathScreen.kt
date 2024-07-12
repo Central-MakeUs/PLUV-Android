@@ -28,7 +28,7 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.ui.home.getAppNameRes
 
 @Composable
-fun ExecuteMigrationScreen(
+fun DisplayMigrationPathScreen(
     modifier: Modifier = Modifier,
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectPlaylist: () -> Unit
@@ -67,7 +67,10 @@ fun ExecuteMigrationScreen(
                 .fillMaxWidth()
                 .padding(bottom = 42.dp)
                 .height(58.dp),
-            onClick = { navigateToSelectPlaylist() }
+            onClick = {
+                viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+                navigateToSelectPlaylist()
+            }
         )
     }
 }

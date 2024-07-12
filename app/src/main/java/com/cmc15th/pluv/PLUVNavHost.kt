@@ -30,7 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
 import com.cmc15th.pluv.ui.home.HomeScreen
-import com.cmc15th.pluv.ui.home.migrate.direct.ExecuteMigrationScreen
+import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectDestinationAppScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigratePlaylistScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectSourceAppScreen
@@ -90,7 +90,7 @@ fun PLUVNavHost(
                     Column {
                         TopBarWithProgress(navController = navController)
                         Spacer(modifier = Modifier.height(28.dp))
-                        ExecuteMigrationScreen(
+                        DisplayMigrationPathScreen(
                             viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
                             navigateToSelectPlaylist = {
                                 navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
