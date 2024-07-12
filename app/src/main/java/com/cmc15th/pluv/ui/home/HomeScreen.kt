@@ -55,7 +55,9 @@ fun HomeScreen(
     )
 
     Column(
-        modifier = modifier.verticalScroll(scrollState)
+        modifier = modifier
+            .padding(24.dp)
+            .verticalScroll(scrollState)
     ) {
         Text(
             text = stringResource(id = R.string.app_name),
@@ -203,7 +205,7 @@ fun MigrationMethodItem(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.height(80.dp),
+        modifier = modifier.height(108.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Box(
@@ -219,19 +221,20 @@ fun MigrationMethodItem(
                     .fillMaxWidth()
                     .padding(horizontal = 18.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(start = 20.dp)
                 ) {
-                    Icon(
-                        painterResource(id = R.drawable.grayplaceholder),
-                        contentDescription = null,
-                        modifier = Modifier.size(30.dp)
-                    )
                     Text(
                         text = stringResource(id = text),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(start = 13.dp)
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Spacer(modifier = Modifier.size(12.dp))
+                    Text(
+                        text = "음원 스트리밍 서비스 연동",
+                        fontSize = 14.sp,
+                        color = colorResource(id = R.color.sub_title_gray_color)
                     )
                 }
                 Icon(
