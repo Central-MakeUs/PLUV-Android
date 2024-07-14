@@ -1,4 +1,4 @@
-package com.cmc15th.pluv.ui.theme
+package com.cmc15th.pluv.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
