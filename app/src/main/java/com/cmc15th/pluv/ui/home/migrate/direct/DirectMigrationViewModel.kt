@@ -21,9 +21,13 @@ class DirectMigrationViewModel @Inject constructor(): ViewModel() {
 
     private val _uiEvent: MutableSharedFlow<DirectMigrationUiEvent> = MutableSharedFlow()
 
+    private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
+    val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
+
     init {
         subscribeEvents()
     }
+
     fun setEvent(event: DirectMigrationUiEvent) {
         viewModelScope.launch {
             _uiEvent.emit(event)
