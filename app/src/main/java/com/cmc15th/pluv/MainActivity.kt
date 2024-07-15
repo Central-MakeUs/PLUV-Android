@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.cmc15th.pluv.ui.theme.PLUVTheme
+import com.cmc15th.pluv.core.designsystem.theme.PLUVTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
