@@ -54,6 +54,12 @@ android {
 
 dependencies {
 
+    // retrofit2 + okhttp3
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
     // coil
     implementation(libs.coil.compose)
     // hilt
