@@ -34,6 +34,7 @@ import com.cmc15th.pluv.ui.home.migrate.component.FetchPlaylistLoadingIcon
 fun DisplayMigrationPathScreen(
     modifier: Modifier = Modifier,
     viewModel: DirectMigrationViewModel = hiltViewModel(),
+    navigateToSelectDestinationApp: () -> Unit,
     navigateToSelectPlaylist: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState()

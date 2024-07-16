@@ -33,7 +33,7 @@ import com.cmc15th.pluv.ui.home.getAppNameRes
 fun SelectSourceAppScreen(
     modifier: Modifier = Modifier,
     viewModel: DirectMigrationViewModel = hiltViewModel(),
-    navigateToDestination: () -> Unit
+    navigateToSelectDestinationApp: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState()
     Column(
@@ -52,7 +52,7 @@ fun SelectSourceAppScreen(
                 .wrapContentHeight(),
             onClick = {
                 viewModel.setEvent(DirectMigrationUiEvent.SelectSourceApp(it))
-                navigateToDestination()
+                navigateToSelectDestinationApp()
             }
         )
         Spacer(modifier = Modifier.weight(1f))

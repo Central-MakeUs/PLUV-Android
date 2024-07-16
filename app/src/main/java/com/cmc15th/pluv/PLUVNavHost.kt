@@ -39,6 +39,7 @@ import com.cmc15th.pluv.ui.home.migrate.direct.SelectSourceAppScreen
 fun PLUVNavHost(
     navController: NavHostController
 ) {
+
     NavHost(
         navController = navController,
         startDestination = DestinationScreens.Home.route
@@ -55,60 +56,71 @@ fun PLUVNavHost(
         navigation(
             startDestination = DestinationScreens.SelectApp.route,
             route = DestinationScreens.DirectMigrationRoot.route
+            route = DestinationScreens.DirectMigrationRoot.route,
+            startDestination = DestinationScreens.DirectMigrationSelectSourceApp.route
         ) {
 
-            navigation(
-                startDestination = DestinationScreens.DirectMigrationSelectSourceApp.route,
-                route = DestinationScreens.SelectApp.route
-            ) {
-                composable(route = DestinationScreens.DirectMigrationSelectSourceApp.route) {
-                    Column {
-                        TopBarWithProgress(navController = navController)
-                        Spacer(modifier = Modifier.height(28.dp))
-                        SelectSourceAppScreen(
-                            viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
-                            navigateToDestination = {
-                                navController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route)
-                            }
-                        )
-                    }
-                }
-
-                composable(route = DestinationScreens.DirectMigrationSelectDestinationApp.route) {
-                    Column {
-                        TopBarWithProgress(navController = navController)
-                        Spacer(modifier = Modifier.height(28.dp))
-                        SelectDestinationAppScreen(
-                            viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
-                            navigateToExecute = {
-                                navController.navigate(DestinationScreens.ExecuteDirectMigration.route)
-                            }
-                        )
-                    }
-                }
-                composable(route = DestinationScreens.ExecuteDirectMigration.route) {
-                    Column {
-                        TopBarWithProgress(navController = navController)
-                        Spacer(modifier = Modifier.height(28.dp))
-                        DisplayMigrationPathScreen(
-                            viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
-                            navigateToSelectPlaylist = {
-                                navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
-                            }
-                        )
-                    }
+            composable(route = DestinationScreens.DirectMigrationSelectSourceApp.route) {
+                Column {
+                    TopBarWithProgress(navController = navController)
+                    Spacer(modifier = Modifier.height(28.dp))
+                    SelectSourceAppScreen(
+                        viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
+                        navigateToSelectDestinationApp = {
+                            navController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route)
+                        }
+                    )
                 }
             }
-            navigation(
-                startDestination = DestinationScreens.SelectMigratePlaylist.route,
-                route = DestinationScreens.SelectMigratePlyListRoot.route
-            ) {
-                composable(route = DestinationScreens.SelectMigratePlaylist.route) {
-                    Column {
-                        TopBarWithProgress(navController = navController)
-                        Spacer(modifier = Modifier.height(28.dp))
-                        SelectMigratePlaylistScreen()
-                    }
+
+            composable(route = DestinationScreens.DirectMigrationSelectDestinationApp.route) {
+                Column {
+                    TopBarWithProgress(navController = navController)
+                    Spacer(modifier = Modifier.height(28.dp))
+                    SelectDestinationAppScreen(
+                        viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
+                        navigateToSelectSource = {
+                            navController.navigate(DestinationScreens.DirectMigrationSelectSourceApp.route) {
+                                popUpTo(DestinationScreens.DirectMigrationSelectSourceApp.route) { inclusive = true }
+                            }
+                        },
+                        navigateToDisplayMigrationPath = {
+                            navController.navigate(DestinationScreens.ExecuteDirectMigration.route)
+                        }
+                    )
+                }
+            }
+
+            composable(route = DestinationScreens.ExecuteDirectMigration.route) {
+                Column {
+                    TopBarWithProgress(navController = navController)
+                    Spacer(modifier = Modifier.height(28.dp))
+                    DisplayMigrationPathScreen(
+                        viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
+                        navigateToSelectDestinationApp = {
+                            navController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route) {
+                                popUpTo(DestinationScreens.DirectMigrationSelectDestinationApp.route) { inclusive = true }
+                            }
+                        },
+                        navigateToSelectPlaylist = {
+                            navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+                        }
+                    )
+                }
+            }
+
+            composable(route = DestinationScreens.SelectMigratePlaylist.route) {
+                Column {
+                    TopBarWithProgress(navController = navController)
+                    Spacer(modifier = Modifier.height(28.dp))
+                    SelectMigratePlaylistScreen(
+                        navigateToDisplayMigrationPath = {
+                            navController.navigate(DestinationScreens.ExecuteDirectMigration.route) {
+                                popUpTo(DestinationScreens.ExecuteDirectMigration.route) { inclusive = true }
+                            }
+                        },
+                        viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route)
+                    )
                 }
             }
         }

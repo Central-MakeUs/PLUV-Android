@@ -28,7 +28,8 @@ import com.cmc15th.pluv.ui.home.getSelectedIconRes
 fun SelectDestinationAppScreen(
     modifier: Modifier = Modifier,
     viewModel: DirectMigrationViewModel = hiltViewModel(),
-    navigateToExecute: () -> Unit
+    navigateToSelectSource: () -> Unit,
+    navigateToDisplayMigrationPath: () -> Unit
 ) {
     val state = viewModel.uiState.collectAsState()
 
@@ -53,7 +54,7 @@ fun SelectDestinationAppScreen(
             playListApps = state.value.destinationApps,
             onClick = {
                 viewModel.setEvent(DirectMigrationUiEvent.SelectDestinationApp(it))
-                navigateToExecute()
+                navigateToDisplayMigrationPath()
             }
         )
         Spacer(modifier = Modifier.weight(1f))
