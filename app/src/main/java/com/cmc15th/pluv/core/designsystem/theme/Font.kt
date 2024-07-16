@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.core.designsystem.theme
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -57,4 +58,17 @@ val Content3 = TextStyle(
     fontSize = 12.sp
 )
 
+val MigrateAppName = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp,
+    color = Color.Blue
+)
+
+val SelectedAppName = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp,
+    color = Color(0xFF5C5C5C)
+)
 
