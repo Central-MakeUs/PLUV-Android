@@ -55,6 +55,13 @@ fun SelectSourceAppScreen(
                 navigateToDestination()
             }
         )
+        Spacer(modifier = Modifier.weight(1f))
+        PreviousOrMigrateButton(
+            modifier = Modifier.size(58.dp),
+            isPreviousButtonEnabled = false,
+            onPreviousClick = {},
+            onMigrateClick = { /*TODO*/ }
+        )
     }
 }
 

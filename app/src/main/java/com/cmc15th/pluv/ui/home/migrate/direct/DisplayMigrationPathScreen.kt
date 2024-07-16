@@ -92,16 +92,16 @@ fun DisplayMigrationPathScreen(
             }
             Spacer(modifier = Modifier.size(23.dp))
             SelectedAppItem(playListApp = uiState.value.selectedDestinationApp)
+            Spacer(modifier = Modifier.weight(1f))
+            PreviousOrMigrateButton(
+                modifier = Modifier.size(58.dp),
+                isNextButtonEnabled = true,
+                onPreviousClick = { navigateToSelectDestinationApp() },
+                onMigrateClick = {
+                    viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+                }
+            )
         }
-        MigrateButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 42.dp)
-                .height(58.dp),
-            onClick = {
-                viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
-            }
-        )
     }
 }
 
