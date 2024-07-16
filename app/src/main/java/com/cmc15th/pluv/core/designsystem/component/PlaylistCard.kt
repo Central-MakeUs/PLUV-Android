@@ -13,12 +13,12 @@ fun PlaylistCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        modifier = modifier
     ) {
         AsyncImage(
             model = imageUrl,
             contentDescription = "Playlist Cover",
-            modifier = modifier
         )
     }
 }

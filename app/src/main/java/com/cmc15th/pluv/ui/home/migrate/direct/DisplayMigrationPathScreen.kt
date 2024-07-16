@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,13 +21,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
-import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
+import com.cmc15th.pluv.core.designsystem.theme.Title1
+import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.ui.home.migrate.component.FetchPlaylistLoadingIcon
+import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
 
 @Composable
 fun DisplayMigrationPathScreen(
@@ -66,7 +69,7 @@ fun DisplayMigrationPathScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp),
+            .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -79,7 +82,8 @@ fun DisplayMigrationPathScreen(
         ) {
             DestinationAppText(
                 title = uiState.value.selectedDestinationApp.getAppNameRes(),
-                modifier = Modifier.align(Alignment.Start)
+                modifier = Modifier.align(Alignment.Start),
+                textStyle = Title1
             )
             Spacer(modifier = Modifier.size(32.dp))
             SelectedAppItem(playListApp = uiState.value.selectedSourceApp)
@@ -109,6 +113,7 @@ fun DisplayMigrationPathScreen(
 @Composable
 fun DestinationAppText(
     @StringRes title: Int,
+    textStyle: TextStyle,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -117,19 +122,17 @@ fun DestinationAppText(
         Row {
             Text(
                 text = stringResource(id = title),
-                fontSize = 24.sp,
+                style = textStyle,
                 color = colorResource(id = R.color.destination_app_title_color)
             )
             Text(
                 text = "으로",
-                fontSize = 24.sp,
-                color = Color.Black
+                style = textStyle
             )
         }
         Text(
             text = stringResource(id = R.string.ask_migrate_playlist),
-            fontSize = 24.sp,
-            color = Color.Black
+            style = textStyle
         )
     }
 
@@ -154,5 +157,17 @@ fun MigrateButton(
             fontSize = 16.sp,
         )
     }
+}
+
+@Preview
+@Composable
+fun DisplayMigrationPathPreview() {
+    DisplayMigrationPathScreen(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        navigateToSelectDestinationApp = {},
+        navigateToSelectPlaylist = {}
+    )
 }
 

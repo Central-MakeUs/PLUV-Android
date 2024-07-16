@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -16,13 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
+import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.ui.home.getSelectedIconRes
+import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
 
 @Composable
 fun SelectDestinationAppScreen(
@@ -34,10 +38,18 @@ fun SelectDestinationAppScreen(
     val state = viewModel.uiState.collectAsState()
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Text(
+            text = "어디로\n플레이리스트를 옮길까요?",
+            style = Title1,
+            modifier = Modifier.align(Alignment.Start),
+        )
+        Spacer(modifier = Modifier.size(32.dp))
         SelectedAppItem(
             playListApp = state.value.selectedSourceApp,
         )
@@ -93,10 +105,21 @@ fun SelectedAppItem(
         Spacer(modifier = Modifier.size(7.dp))
         Text(
             text = stringResource(id = playListApp.getAppNameRes()),
-            fontSize = 14.sp,
-            color = colorResource(id = R.color.sub_title_gray_color)
+            style = SelectedAppName
         )
     }
+}
+
+@Preview
+@Composable
+fun SelectDestinationAppScreenPreview() {
+    SelectDestinationAppScreen(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        navigateToSelectSource = {},
+        navigateToDisplayMigrationPath = {}
+    )
 }
 
 
