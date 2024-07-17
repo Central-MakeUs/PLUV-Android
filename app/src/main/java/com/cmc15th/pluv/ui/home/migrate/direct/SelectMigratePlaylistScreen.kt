@@ -1,8 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,12 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.Title4
@@ -37,8 +35,31 @@ fun SelectMigratePlaylistScreen(
     modifier: Modifier = Modifier,
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToDisplayMigrationPath: () -> Unit,
+    navigateToSelectMigrationMusic: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                DirectMigrationUiEffect.onSuccess -> {
+                    navigateToSelectMigrationMusic()
+                }
+
+                DirectMigrationUiEffect.onFailure -> {
+                    //TODO 에러 표시
+                }
+            }
+        }
+    }
+
+    if (uiState.isLoading) {
+        LoadingDialog(
+            icon = { /*TODO*/ },
+            description = "음악을\n불러오는 중이에요!",
+            onDismissRequest = {}
+        )
+    }
 
     Column(
         modifier = modifier
@@ -46,8 +67,8 @@ fun SelectMigratePlaylistScreen(
             .padding(24.dp)
     ) {
         SourceToDestinationText(
-            sourceApp = uiState.selectedSourceApp.name,
-            destinationApp = uiState.selectedDestinationApp.name
+            sourceApp = uiState.selectedSourceApp.appName,
+            destinationApp = uiState.selectedDestinationApp.appName
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(text = "옮길 플레이리스트를 선택 해주세요", style = Title1)
@@ -55,7 +76,7 @@ fun SelectMigratePlaylistScreen(
         Text(
             text = "최대 1개",
             style = Content2,
-            textAlign = TextAlign.End,
+            textAlign = TextAlign.Start,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
@@ -69,9 +90,10 @@ fun SelectMigratePlaylistScreen(
         Spacer(modifier = Modifier.weight(1f))
         PreviousOrMigrateButton(
             modifier = Modifier.size(58.dp),
-            isNextButtonEnabled = uiState.selectedPlaylist != -1L,
+//            isNextButtonEnabled = uiState.selectedPlaylist != -1L,
+            isNextButtonEnabled = true, // FIXME
             onPreviousClick = { navigateToDisplayMigrationPath() },
-            onMigrateClick = { /*TODO*/ }
+            onMigrateClick = { viewModel.setEvent(DirectMigrationUiEvent.SelectPlaylist) }
         )
     }
 }
@@ -86,20 +108,21 @@ fun PlaylistColumn(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = modifier
     ) {
-        itemsIndexed(playlists) { index, playlist ->
+        items(6) { index ->
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
+                painter = painterResource(id = R.drawable.playlistex),
                 contentDescription = null,
                 modifier = Modifier
                     .size(140.dp)
-                    .border(
-                        if (playlist.id == selectedPlaylist) 2.dp else 0.dp,
-                        colorResource(id = R.color.destination_app_title_color)
-                    )
-                    .clickable { onPlaylistSelect(playlist.id) }
+//                    .border(
+//                        if (playlist.id == selectedPlaylist) 2.dp else 0.dp,
+//                        colorResource(id = R.color.destination_app_title_color)
+//                    )
+//                    .clickable { onPlaylistSelect(playlist.id) }
             )
 //            PlaylistCard(imageUrl = "")
         }
@@ -119,7 +142,8 @@ fun SelectMigratePlaylistScreenPreview() {
             .fillMaxSize()
             .padding(24.dp),
         viewModel = DirectMigrationViewModel(),
-        navigateToDisplayMigrationPath = {}
+        navigateToDisplayMigrationPath = {},
+        navigateToSelectMigrationMusic = {}
     )
 }
 
