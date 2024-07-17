@@ -24,6 +24,8 @@ class DirectMigrationViewModel @Inject constructor(): ViewModel() {
     private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
 
+    val selectedMusics = mutableStateOf(listOf<Long>())
+
     init {
         subscribeEvents()
     }
