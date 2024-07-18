@@ -58,10 +58,13 @@ fun MusicItem(
             }
         }
 
-        PlaylistCheckBox(
-            isChecked = isChecked,
-            modifier = Modifier.padding(end = 16.dp)
-        )
+        if (isChecked) {
+            PlaylistCheckBox(
+                modifier = Modifier
+                    .padding(end = 24.dp)
+                    .size(16.dp)
+            )
+        }
     }
 }
 
