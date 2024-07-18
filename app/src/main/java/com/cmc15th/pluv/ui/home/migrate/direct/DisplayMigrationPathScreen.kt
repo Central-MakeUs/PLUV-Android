@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
+import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.ui.home.migrate.component.FetchPlaylistLoadingIcon
@@ -36,6 +38,9 @@ import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
 @Composable
 fun DisplayMigrationPathScreen(
     modifier: Modifier = Modifier,
+    currentStep: Int = 0,
+    totalStep: Int = 0,
+    onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectDestinationApp: () -> Unit,
     navigateToSelectPlaylist: () -> Unit
@@ -48,6 +53,7 @@ fun DisplayMigrationPathScreen(
                 DirectMigrationUiEffect.onSuccess -> {
                     navigateToSelectPlaylist()
                 }
+
                 DirectMigrationUiEffect.onFailure -> {
                     //TODO 에러 스낵바 표시
                 }
@@ -66,46 +72,62 @@ fun DisplayMigrationPathScreen(
         )
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            DestinationAppText(
-                title = uiState.value.selectedDestinationApp.getAppNameRes(),
-                modifier = Modifier.align(Alignment.Start),
-                textStyle = Title1
-            )
-            Spacer(modifier = Modifier.size(32.dp))
-            SelectedAppItem(playListApp = uiState.value.selectedSourceApp)
-            Spacer(modifier = Modifier.size(23.dp))
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                SourceToDestinationDots()
-                SourceToDestinationDots()
-                SourceToDestinationDots()
-            }
-            Spacer(modifier = Modifier.size(23.dp))
-            SelectedAppItem(playListApp = uiState.value.selectedDestinationApp)
-            Spacer(modifier = Modifier.weight(1f))
-            PreviousOrMigrateButton(
-                modifier = Modifier.size(58.dp),
-                isNextButtonEnabled = true,
-                onPreviousClick = { navigateToSelectDestinationApp() },
-                onMigrateClick = {
-                    viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+    Scaffold(
+        topBar = {
+            TopBarWithProgress(
+                totalStep = totalStep,
+                currentStep = currentStep,
+                onCloseClick = {
+                    onCloseClick()
                 }
             )
+        },
+        bottomBar = {
+            PreviousOrMigrateButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+                    .size(58.dp),
+                isNextButtonEnabled = true,
+                onPreviousClick = { navigateToSelectDestinationApp() },
+                onMigrateClick = { viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)}
+            )
+        }
+    ) { paddingValues ->
+
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                DestinationAppText(
+                    title = uiState.value.selectedDestinationApp.getAppNameRes(),
+                    modifier = Modifier.align(Alignment.Start),
+                    textStyle = Title1
+                )
+                Spacer(modifier = Modifier.size(32.dp))
+                SelectedAppItem(playListApp = uiState.value.selectedSourceApp)
+                Spacer(modifier = Modifier.size(23.dp))
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    SourceToDestinationDots()
+                    SourceToDestinationDots()
+                    SourceToDestinationDots()
+                }
+                Spacer(modifier = Modifier.size(23.dp))
+                SelectedAppItem(playListApp = uiState.value.selectedDestinationApp)
+            }
         }
     }
 }
@@ -162,12 +184,30 @@ fun MigrateButton(
 @Preview
 @Composable
 fun DisplayMigrationPathPreview() {
-    DisplayMigrationPathScreen(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        navigateToSelectDestinationApp = {},
-        navigateToSelectPlaylist = {}
-    )
+    Scaffold(
+        topBar = {
+            TopBarWithProgress(totalStep = 5, currentStep = 1, onCloseClick = {})
+        },
+        bottomBar = {
+            PreviousOrMigrateButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+                    .size(58.dp),
+                isNextButtonEnabled = true,
+                onPreviousClick = { },
+                onMigrateClick = {}
+            )
+        }
+    ) { paddingValues ->
+        DisplayMigrationPathScreen(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            navigateToSelectDestinationApp = {},
+            navigateToSelectPlaylist = {},
+            onCloseClick = {}
+        )
+    }
 }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,15 +22,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
+import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
+import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
 import com.cmc15th.pluv.ui.home.migrate.component.SourceToDestinationText
 
 @Composable
 fun SelectMigrationMusicScreen(
     modifier: Modifier = Modifier,
+    currentStep: Int = 0,
+    totalStep: Int = 0,
+    onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectPlaylist: () -> Unit,
     navigateToExecuteMigrationScreen: () -> Unit
@@ -37,42 +43,66 @@ fun SelectMigrationMusicScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val selectedMusics by viewModel.selectedMusics
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp)
-    ) {
-        SourceToDestinationText(
-            uiState.selectedSourceApp.appName,
-            uiState.selectedDestinationApp.appName
-        )
-        Spacer(modifier = Modifier.size(8.dp))
-        Text(text = "플레이리스트의 음악이\n일치하는지 확인해 주세요", style = Title1)
-        Spacer(modifier = Modifier.size(28.dp))
-        PlaylistInfo(
-            appName = uiState.selectedSourceApp.appName,
-            playlistName = "여유로운 오후의 취향 저격 팝",
-            totalSongCount = 10
-        )
-
-        Spacer(modifier = Modifier.size(70.dp))
-
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+    Scaffold(
+        topBar = {
+            TopBarWithProgress(
+                totalStep = totalStep,
+                currentStep = currentStep,
+                onCloseClick = {
+                    onCloseClick()
+                }
+            )
+        },
+        bottomBar = {
+            PreviousOrMigrateButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+                    .size(58.dp),
+                isNextButtonEnabled = true,
+                onPreviousClick = { navigateToSelectPlaylist() },
+                onMigrateClick = { }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(24.dp)
         ) {
-            items(
-                uiState.allMusics,
-                key = { music -> music.id }
-            ) { music ->
-                MusicItem(
-                    isChecked = selectedMusics.contains(music.id),
-                    imageUrl = music.thumbNailUrl,
-                    musicName = music.title,
-                    artistName = music.artist,
-                    onCheckedChange = { _ ->
-                        viewModel.setEvent(DirectMigrationUiEvent.SelectMusic(music.id))
-                    },
-                )
+            SourceToDestinationText(
+                uiState.selectedSourceApp.appName,
+                uiState.selectedDestinationApp.appName
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(text = "플레이리스트의 음악이\n일치하는지 확인해 주세요", style = Title1)
+            Spacer(modifier = Modifier.size(28.dp))
+            PlaylistInfo(
+                appName = uiState.selectedSourceApp.appName,
+                playlistName = "여유로운 오후의 취향 저격 팝",
+                totalSongCount = 10
+            )
+
+            Spacer(modifier = Modifier.size(70.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(
+                    uiState.allMusics,
+                    key = { music -> music.id }
+                ) { music ->
+                    MusicItem(
+                        isChecked = selectedMusics.contains(music.id),
+                        imageUrl = music.thumbNailUrl,
+                        musicName = music.title,
+                        artistName = music.artist,
+                        onCheckedChange = { _ ->
+                            viewModel.setEvent(DirectMigrationUiEvent.SelectMusic(music.id))
+                        },
+                    )
+                }
             }
         }
     }

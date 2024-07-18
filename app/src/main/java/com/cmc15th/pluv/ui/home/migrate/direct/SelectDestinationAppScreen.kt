@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.domain.model.PlayListApp
@@ -31,50 +34,71 @@ import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
 @Composable
 fun SelectDestinationAppScreen(
     modifier: Modifier = Modifier,
+    currentStep: Int = 0,
+    totalStep: Int = 0,
+    onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectSource: () -> Unit,
     navigateToDisplayMigrationPath: () -> Unit
 ) {
+
     val state = viewModel.uiState.collectAsState()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "어디로\n플레이리스트를 옮길까요?",
-            style = Title1,
-            modifier = Modifier.align(Alignment.Start),
-        )
-        Spacer(modifier = Modifier.size(32.dp))
-        SelectedAppItem(
-            playListApp = state.value.selectedSourceApp,
-        )
-        Spacer(modifier = Modifier.size(23.dp))
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            SourceToDestinationDots()
-            SourceToDestinationDots()
-            SourceToDestinationDots()
+    Scaffold(
+        topBar = {
+            TopBarWithProgress(
+                totalStep = totalStep,
+                currentStep = currentStep,
+                onCloseClick = {
+                    onCloseClick()
+                }
+            )
+        },
+        bottomBar = {
+            PreviousOrMigrateButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+                    .size(58.dp),
+                isNextButtonEnabled = true,
+                onPreviousClick = { navigateToSelectSource() },
+                onMigrateClick = { navigateToDisplayMigrationPath() }
+            )
         }
-        Spacer(modifier = Modifier.size(13.dp))
-        SelectAppColumn(
-            playListApps = state.value.destinationApps,
-            onClick = {
-                viewModel.setEvent(DirectMigrationUiEvent.SelectDestinationApp(it))
-                navigateToDisplayMigrationPath()
+    ) { paddingValues ->
+
+        Column(
+            modifier = modifier
+                .padding(paddingValues)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "어디로\n플레이리스트를 옮길까요?",
+                style = Title1,
+                modifier = Modifier.align(Alignment.Start),
+            )
+            Spacer(modifier = Modifier.size(32.dp))
+            SelectedAppItem(
+                playListApp = state.value.selectedSourceApp,
+            )
+            Spacer(modifier = Modifier.size(23.dp))
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                SourceToDestinationDots()
+                SourceToDestinationDots()
+                SourceToDestinationDots()
             }
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        PreviousOrMigrateButton(
-            modifier = Modifier.size(58.dp),
-            onPreviousClick = { navigateToSelectSource() },
-            onMigrateClick = { navigateToDisplayMigrationPath() }
-        )
+            Spacer(modifier = Modifier.size(13.dp))
+            SelectAppColumn(
+                playListApps = state.value.destinationApps,
+                onClick = {
+                    viewModel.setEvent(DirectMigrationUiEvent.SelectDestinationApp(it))
+                    navigateToDisplayMigrationPath()
+                }
+            )
+        }
     }
 }
 
@@ -115,8 +139,7 @@ fun SelectedAppItem(
 fun SelectDestinationAppScreenPreview() {
     SelectDestinationAppScreen(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
+            .fillMaxSize(),
         navigateToSelectSource = {},
         navigateToDisplayMigrationPath = {}
     )

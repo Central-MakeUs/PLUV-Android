@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
+import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.Title4
@@ -33,6 +35,9 @@ import com.cmc15th.pluv.ui.home.migrate.component.SourceToDestinationText
 @Composable
 fun SelectMigratePlaylistScreen(
     modifier: Modifier = Modifier,
+    currentStep: Int = 0,
+    totalStep: Int = 0,
+    onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToDisplayMigrationPath: () -> Unit,
     navigateToSelectMigrationMusic: () -> Unit
@@ -61,40 +66,56 @@ fun SelectMigratePlaylistScreen(
         )
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp)
-    ) {
-        SourceToDestinationText(
-            sourceApp = uiState.selectedSourceApp.appName,
-            destinationApp = uiState.selectedDestinationApp.appName
-        )
-        Spacer(modifier = Modifier.size(8.dp))
-        Text(text = "옮길 플레이리스트를 선택 해주세요", style = Title1)
-        Spacer(modifier = Modifier.size(28.dp))
-        Text(
-            text = "최대 1개",
-            style = Content2,
-            textAlign = TextAlign.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-        )
-        PlaylistColumn(
-            playlists = uiState.allPlaylists,
-            selectedPlaylist = uiState.selectedPlaylist,
-            modifier = Modifier.padding(15.dp),
-            onPlaylistSelect = {}
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        PreviousOrMigrateButton(
-            modifier = Modifier.size(58.dp),
-//            isNextButtonEnabled = uiState.selectedPlaylist != -1L,
-            isNextButtonEnabled = true, // FIXME
-            onPreviousClick = { navigateToDisplayMigrationPath() },
-            onMigrateClick = { viewModel.setEvent(DirectMigrationUiEvent.SelectPlaylist) }
-        )
+    Scaffold(
+        topBar = {
+            TopBarWithProgress(
+                totalStep = totalStep,
+                currentStep = currentStep,
+                onCloseClick = {
+                    onCloseClick()
+                }
+            )
+        },
+        bottomBar = {
+            PreviousOrMigrateButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+                    .size(58.dp),
+                isNextButtonEnabled = true, // FIXME
+                onPreviousClick = { navigateToDisplayMigrationPath() },
+                onMigrateClick = { viewModel.setEvent(DirectMigrationUiEvent.SelectPlaylist) }
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(24.dp)
+        ) {
+            SourceToDestinationText(
+                sourceApp = uiState.selectedSourceApp.appName,
+                destinationApp = uiState.selectedDestinationApp.appName
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(text = "옮길 플레이리스트를 선택 해주세요", style = Title1)
+            Spacer(modifier = Modifier.size(28.dp))
+            Text(
+                text = "최대 1개",
+                style = Content2,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+            )
+            PlaylistColumn(
+                playlists = uiState.allPlaylists,
+                selectedPlaylist = uiState.selectedPlaylist,
+                modifier = Modifier.padding(15.dp),
+                onPlaylistSelect = {}
+            )
+        }
     }
 }
 
