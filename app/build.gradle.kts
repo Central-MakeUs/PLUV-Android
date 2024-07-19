@@ -62,6 +62,8 @@ fun getServerUrl(propertyKey: String): String {
 
 dependencies {
 
+    implementation(libs.spotify.auth)
+    implementation ("androidx.browser:browser:1.4.0")
     // retrofit2 + okhttp3
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
