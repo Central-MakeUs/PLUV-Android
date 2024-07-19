@@ -23,7 +23,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String", "server_url", getServerUrl("server_url"))
+        buildConfigField("String", "server_url", getProperty("server_url"))
+        buildConfigField("String", "spotify_client_id", getProperty("spotify_client_id"))
+        buildConfigField("String", "spotify_redirect_uri", getProperty("spotify_redirect_uri"))
     }
 
     buildTypes {
@@ -56,7 +58,7 @@ android {
     }
 }
 
-fun getServerUrl(propertyKey: String): String {
+fun getProperty(propertyKey: String): String {
     return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
