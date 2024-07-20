@@ -27,6 +27,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
+import com.cmc15th.pluv.core.ui.component.MusicsHeader
 import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
 import com.cmc15th.pluv.ui.home.migrate.component.SourceToDestinationText
 
@@ -69,22 +70,38 @@ fun SelectMigrationMusicScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(24.dp)
         ) {
-            SourceToDestinationText(
-                uiState.selectedSourceApp.appName,
-                uiState.selectedDestinationApp.appName
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(text = "플레이리스트의 음악이\n일치하는지 확인해 주세요", style = Title1)
-            Spacer(modifier = Modifier.size(28.dp))
-            PlaylistInfo(
-                appName = uiState.selectedSourceApp.appName,
-                playlistName = "여유로운 오후의 취향 저격 팝",
-                totalSongCount = 10
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(24.dp)
+            ) {
+                SourceToDestinationText(
+                    uiState.selectedSourceApp.appName,
+                    uiState.selectedDestinationApp.appName
+                )
+                Spacer(modifier = Modifier.size(8.dp))
 
-            Spacer(modifier = Modifier.size(70.dp))
+                Text(text = "플레이리스트의 음악이\n일치하는지 확인해 주세요", style = Title1)
+
+                Spacer(modifier = Modifier.size(28.dp))
+
+                PlaylistInfo(
+                    appName = uiState.selectedSourceApp.appName,
+                    playlistName = "여유로운 오후의 취향 저격 팝",
+                    totalSongCount = 10
+                )
+
+                Spacer(modifier = Modifier.size(70.dp))
+
+                MusicsHeader(
+                    modifier = Modifier.fillMaxWidth(),
+                    selectedMusicCount = viewModel.selectedMusics.value.size,
+                    isSelectedAll = viewModel.selectedMusics.value.size == uiState.allMusics.size,
+                    onAllSelectedClick = { isSelectedAll ->
+                        viewModel.setEvent(DirectMigrationUiEvent.SelectAllMusic(isSelectedAll))
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.size(12.dp))
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
