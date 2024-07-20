@@ -33,6 +33,21 @@ fun PLUVNavHost(
             HomeScreen(
                 navigateToDirectMigration = {
                     navController.navigate(DestinationScreens.DirectMigrationRoot.route)
+                },
+                navigateToScreenShotMigration = {
+                    navController.navigate(DestinationScreens.UploadPlaylistScreenShot.route)
+                }
+            )
+        }
+
+        composable(route = DestinationScreens.SpotifyLogin.route) {
+            PlaylistLoginScreen(
+                onLoginSuccess = {
+                    navController.successSourceAppLogin()
+                },
+                onLoginError = {
+                    //TODO 에러 스낵바 표시
+                    navController.popBackStack()
                 }
             )
         }
@@ -102,8 +117,16 @@ fun PLUVNavHost(
                             }
                         }
                     },
-                    navigateToSelectPlaylist = {
-                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+//                    navigateToSelectPlaylist = {
+//                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+//                    },
+                    navigateToLoginSourceApp = { sourceApp ->
+                        when (sourceApp) {
+                            PlayListApp.SPOTIFY -> navController.navigate(DestinationScreens.SpotifyLogin.route)
+                            else -> {
+                                //TODO 애플뮤직, 유튜브뮤직, 멜론 추가 예정
+                            }
+                        }
                     }
                 )
 
@@ -150,6 +173,14 @@ fun PLUVNavHost(
                     },
                     viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route)
                 )
+            }
+        }
+        navigation(
+            route = DestinationScreens.ScreenShotMigrationRoot.route,
+            startDestination = DestinationScreens.UploadPlaylistScreenShot.route
+        ) {
+            composable(route = DestinationScreens.UploadPlaylistScreenShot.route) {
+                UploadPlaylistScreenShotScreen()
             }
         }
     }
