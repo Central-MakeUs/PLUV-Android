@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCheckBox
 import com.cmc15th.pluv.core.designsystem.theme.Content1
+import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.SelectAllContent
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 
 @Composable
@@ -32,13 +34,13 @@ fun MusicItem(
     onCheckedChange: (Boolean) -> Unit
 ) {
 
-    val backgroundColor = if (isChecked) MaterialTheme.colorScheme.surface else Color(0xFFF7F7F7)
+    val backgroundColor = if (isChecked) Color(0xFFCB84FF) else MaterialTheme.colorScheme.surface
 
     Row(
         modifier = modifier
-            .background(color = backgroundColor)
-            .padding(vertical = 10.dp)
             .fillMaxWidth()
+            .background(color = backgroundColor)
+            .padding(vertical = 10.dp, horizontal = 24.dp)
             .clickable { onCheckedChange(!isChecked) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -60,11 +62,58 @@ fun MusicItem(
 
         if (isChecked) {
             PlaylistCheckBox(
-                modifier = Modifier
-                    .padding(end = 24.dp)
-                    .size(16.dp)
+                modifier = Modifier.size(16.dp)
             )
         }
+    }
+}
+
+@Composable
+fun MusicsHeader(
+    modifier: Modifier = Modifier,
+    selectedMusicCount: Int,
+    isSelectedAll: Boolean,
+    onAllSelectedClick: (Boolean) -> Unit = {}
+
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "${selectedMusicCount}곡",
+            style = Content2
+        )
+
+        AllSelectedText(
+            modifier = Modifier.clickable { onAllSelectedClick(isSelectedAll) },
+            isSelectedAll = isSelectedAll
+        )
+    }
+}
+
+@Composable
+fun AllSelectedText(
+    modifier: Modifier = Modifier,
+    isSelectedAll: Boolean
+) {
+
+    if (isSelectedAll) {
+        Row(
+            modifier = modifier
+        ) {
+            PlaylistCheckBox(
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.size(6.dp))
+            Text(text = "전체선택", style = SelectAllContent)
+        }
+    } else {
+        Text(
+            modifier = modifier,
+            text = "전체선택",
+            style = Content2
+        )
     }
 }
 
@@ -76,5 +125,14 @@ fun MusicItemPreview() {
         musicName = "Dynamite",
         artistName = "BTS",
         onCheckedChange = {}
+    )
+}
+
+@Preview
+@Composable
+fun MusicHeaderPreview() {
+    MusicsHeader(
+        modifier = Modifier.fillMaxWidth(),
+        selectedMusicCount = 5, isSelectedAll = false
     )
 }

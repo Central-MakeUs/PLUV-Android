@@ -72,3 +72,11 @@ val SelectedAppName = TextStyle(
     color = Color(0xFF5C5C5C)
 )
 
+val SelectAllContent = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp,
+    color = Color(0xFF9E22FF)
+)
+
+
