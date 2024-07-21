@@ -1,28 +1,29 @@
 package com.cmc15th.pluv
 
+import PlaylistLoginScreen
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navigation
+import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.HomeScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectDestinationAppScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigratePlaylistScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigrationMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectSourceAppScreen
+import com.cmc15th.pluv.ui.home.migrate.screenshot.UploadPlaylistScreenShotScreen
 
 @Composable
 fun PLUVNavHost(
     navController: NavHostController
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     NavHost(
         navController = navController,
@@ -40,17 +41,6 @@ fun PLUVNavHost(
             )
         }
 
-        composable(route = DestinationScreens.SpotifyLogin.route) {
-            PlaylistLoginScreen(
-                onLoginSuccess = {
-                    navController.successSourceAppLogin()
-                },
-                onLoginError = {
-                    //TODO 에러 스낵바 표시
-                    navController.popBackStack()
-                }
-            )
-        }
 
         navigation(
             route = DestinationScreens.DirectMigrationRoot.route,
@@ -138,11 +128,30 @@ fun PLUVNavHost(
                         }
                     }
                 )
-
             }
 
-            composable(route = DestinationScreens.SelectMigratePlaylist.route) {
-                val currentRoute = navBackStackEntry?.destination?.route
+            composable(route = DestinationScreens.SpotifyLogin.route) { navBackStackEntry ->
+                PlaylistLoginScreen(
+                    viewModel = navController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    ),
+                    onLoginSuccess = {
+                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+                    },
+                    onLoginError = {
+                        //TODO 에러 스낵바 표시
+                        navController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route) {
+                            popUpTo(DestinationScreens.DirectMigrationSelectDestinationApp.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+
+            composable(route = DestinationScreens.SelectMigratePlaylist.route) { navBackStackEntry ->
+                val currentRoute = navBackStackEntry.destination.route
                 SelectMigratePlaylistScreen(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,

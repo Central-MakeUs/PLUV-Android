@@ -6,7 +6,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.BuildConfig
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -14,7 +16,8 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 private const val TAG = "PlaylistLoginScreen"
 @Composable
 fun PlaylistLoginScreen(
-    onLoginSuccess: (String) -> Unit = {},
+    viewModel: DirectMigrationViewModel = hiltViewModel(),
+    onLoginSuccess: () -> Unit = {},
     onLoginError: (String) -> Unit = {}
 ) {
 
@@ -29,7 +32,8 @@ fun PlaylistLoginScreen(
                 // 로그인 성공
                 val accessToken = response.accessToken
                 Log.d(TAG, "PlaylistLoginScreen:  $accessToken ")
-                onLoginSuccess(accessToken)
+                viewModel.setSpotifyAccessToken(accessToken)
+                onLoginSuccess()
             }
             AuthorizationResponse.Type.ERROR -> {
                 // 로그인 실패

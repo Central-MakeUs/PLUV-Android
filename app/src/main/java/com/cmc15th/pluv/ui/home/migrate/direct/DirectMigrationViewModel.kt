@@ -102,4 +102,7 @@ class DirectMigrationViewModel @Inject constructor() : ViewModel() {
             it.copy(selectedDestinationApp = playListApp)
         }
     }
+    fun setSpotifyAccessToken(accessToken: String?) {
+
+    }
 }
