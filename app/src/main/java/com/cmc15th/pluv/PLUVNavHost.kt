@@ -58,8 +58,8 @@ fun PLUVNavHost(
         ) {
             val totalSteps = DirectMigrationRoutes.getRouteSize()
 
-            composable(route = DestinationScreens.DirectMigrationSelectSourceApp.route) {
-                val currentRoute = navBackStackEntry?.destination?.route
+            composable(route = DestinationScreens.DirectMigrationSelectSourceApp.route) { navBackStackEntry ->
+                val currentRoute = navBackStackEntry.destination.route
                 SelectSourceAppScreen(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
@@ -68,15 +68,18 @@ fun PLUVNavHost(
                             popUpTo(DestinationScreens.Home.route) { inclusive = true }
                         }
                     },
-                    viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
+                    viewModel = navController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    ),
                     navigateToSelectDestinationApp = {
                         navController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route)
                     }
                 )
             }
 
-            composable(route = DestinationScreens.DirectMigrationSelectDestinationApp.route) {
-                val currentRoute = navBackStackEntry?.destination?.route
+            composable(route = DestinationScreens.DirectMigrationSelectDestinationApp.route) { navBackStackEntry ->
+                val currentRoute = navBackStackEntry.destination.route
                 SelectDestinationAppScreen(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
@@ -85,7 +88,10 @@ fun PLUVNavHost(
                             popUpTo(DestinationScreens.Home.route) { inclusive = true }
                         }
                     },
-                    viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
+                    viewModel = navController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    ),
                     navigateToSelectSource = {
                         navController.navigate(DestinationScreens.DirectMigrationSelectSourceApp.route) {
                             popUpTo(DestinationScreens.DirectMigrationSelectSourceApp.route) {
@@ -99,8 +105,8 @@ fun PLUVNavHost(
                 )
             }
 
-            composable(route = DestinationScreens.ExecuteDirectMigration.route) {
-                val currentRoute = navBackStackEntry?.destination?.route
+            composable(route = DestinationScreens.ExecuteDirectMigration.route) { navBackStackEntry ->
+                val currentRoute = navBackStackEntry.destination.route
                 DisplayMigrationPathScreen(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
@@ -109,7 +115,10 @@ fun PLUVNavHost(
                             popUpTo(DestinationScreens.Home.route) { inclusive = true }
                         }
                     },
-                    viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route),
+                    viewModel = navController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    ),
                     navigateToSelectDestinationApp = {
                         navController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route) {
                             popUpTo(DestinationScreens.DirectMigrationSelectDestinationApp.route) {
@@ -152,11 +161,14 @@ fun PLUVNavHost(
                     navigateToSelectMigrationMusic = {
                         navController.navigate(DestinationScreens.SelectMigrationMusic.route)
                     },
-                    viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route)
+                    viewModel = navController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    )
                 )
             }
-            composable(route = DestinationScreens.SelectMigrationMusic.route) {
-                val currentRoute = navBackStackEntry?.destination?.route
+            composable(route = DestinationScreens.SelectMigrationMusic.route) { navBackStackEntry ->
+                val currentRoute = navBackStackEntry.destination.route
                 SelectMigrationMusicScreen(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
@@ -171,7 +183,10 @@ fun PLUVNavHost(
                     navigateToExecuteMigrationScreen = {
 
                     },
-                    viewModel = navController.sharedViewModel(route = DestinationScreens.DirectMigrationRoot.route)
+                    viewModel = navController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    )
                 )
             }
         }
@@ -187,8 +202,8 @@ fun PLUVNavHost(
 }
 
 @Composable
-inline fun <reified T : ViewModel> NavController.sharedViewModel(route: String): T {
-    val parentEntry = remember {
+inline fun <reified T : ViewModel> NavController.sharedViewModel(navBackStackEntry: NavBackStackEntry, route: String): T {
+    val parentEntry = remember(navBackStackEntry) {
         getBackStackEntry(route)
     }
     return hiltViewModel(parentEntry)
