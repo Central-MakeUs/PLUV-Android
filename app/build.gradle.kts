@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -21,6 +23,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "server_url", getProperty("server_url"))
+        buildConfigField("String", "spotify_client_id", getProperty("spotify_client_id"))
+        buildConfigField("String", "spotify_redirect_uri", getProperty("spotify_redirect_uri"))
     }
 
     buildTypes {
@@ -41,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -52,8 +58,20 @@ android {
     }
 }
 
+fun getProperty(propertyKey: String): String {
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
+}
+
 dependencies {
 
+    implementation(libs.spotify.auth)
+    implementation ("androidx.browser:browser:1.4.0")
+    // retrofit2 + okhttp3
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
     // coil
     implementation(libs.coil.compose)
     // hilt

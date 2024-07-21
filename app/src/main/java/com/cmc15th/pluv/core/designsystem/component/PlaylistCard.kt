@@ -4,6 +4,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
@@ -13,12 +14,13 @@ fun PlaylistCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
     ) {
         AsyncImage(
+            modifier = modifier,
             model = imageUrl,
             contentDescription = "Playlist Cover",
-            modifier = modifier
+            contentScale = ContentScale.Crop
         )
     }
 }

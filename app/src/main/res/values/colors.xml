@@ -11,5 +11,8 @@
     <color name="app_logo_color">#B0B0B0</color>
     <color name="sub_title_gray_color">#7F7F7F</color>
     <color name="current_step_color">#8F00FF</color>
-    <color name="destination_app_title_color">#9E22FF</color>i
+    <color name="destination_app_title_color">#9E22FF</color>
+    <color name="loading_playlist_icon_color">#F6EAFF</color>
+    <color name="blue">#2E81FF</color>
+    <color name="blue_light">#EFF7FE</color>
 </resources>

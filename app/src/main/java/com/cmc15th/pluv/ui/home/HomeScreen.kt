@@ -43,7 +43,8 @@ import com.cmc15th.pluv.R
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToDirectMigration: () -> Unit
+    navigateToDirectMigration: () -> Unit = {},
+    navigateToScreenShotMigration: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -73,7 +74,9 @@ fun HomeScreen(
             onDirectClick = {
                 navigateToDirectMigration()
             },
-            onScreenShotClick = {}
+            onScreenShotClick = {
+                navigateToScreenShotMigration()
+            }
         )
         Spacer(modifier = Modifier.size(50.dp))
         PlayListRowArea(
