@@ -50,7 +50,7 @@ class ApiResultCall<T : Any>(private val delegate: Call<T>) : Call<ApiResult<T>>
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 val networkResponse = when (t) {
-                    is ConnectException -> ApiResult.NetworkError(IOException("서버와 통신할 수 없습니다. 관리자에게 문의 바랍니다."))
+                    is ConnectException -> ApiResult.NetworkError(t)
                     is IOException -> ApiResult.NetworkError(t)
                     else -> ApiResult.Unexpected(t)
                 }
