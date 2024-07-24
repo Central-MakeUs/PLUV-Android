@@ -28,8 +28,8 @@ import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.core.ui.component.MusicsHeader
-import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.component.SourceToDestinationText
+import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
+import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 
 @Composable
 fun SelectMigrationMusicScreen(

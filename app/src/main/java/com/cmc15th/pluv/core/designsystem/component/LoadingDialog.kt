@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.cmc15th.pluv.R
-import com.cmc15th.pluv.ui.home.migrate.component.FetchPlaylistLoadingIcon
+import com.cmc15th.pluv.ui.home.migrate.common.component.FetchPlaylistLoadingIcon
 
 @Composable
 fun LoadingDialog(

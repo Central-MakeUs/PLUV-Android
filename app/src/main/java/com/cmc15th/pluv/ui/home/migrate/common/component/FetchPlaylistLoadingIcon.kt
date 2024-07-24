@@ -1,4 +1,4 @@
-package com.cmc15th.pluv.ui.home.migrate.component
+package com.cmc15th.pluv.ui.home.migrate.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

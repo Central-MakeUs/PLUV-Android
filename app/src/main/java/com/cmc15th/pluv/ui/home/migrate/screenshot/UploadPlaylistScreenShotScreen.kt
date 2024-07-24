@@ -37,7 +37,7 @@ import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
-import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
+import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
 
 @Composable
 fun UploadPlaylistScreenShotScreen(

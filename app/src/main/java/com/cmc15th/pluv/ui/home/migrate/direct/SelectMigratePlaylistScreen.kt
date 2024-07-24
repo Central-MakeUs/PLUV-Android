@@ -29,8 +29,8 @@ import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.model.Playlist
-import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.component.SourceToDestinationText
+import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
+import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 
 @Composable
 fun SelectMigratePlaylistScreen(
