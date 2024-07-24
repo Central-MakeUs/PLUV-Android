@@ -1,7 +1,9 @@
 package com.cmc15th.pluv.core.data.repository
 
+import com.cmc15th.pluv.core.data.mapper.toMusic
 import com.cmc15th.pluv.core.data.mapper.toPlaylist
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.model.Music
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.service.MigrationService
@@ -21,9 +23,23 @@ class PlaylistRepositoryImpl @Inject constructor(
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>> = flow {
         emit(
-            migrationService.fetchPlaylists(PlaylistAccessToken(accessToken)).map { result ->
+            migrationService.fetchPlaylists(playlistAppName, PlaylistAccessToken(accessToken)).map { result ->
                 result.map {
                     it.toPlaylist()
+                }
+            }
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override fun fetchMusics(
+        playlistAppName: PlayListApp,
+        accessToken: String,
+        playlistId: String
+    ): Flow<ApiResult<List<Music>>> = flow {
+        emit(
+            migrationService.fetchMusicsByPlaylistId(playlistAppName, playlistId, PlaylistAccessToken(accessToken)).map { result ->
+                result.map {
+                    it.toMusic()
                 }
             }
         )

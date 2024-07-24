@@ -3,6 +3,7 @@ package com.cmc15th.pluv.core.network.service
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.response.ReadPlaylistResponse
+import com.cmc15th.pluv.core.network.response.ReadPlaylistResponse.ReadMusicResponse
 import com.cmc15th.pluv.domain.model.PlayListApp
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -15,5 +16,12 @@ interface MigrationService {
         @Path("source") source: PlayListApp,
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<List<ReadPlaylistResponse>>
+
+    @POST("{source}/playLists/{playlistId}/read")
+    suspend fun fetchMusicsByPlaylistId(
+        @Path("source") source: PlayListApp,
+        @Path("playlistId") playlistId: String,
+        @Body accessToken: PlaylistAccessToken
+    ): ApiResult<List<ReadMusicResponse>>
 
 }
