@@ -1,14 +1,14 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cmc15th.pluv.core.model.Music
+import com.cmc15th.pluv.core.data.repository.PlaylistRepository
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DirectMigrationViewModel @Inject constructor() : ViewModel() {
+class DirectMigrationViewModel @Inject constructor(
+    private val playlistRepository: PlaylistRepository
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DirectMigrationUiState> =
         MutableStateFlow(DirectMigrationUiState())
@@ -31,7 +33,9 @@ class DirectMigrationViewModel @Inject constructor() : ViewModel() {
     private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
 
-    val selectedMusics = mutableStateOf(listOf<Long>())
+    val selectedMusics = mutableStateOf(listOf<String>())
+
+    private val playlistAccessToken = MutableStateFlow("")
 
     init {
         subscribeEvents()
@@ -63,10 +67,17 @@ class DirectMigrationViewModel @Inject constructor() : ViewModel() {
 
             is DirectMigrationUiEvent.ExecuteMigration -> {
                 //TODO Source App Login
-                fetchPlaylists()
             }
 
             is DirectMigrationUiEvent.SelectPlaylist -> {
+                _uiState.update {
+                    it.copy(
+                        selectedPlaylist = event.selectedPlaylistId
+                    )
+                }
+            }
+
+            is DirectMigrationUiEvent.FetchMusicsByPlaylist -> {
                 fetchMusicByPlaylist()
             }
 
@@ -83,9 +94,15 @@ class DirectMigrationViewModel @Inject constructor() : ViewModel() {
             is DirectMigrationUiEvent.SelectAllMusic -> {
                 when (event.selectAllFlag) {
                     true -> selectedMusics.value = emptyList()
-                    false -> selectedMusics.value = uiState.value.allMusics.map { it.id }
+                    false -> selectedMusics.value = uiState.value.allMusics.map { it.isrcCode }
                 }
             }
+        }
+    }
+
+    private fun sendEffect(effect: DirectMigrationUiEffect) {
+        viewModelScope.launch {
+            _uiEffect.send(effect)
         }
     }
 
@@ -106,56 +123,71 @@ class DirectMigrationViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun fetchPlaylists() {
+    fun fetchPlaylists() {
         // Fetch playlists
         viewModelScope.launch {
+            Log.d(TAG, "fetchPlaylists: ${playlistAccessToken.value} ")
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            delay(2000L)
-            _uiState.update {
-                it.copy(isLoading = false)
+            playlistRepository.fetchPlaylists(
+                _uiState.value.selectedSourceApp,
+                playlistAccessToken.value
+            ).collect { result ->
+                Log.d(TAG, "fetchPlaylists: $result")
+                result.onSuccess { data ->
+                    _uiState.update {
+                        it.copy(
+                            allPlaylists = data,
+                            isLoading = false
+                        )
+                    }
+                }
+                result.onFailure { i, s ->
+                    _uiState.update {
+                        it.copy(isLoading = false)
+                    }
+                }
             }
-            _uiEffect.send(DirectMigrationUiEffect.onSuccess)
-            // Fetch playlists
-            // onSuccess -> dialog 종료 후 화면 이동
-            // onError -> dialog 종료 및 스낵바 표출
         }
     }
 
     private fun fetchMusicByPlaylist() {
-        val musics = mutableListOf<Music>()
-        for (i in 0 until 10) {
-            musics.add(
-                Music(
-                    i.toLong(),
-                    thumbNailUrl = "https://picsum.photos/140",
-                    title = "Melody",
-                    artist = "김동률"
-                )
-            )
-        }
-
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            delay(500L)
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    allMusics = musics
-                )
+            playlistRepository.fetchMusics(
+                accessToken = playlistAccessToken.value,
+                playlistAppName = _uiState.value.selectedSourceApp,
+                playlistId = _uiState.value.selectedPlaylist
+            ).collect { result ->
+                Log.d(TAG, "fetchMusicByPlaylist: $result")
+                result.onSuccess { data ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            allMusics = data
+                        )
+                    }
+                    sendEffect(DirectMigrationUiEffect.onSuccess)
+                }
+                result.onFailure { code, error ->
+                    _uiState.update {
+                        it.copy(isLoading = false)
+                    }
+                    sendEffect(DirectMigrationUiEffect.onFailure)
+                    Log.d(TAG, "fetchMusicByPlaylist: $code, $error")
+                }
             }
-            selectedMusics.value = musics.map { it.id }
-            _uiEffect.send(DirectMigrationUiEffect.onSuccess)
-            // Fetch music
-            // onSuccess -> dialog 종료 후 화면 이동
-            // onError -> dialog 종료 및 스낵바 표출
         }
     }
 
     fun setSpotifyAccessToken(accessToken: String?) {
+        playlistAccessToken.update { accessToken ?: "" }
+    }
 
+    companion object {
+        private const val TAG = "DirectMigrationViewModel"
     }
 }
