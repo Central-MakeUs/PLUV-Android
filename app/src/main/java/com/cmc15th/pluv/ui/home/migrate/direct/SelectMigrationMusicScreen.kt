@@ -72,7 +72,9 @@ fun SelectMigrationMusicScreen(
                 .padding(paddingValues)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(24.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
             ) {
                 SourceToDestinationText(
                     uiState.selectedSourceApp.appName,
@@ -108,15 +110,15 @@ fun SelectMigrationMusicScreen(
             ) {
                 items(
                     uiState.allMusics,
-                    key = { music -> music.id }
+                    key = { music -> music.isrcCode }
                 ) { music ->
                     MusicItem(
-                        isChecked = selectedMusics.contains(music.id),
+                        isChecked = selectedMusics.contains(music.isrcCode),
                         imageUrl = music.thumbNailUrl,
                         musicName = music.title,
-                        artistName = music.artist,
+                        artistName = music.artistName,
                         onCheckedChange = { _ ->
-                            viewModel.setEvent(DirectMigrationUiEvent.SelectMusic(music.id))
+                            viewModel.setEvent(DirectMigrationUiEvent.SelectMusic(music.isrcCode))
                         },
                     )
                 }
