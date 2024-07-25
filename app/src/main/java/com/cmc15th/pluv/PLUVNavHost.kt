@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.cmc15th.pluv.domain.model.LoginMoment
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.HomeScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
@@ -121,7 +122,7 @@ fun PLUVNavHost(
 //                    },
                     navigateToLoginSourceApp = { sourceApp ->
                         when (sourceApp) {
-                            PlayListApp.SPOTIFY -> navController.navigate(DestinationScreens.SpotifyLogin.route)
+                            PlayListApp.spotify -> navController.navigate(DestinationScreens.SpotifyLogin.route)
                             else -> {
                                 //TODO 애플뮤직, 유튜브뮤직, 멜론 추가 예정
                             }
@@ -136,8 +137,16 @@ fun PLUVNavHost(
                         navBackStackEntry = navBackStackEntry,
                         route = DestinationScreens.DirectMigrationRoot.route
                     ),
-                    onLoginSuccess = {
-                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+                    onLoginSuccess = { loginMoment ->
+                        when (loginMoment) {
+                            LoginMoment.Source -> {
+                                navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+                            }
+
+                            LoginMoment.Destination -> {
+                                navController.navigate(DestinationScreens.SelectMigrationMusic.route)
+                            }
+                        }
                     },
                     onLoginError = {
                         //TODO 에러 스낵바 표시
@@ -186,8 +195,12 @@ fun PLUVNavHost(
                             popUpTo(DestinationScreens.Home.route) { inclusive = true }
                         }
                     },
+                    navigateToLoginScreen = {
+                        navController.navigate(DestinationScreens.SpotifyLogin.route)
+                    },
                     navigateToSelectPlaylist = {
-                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+                        navController.popBackStack()
+//                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
                     },
                     navigateToExecuteMigrationScreen = {
 
@@ -211,7 +224,10 @@ fun PLUVNavHost(
 }
 
 @Composable
-inline fun <reified T : ViewModel> NavController.sharedViewModel(navBackStackEntry: NavBackStackEntry, route: String): T {
+inline fun <reified T : ViewModel> NavController.sharedViewModel(
+    navBackStackEntry: NavBackStackEntry,
+    route: String
+): T {
     val parentEntry = remember(navBackStackEntry) {
         getBackStackEntry(route)
     }
