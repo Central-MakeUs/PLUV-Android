@@ -10,6 +10,6 @@ sealed class DirectMigrationUiEvent {
     data object OnLoginDestinationSuccess: DirectMigrationUiEvent()
     class SelectPlaylist(val selectedPlaylistId: String) : DirectMigrationUiEvent()
     data object FetchMusicsByPlaylist : DirectMigrationUiEvent()
-    class SelectMusic(val selectedMusicId: String) : DirectMigrationUiEvent()
-    class SelectAllMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
+    class SelectSourceMusic(val selectedMusicId: String) : DirectMigrationUiEvent()
+    class SelectAllSourceMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
 }

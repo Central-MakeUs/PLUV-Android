@@ -1,10 +1,9 @@
 package com.cmc15th.pluv.core.data.repository
 
-import android.util.Log
-import com.cmc15th.pluv.core.data.mapper.toMusic
+import com.cmc15th.pluv.core.data.mapper.toSourceMusic
 import com.cmc15th.pluv.core.data.mapper.toPlaylist
 import com.cmc15th.pluv.core.model.ApiResult
-import com.cmc15th.pluv.core.model.Music
+import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.service.MigrationService
@@ -37,7 +36,7 @@ class PlaylistRepositoryImpl @Inject constructor(
         playlistAppName: PlayListApp,
         accessToken: String,
         playlistId: String
-    ): Flow<ApiResult<List<Music>>> = flow {
+    ): Flow<ApiResult<List<SourceMusic>>> = flow {
         emit(
             migrationService.fetchMusicsByPlaylistId(
                 source = playlistAppName,
@@ -45,7 +44,7 @@ class PlaylistRepositoryImpl @Inject constructor(
                 accessToken = PlaylistAccessToken(accessToken)
             ).map { result ->
                 result.data.map {
-                    it.toMusic()
+                    it.toSourceMusic()
                 }
             }
         )

@@ -94,7 +94,7 @@ class DirectMigrationViewModel @Inject constructor(
                 fetchMusicByPlaylist()
             }
 
-            is DirectMigrationUiEvent.SelectMusic -> {
+            is DirectMigrationUiEvent.SelectSourceMusic -> {
                 selectedMusics.value = selectedMusics.value.toMutableList().apply {
                     if (contains(event.selectedMusicId)) {
                         remove(event.selectedMusicId)
@@ -104,10 +104,10 @@ class DirectMigrationViewModel @Inject constructor(
                 }
             }
 
-            is DirectMigrationUiEvent.SelectAllMusic -> {
+            is DirectMigrationUiEvent.SelectAllSourceMusic -> {
                 when (event.selectAllFlag) {
                     true -> selectedMusics.value = emptyList()
-                    false -> selectedMusics.value = uiState.value.allMusics.map { it.isrcCode }
+                    false -> selectedMusics.value = uiState.value.allSourceMusics.map { it.isrcCode }
                 }
             }
         }

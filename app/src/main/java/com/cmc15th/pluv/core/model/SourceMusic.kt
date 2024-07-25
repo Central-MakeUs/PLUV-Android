@@ -1,6 +1,6 @@
 package com.cmc15th.pluv.core.model
 
-data class Music(
+data class SourceMusic(
     val isrcCode: String = "",
     val thumbNailUrl: String = "",
     val title: String = "",

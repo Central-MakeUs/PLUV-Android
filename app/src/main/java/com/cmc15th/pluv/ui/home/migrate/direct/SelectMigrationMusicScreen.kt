@@ -113,7 +113,7 @@ fun SelectMigrationMusicScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(
-                    uiState.allMusics,
+                    uiState.allSourceMusics,
                     key = { music -> music.isrcCode }
                 ) { music ->
                     MusicItem(

@@ -1,8 +1,9 @@
 package com.cmc15th.pluv.core.data.mapper
 
-import com.cmc15th.pluv.core.model.Music
 import com.cmc15th.pluv.core.model.Playlist
+import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.network.response.ReadPlaylistResponse
+import com.cmc15th.pluv.core.network.response.ReadSourceMusicResponse
 import com.cmc15th.pluv.domain.model.PlayListApp
 
 fun ReadPlaylistResponse.toPlaylist() = Playlist(
@@ -13,7 +14,7 @@ fun ReadPlaylistResponse.toPlaylist() = Playlist(
     source = PlayListApp.toAppName(source)
 )
 
-fun ReadPlaylistResponse.ReadMusicResponse.toMusic() = Music(
+fun ReadSourceMusicResponse.toSourceMusic() = SourceMusic(
     title = title,
     artistName = artistName,
     isrcCode = isrcCode,
