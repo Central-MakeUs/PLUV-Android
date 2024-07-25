@@ -1,4 +1,3 @@
-
 import android.app.Activity
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -8,39 +7,71 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.BuildConfig
+import com.cmc15th.pluv.domain.model.LoginMoment
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEffect
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
+import com.spotify.sdk.android.auth.LoginActivity.REQUEST_CODE
 
 private const val TAG = "PlaylistLoginScreen"
+
 @Composable
 fun PlaylistLoginScreen(
     viewModel: DirectMigrationViewModel = hiltViewModel(),
-    onLoginSuccess: () -> Unit = {},
+    onLoginSuccess: (LoginMoment) -> Unit = {},
     onLoginError: (String) -> Unit = {}
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect {
+            when (it) {
+                DirectMigrationUiEffect.OnFetchPlaylistSuccess -> {
+                    onLoginSuccess(viewModel.loginMoment.value)
+                }
+
+                DirectMigrationUiEffect.OnFailure -> {
+                    onLoginError("Failed to fetch playlists")
+                }
+
+                else -> {}
+            }
+        }
+    }
 
     val context = LocalContext.current as Activity
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         val response = AuthorizationClient.getResponse(result.resultCode, result.data)
-
+        AuthorizationClient.stopLoginActivity(context, REQUEST_CODE)
         when (response.type) {
             AuthorizationResponse.Type.TOKEN -> {
                 // 로그인 성공
                 val accessToken = response.accessToken
                 Log.d(TAG, "PlaylistLoginScreen:  $accessToken ")
                 viewModel.setSpotifyAccessToken(accessToken)
-                onLoginSuccess()
+
+                when (viewModel.loginMoment.value) {
+                    LoginMoment.Source -> {
+                        viewModel.setEvent(DirectMigrationUiEvent.OnLoginSourceSuccess)
+                    }
+
+                    LoginMoment.Destination -> {
+                        viewModel.setEvent(DirectMigrationUiEvent.OnLoginDestinationSuccess)
+                    }
+                }
             }
+
             AuthorizationResponse.Type.ERROR -> {
                 // 로그인 실패
                 val error = response.error
                 Log.e(TAG, "PlaylistLoginScreen: $error")
                 onLoginError(error)
             }
+
             else -> {
                 // 기타 처리
                 onLoginError("Unknown error occurred")
