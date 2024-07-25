@@ -28,6 +28,7 @@ import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.core.ui.component.MusicsHeader
+import com.cmc15th.pluv.domain.model.LoginMoment
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
 import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 
@@ -62,7 +63,10 @@ fun SelectMigrationMusicScreen(
                     .size(58.dp),
                 isNextButtonEnabled = true,
                 onPreviousClick = { navigateToSelectPlaylist() },
-                onMigrateClick = { }
+                onMigrateClick = {
+                    viewModel.setLoginMoment(LoginMoment.Destination)
+                    navigateToLoginScreen()
+                }
             )
         }
     ) { paddingValues ->
