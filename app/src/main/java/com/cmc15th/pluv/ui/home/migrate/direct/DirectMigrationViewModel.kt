@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
+import com.cmc15th.pluv.domain.model.LoginMoment
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +34,9 @@ class DirectMigrationViewModel @Inject constructor(
 
     private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
+
+    private val _loginMoment: MutableStateFlow<LoginMoment> = MutableStateFlow(LoginMoment.Source)
+    val loginMoment: StateFlow<LoginMoment> = _loginMoment.asStateFlow()
 
     val selectedMusics = mutableStateOf(listOf<String>())
 
@@ -67,6 +72,14 @@ class DirectMigrationViewModel @Inject constructor(
 
             is DirectMigrationUiEvent.ExecuteMigration -> {
                 //TODO Source App Login
+            }
+
+            is DirectMigrationUiEvent.OnLoginSourceSuccess -> {
+                fetchPlaylists()
+            }
+
+            is DirectMigrationUiEvent.OnLoginDestinationSuccess -> {
+                //TODO 유효성 검사
             }
 
             is DirectMigrationUiEvent.SelectPlaylist -> {
@@ -123,7 +136,7 @@ class DirectMigrationViewModel @Inject constructor(
         }
     }
 
-    fun fetchPlaylists() {
+    private fun fetchPlaylists() {
         // Fetch playlists
         viewModelScope.launch {
             Log.d(TAG, "fetchPlaylists: ${playlistAccessToken.value} ")
@@ -142,11 +155,13 @@ class DirectMigrationViewModel @Inject constructor(
                             isLoading = false
                         )
                     }
+                    sendEffect(DirectMigrationUiEffect.OnFetchPlaylistSuccess)
                 }
                 result.onFailure { i, s ->
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
                 }
             }
         }
@@ -170,13 +185,13 @@ class DirectMigrationViewModel @Inject constructor(
                             allMusics = data
                         )
                     }
-                    sendEffect(DirectMigrationUiEffect.onSuccess)
+                    sendEffect(DirectMigrationUiEffect.OnFetchMusicSuccess)
                 }
                 result.onFailure { code, error ->
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
-                    sendEffect(DirectMigrationUiEffect.onFailure)
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
                     Log.d(TAG, "fetchMusicByPlaylist: $code, $error")
                 }
             }
@@ -185,6 +200,10 @@ class DirectMigrationViewModel @Inject constructor(
 
     fun setSpotifyAccessToken(accessToken: String?) {
         playlistAccessToken.update { accessToken ?: "" }
+    }
+
+    fun setLoginMoment(moment: LoginMoment) {
+        _loginMoment.update { moment }
     }
 
     companion object {
