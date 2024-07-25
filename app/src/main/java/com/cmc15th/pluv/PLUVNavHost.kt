@@ -11,7 +11,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.cmc15th.pluv.domain.model.LoginMoment
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.HomeScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
@@ -117,9 +116,9 @@ fun PLUVNavHost(
                             }
                         }
                     },
-//                    navigateToSelectPlaylist = {
-//                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
-//                    },
+                    navigateToSelectPlaylist = {
+                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+                    },
                     navigateToLoginSourceApp = { sourceApp ->
                         when (sourceApp) {
                             PlayListApp.spotify -> navController.navigate(DestinationScreens.SpotifyLogin.route)
@@ -137,16 +136,8 @@ fun PLUVNavHost(
                         navBackStackEntry = navBackStackEntry,
                         route = DestinationScreens.DirectMigrationRoot.route
                     ),
-                    onLoginSuccess = { loginMoment ->
-                        when (loginMoment) {
-                            LoginMoment.Source -> {
-                                navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
-                            }
-
-                            LoginMoment.Destination -> {
-                                navController.navigate(DestinationScreens.SelectMigrationMusic.route)
-                            }
-                        }
+                    navigateToPreviousScreen = {
+                        navController.popBackStack()
                     },
                     onLoginError = {
                         //TODO 에러 스낵바 표시
@@ -195,7 +186,14 @@ fun PLUVNavHost(
                             popUpTo(DestinationScreens.Home.route) { inclusive = true }
                         }
                     },
-                    navigateToLoginScreen = {
+                    navigateToLoginScreen = { destinationApp ->
+                        //TODO 다른 서비스 로그인 구현시 사용예정
+//                        when (destinationApp) {
+//                            PlayListApp.spotify -> navController.navigate(DestinationScreens.SpotifyLogin.route)
+//                            else -> {
+//                                //TODO 애플뮤직, 유튜브뮤직, 멜론 추가 예정
+//                            }
+//                        }
                         navController.navigate(DestinationScreens.SpotifyLogin.route)
                     },
                     navigateToSelectPlaylist = {

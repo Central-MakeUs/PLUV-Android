@@ -15,6 +15,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,9 +45,26 @@ fun DisplayMigrationPathScreen(
     onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectDestinationApp: () -> Unit,
-    navigateToLoginSourceApp: (PlayListApp) -> Unit = {}
+    navigateToLoginSourceApp: (PlayListApp) -> Unit = {},
+    navigateToSelectPlaylist: () -> Unit = {}
 ) {
     val uiState = viewModel.uiState.collectAsState()
+
+    // 플레이리스트를 성공적으로 가져온 경우 플리 선택 화면으로 이동
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                DirectMigrationUiEffect.OnFetchPlaylistSuccess -> {
+                    navigateToSelectPlaylist()
+                }
+
+                DirectMigrationUiEffect.OnFailure -> {
+                    //TODO 에러 표시
+                }
+                else -> {}
+            }
+        }
+    }
 
     // 플레이리스트 목록 가져오는 중일 경우 Dialog 표시
     if (uiState.value.isLoading) {

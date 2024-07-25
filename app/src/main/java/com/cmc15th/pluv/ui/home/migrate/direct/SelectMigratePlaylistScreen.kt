@@ -48,16 +48,16 @@ fun SelectMigratePlaylistScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchPlaylists()
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                DirectMigrationUiEffect.onSuccess -> {
+                DirectMigrationUiEffect.OnFetchMusicSuccess -> {
                     navigateToSelectMigrationMusic()
                 }
 
-                DirectMigrationUiEffect.onFailure -> {
+                DirectMigrationUiEffect.OnFailure -> {
                     //TODO 에러 표시
                 }
+                else -> {}
             }
         }
     }
