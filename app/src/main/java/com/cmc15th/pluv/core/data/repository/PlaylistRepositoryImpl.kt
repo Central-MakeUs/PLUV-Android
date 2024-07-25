@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.core.data.repository
 
+import android.util.Log
 import com.cmc15th.pluv.core.data.mapper.toMusic
 import com.cmc15th.pluv.core.data.mapper.toPlaylist
 import com.cmc15th.pluv.core.model.ApiResult
@@ -23,11 +24,12 @@ class PlaylistRepositoryImpl @Inject constructor(
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>> = flow {
         emit(
-            migrationService.fetchPlaylists(playlistAppName, PlaylistAccessToken(accessToken)).map { result ->
-                result.map {
-                    it.toPlaylist()
+            migrationService.fetchPlaylists(playlistAppName, PlaylistAccessToken(accessToken))
+                .map { result ->
+                    result.map {
+                        it.toPlaylist()
+                    }
                 }
-            }
         )
     }.flowOn(Dispatchers.IO)
 
@@ -37,8 +39,12 @@ class PlaylistRepositoryImpl @Inject constructor(
         playlistId: String
     ): Flow<ApiResult<List<Music>>> = flow {
         emit(
-            migrationService.fetchMusicsByPlaylistId(playlistAppName, playlistId, PlaylistAccessToken(accessToken)).map { result ->
-                result.map {
+            migrationService.fetchMusicsByPlaylistId(
+                source = playlistAppName,
+                playlistId = playlistId,
+                accessToken = PlaylistAccessToken(accessToken)
+            ).map { result ->
+                result.data.map {
                     it.toMusic()
                 }
             }

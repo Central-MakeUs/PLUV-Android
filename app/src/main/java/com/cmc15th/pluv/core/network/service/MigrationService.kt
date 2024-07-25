@@ -2,6 +2,7 @@ package com.cmc15th.pluv.core.network.service
 
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
+import com.cmc15th.pluv.core.network.response.CommonResponse
 import com.cmc15th.pluv.core.network.response.ReadPlaylistResponse
 import com.cmc15th.pluv.core.network.response.ReadPlaylistResponse.ReadMusicResponse
 import com.cmc15th.pluv.domain.model.PlayListApp
@@ -22,6 +23,6 @@ interface MigrationService {
         @Path("source") source: PlayListApp,
         @Path("playlistId") playlistId: String,
         @Body accessToken: PlaylistAccessToken
-    ): ApiResult<List<ReadMusicResponse>>
+    ): ApiResult<CommonResponse<List<ReadMusicResponse>>>
 
 }
