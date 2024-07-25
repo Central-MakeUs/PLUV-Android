@@ -61,7 +61,7 @@ fun SelectMigrationMusicScreen(
                     .fillMaxWidth()
                     .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
                     .size(58.dp),
-                isNextButtonEnabled = true,
+                isNextButtonEnabled = uiState.selectedSourceMusics.isNotEmpty(),
                 onPreviousClick = { navigateToSelectPlaylist() },
                 onMigrateClick = {
                     viewModel.setLoginMoment(LoginMoment.Destination)
@@ -100,10 +100,10 @@ fun SelectMigrationMusicScreen(
 
                 MusicsHeader(
                     modifier = Modifier.fillMaxWidth(),
-                    selectedMusicCount = viewModel.selectedMusics.value.size,
-                    isSelectedAll = viewModel.selectedMusics.value.size == uiState.allMusics.size,
+                    selectedMusicCount = uiState.selectedSourceMusics.size,
+                    isSelectedAll = uiState.selectedSourceMusics.size == uiState.allSourceMusics.size,
                     onAllSelectedClick = { isSelectedAll ->
-                        viewModel.setEvent(DirectMigrationUiEvent.SelectAllMusic(isSelectedAll))
+                        viewModel.setEvent(DirectMigrationUiEvent.SelectAllSourceMusic(isSelectedAll))
                     }
                 )
             }
@@ -117,12 +117,12 @@ fun SelectMigrationMusicScreen(
                     key = { music -> music.isrcCode }
                 ) { music ->
                     MusicItem(
-                        isChecked = selectedMusics.contains(music.isrcCode),
+                        isChecked = uiState.selectedSourceMusics.contains(music),
                         imageUrl = music.thumbNailUrl,
                         musicName = music.title,
                         artistName = music.artistName,
                         onCheckedChange = { _ ->
-                            viewModel.setEvent(DirectMigrationUiEvent.SelectMusic(music.isrcCode))
+                            viewModel.setEvent(DirectMigrationUiEvent.SelectSourceMusic(music))
                         },
                     )
                 }
@@ -130,6 +130,7 @@ fun SelectMigrationMusicScreen(
         }
     }
 }
+
 
 @Composable
 fun PlaylistInfo(

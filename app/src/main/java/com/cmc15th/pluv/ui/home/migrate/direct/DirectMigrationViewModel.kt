@@ -1,7 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
@@ -10,7 +9,6 @@ import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,8 +36,6 @@ class DirectMigrationViewModel @Inject constructor(
     private val _loginMoment: MutableStateFlow<LoginMoment> = MutableStateFlow(LoginMoment.Source)
     val loginMoment: StateFlow<LoginMoment> = _loginMoment.asStateFlow()
 
-    val selectedMusics = mutableStateOf(listOf<String>())
-
     private val playlistAccessToken = MutableStateFlow("")
 
     init {
@@ -61,6 +57,7 @@ class DirectMigrationViewModel @Inject constructor(
     }
 
     private fun handleEvent(event: DirectMigrationUiEvent) {
+
         when (event) {
             is DirectMigrationUiEvent.SelectSourceApp -> {
                 setSelectedSourceApp(event.selectedApp)
@@ -95,19 +92,36 @@ class DirectMigrationViewModel @Inject constructor(
             }
 
             is DirectMigrationUiEvent.SelectSourceMusic -> {
-                selectedMusics.value = selectedMusics.value.toMutableList().apply {
-                    if (contains(event.selectedMusicId)) {
-                        remove(event.selectedMusicId)
-                    } else {
-                        add(event.selectedMusicId)
-                    }
+                val isSelectedMusicContain =
+                    _uiState.value.selectedSourceMusics.contains(event.selectedMusic)
+
+                val selectedMusics = _uiState.value.selectedSourceMusics.toMutableList()
+
+                when (isSelectedMusicContain) {
+                    true -> selectedMusics.remove(event.selectedMusic)
+                    false -> selectedMusics.add(event.selectedMusic)
+                }
+
+                _uiState.update {
+                    it.copy(
+                        selectedSourceMusics = selectedMusics
+                    )
                 }
             }
 
             is DirectMigrationUiEvent.SelectAllSourceMusic -> {
                 when (event.selectAllFlag) {
-                    true -> selectedMusics.value = emptyList()
-                    false -> selectedMusics.value = uiState.value.allSourceMusics.map { it.isrcCode }
+                    true -> {
+                        _uiState.update {
+                            it.copy(selectedSourceMusics = emptyList())
+                        }
+                    }
+
+                    false -> {
+                        _uiState.update {
+                            it.copy(selectedSourceMusics = _uiState.value.allSourceMusics)
+                        }
+                    }
                 }
             }
         }
@@ -183,10 +197,13 @@ class DirectMigrationViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             allMusics = data
+                            allSourceMusics = data,
+                            selectedSourceMusics = data
                         )
                     }
                     sendEffect(DirectMigrationUiEffect.OnFetchMusicSuccess)
                 }
+
                 result.onFailure { code, error ->
                     _uiState.update {
                         it.copy(isLoading = false)

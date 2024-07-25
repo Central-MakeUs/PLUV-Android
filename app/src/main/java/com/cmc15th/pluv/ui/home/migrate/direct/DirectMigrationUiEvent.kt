@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
+import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.domain.model.PlayListApp
 
 sealed class DirectMigrationUiEvent {
@@ -10,6 +11,6 @@ sealed class DirectMigrationUiEvent {
     data object OnLoginDestinationSuccess: DirectMigrationUiEvent()
     class SelectPlaylist(val selectedPlaylistId: String) : DirectMigrationUiEvent()
     data object FetchMusicsByPlaylist : DirectMigrationUiEvent()
-    class SelectSourceMusic(val selectedMusicId: String) : DirectMigrationUiEvent()
+    class SelectSourceMusic(val selectedMusic: SourceMusic) : DirectMigrationUiEvent()
     class SelectAllSourceMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
 }

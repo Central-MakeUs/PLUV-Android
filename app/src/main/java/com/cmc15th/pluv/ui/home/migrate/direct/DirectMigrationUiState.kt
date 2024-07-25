@@ -1,7 +1,8 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
-import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.Playlist
+import com.cmc15th.pluv.core.model.SourceMusic
+import com.cmc15th.pluv.core.model.ValidateMusic
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 
@@ -14,4 +15,6 @@ data class DirectMigrationUiState(
     val allPlaylists: List<Playlist> = emptyList(),
     val selectedPlaylist: String = "",
     val allSourceMusics: List<SourceMusic> = emptyList()
+    val allSourceMusics: List<SourceMusic> = emptyList(),
+    val selectedSourceMusics: List<SourceMusic> = emptyList(),
 )
