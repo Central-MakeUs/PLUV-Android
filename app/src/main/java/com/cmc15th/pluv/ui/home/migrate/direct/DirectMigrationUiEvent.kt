@@ -13,4 +13,5 @@ sealed class DirectMigrationUiEvent {
     data object FetchMusicsByPlaylist : DirectMigrationUiEvent()
     class SelectSourceMusic(val selectedMusic: SourceMusic) : DirectMigrationUiEvent()
     class SelectAllSourceMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
+    class SelectAllValidateMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
 }

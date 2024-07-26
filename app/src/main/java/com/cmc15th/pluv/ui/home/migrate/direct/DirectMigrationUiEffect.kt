@@ -4,5 +4,5 @@ sealed class DirectMigrationUiEffect {
     data object OnFetchPlaylistSuccess : DirectMigrationUiEffect()
     data object OnFetchMusicSuccess : DirectMigrationUiEffect()
     data object OnFailure : DirectMigrationUiEffect()
-    data object OnValidateMusic : DirectMigrationUiEffect()
+    data class OnValidateMusic(val needValidate: Boolean) : DirectMigrationUiEffect()
 }

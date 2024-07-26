@@ -76,7 +76,7 @@ class DirectMigrationViewModel @Inject constructor(
             }
 
             is DirectMigrationUiEvent.OnLoginDestinationSuccess -> {
-                //TODO 유효성 검사
+                validateSelectedMusic()
             }
 
             is DirectMigrationUiEvent.SelectPlaylist -> {
@@ -120,6 +120,21 @@ class DirectMigrationViewModel @Inject constructor(
                     false -> {
                         _uiState.update {
                             it.copy(selectedSourceMusics = _uiState.value.allSourceMusics)
+                        }
+                    }
+                }
+            }
+
+            is DirectMigrationUiEvent.SelectAllValidateMusic -> {
+                when (event.selectAllFlag) {
+                    true -> {
+                        _uiState.update {
+                            it.copy(selectedValidateMusics = emptyList())
+                        }
+                    }
+                    false -> {
+                        _uiState.update {
+                            it.copy(selectedValidateMusics = it.validateMusics)
                         }
                     }
                 }
@@ -196,7 +211,6 @@ class DirectMigrationViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            allMusics = data
                             allSourceMusics = data,
                             selectedSourceMusics = data
                         )

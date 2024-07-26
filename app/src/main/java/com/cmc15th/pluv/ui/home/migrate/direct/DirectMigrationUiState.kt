@@ -14,7 +14,8 @@ data class DirectMigrationUiState(
     val selectedDestinationApp: PlayListApp = PlayListApp.EMPTY,
     val allPlaylists: List<Playlist> = emptyList(),
     val selectedPlaylist: String = "",
-    val allSourceMusics: List<SourceMusic> = emptyList()
     val allSourceMusics: List<SourceMusic> = emptyList(),
     val selectedSourceMusics: List<SourceMusic> = emptyList(),
+    val validateMusics: List<ValidateMusic> = emptyList(),
+    val selectedValidateMusics: List<ValidateMusic> = emptyList(),
 )
