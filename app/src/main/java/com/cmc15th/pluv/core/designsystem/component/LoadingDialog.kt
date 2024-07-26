@@ -34,6 +34,7 @@ fun LoadingDialog(
     icon: @Composable () -> Unit,
     description: String,
     modifier: Modifier = Modifier,
+    progressVisible: Boolean = true,
     onDismissRequest: () -> Unit,
 ) {
     Dialog(
@@ -73,13 +74,15 @@ fun LoadingDialog(
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.size(25.dp))
-                    LinearProgressIndicator(
-                        color = colorResource(id = R.color.current_step_color),
-                        trackColor = Color.LightGray,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 51.dp)
-                    )
+                    if (progressVisible) {
+                        LinearProgressIndicator(
+                            color = colorResource(id = R.color.current_step_color),
+                            trackColor = Color.LightGray,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 51.dp)
+                        )
+                    }
                     Spacer(modifier = Modifier.padding(41.dp))
                 }
             }
