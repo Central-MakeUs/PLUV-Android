@@ -39,7 +39,7 @@ fun MusicItem(
     imageUrl: String,
     musicName: String,
     artistName: String,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit = {}
 ) {
 
     val backgroundColor = if (isChecked) Color(0xFFCB84FF).copy(alpha = 0.08f) else MaterialTheme.colorScheme.surface
