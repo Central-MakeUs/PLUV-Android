@@ -264,13 +264,41 @@ class DirectMigrationViewModel @Inject constructor(
             ).collect { result ->
                 Log.d(TAG, "validateSelectedMusic: $result")
                 result.onSuccess { data ->
+
+                    val updatedData = data.map { validateMusic ->
+                        val matchingSourceMusic =
+                            _uiState.value.selectedSourceMusics.find { sourceMusic ->
+                                sourceMusic.title == validateMusic.sourceMusic.title
+                            }
+
+                        // `validateMusic`의 `sourceMusic`을 업데이트된 `matchingSourceMusic`으로 교체
+                        if (matchingSourceMusic != null) {
+                            validateMusic.copy(sourceMusic = matchingSourceMusic)
+                        } else {
+                            validateMusic
+                        }
+                    }
+                    // isEqual = true, isFound = true 인 경우는 유저가 선택한 음악이 Destination App에 존재하는 경우 (검증 필요X)
+                    val similarMusics = updatedData.filter {
+                        !it.isEqual && it.isFound
+                    }
+
+                    val notFoundMusics = updatedData.filter {
+                        !it.isEqual && !it.isFound
+                    }.map { it.destinationMusic }
+
+                    val needValidate = similarMusics.isNotEmpty() || notFoundMusics.isNotEmpty()
+
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            validateMusics = data
+                            similarMusics = similarMusics,
+                            selectedSimilarMusics = similarMusics,
+                            notFoundMusics = notFoundMusics
                         )
                     }
-                    sendEffect(DirectMigrationUiEffect.OnValidateMusic(needValidate = data.isNotEmpty()))
+                    Log.d(TAG, "validateSelectedMusic:  $similarMusics, $notFoundMusics  $needValidate")
+                    sendEffect(DirectMigrationUiEffect.OnValidateMusic(needValidate = needValidate))
                 }
 
                 result.onFailure { code, error ->
