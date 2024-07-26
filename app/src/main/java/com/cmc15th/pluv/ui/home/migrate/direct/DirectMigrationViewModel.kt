@@ -229,6 +229,42 @@ class DirectMigrationViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 유저가 선택한 옮길 음악 Destination App에서 존재하는지 검증하여 일치하지 않지만 유사한 음악 + 존재하지 않는 음악 응답값으로 받는 함수
+     */
+    private fun validateSelectedMusic() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+            playlistRepository.validateMusic(
+                //FIXME playlistAppName = _uiState.value.selectedDestinationApp,
+                playlistAppName = PlayListApp.spotify,
+                accessToken = playlistAccessToken.value,
+                musics = _uiState.value.selectedSourceMusics
+            ).collect { result ->
+                Log.d(TAG, "validateSelectedMusic: $result")
+                result.onSuccess { data ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            validateMusics = data
+                        )
+                    }
+                    sendEffect(DirectMigrationUiEffect.OnValidateMusic(needValidate = data.isNotEmpty()))
+                }
+
+                result.onFailure { code, error ->
+                    _uiState.update {
+                        it.copy(isLoading = false)
+                    }
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
+                    Log.d(TAG, "validateSelectedMusic: $code, $error")
+                }
+            }
+        }
+    }
+
     fun setSpotifyAccessToken(accessToken: String?) {
         playlistAccessToken.update { accessToken ?: "" }
     }
