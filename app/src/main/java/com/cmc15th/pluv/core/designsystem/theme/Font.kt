@@ -40,6 +40,18 @@ val Title4 = TextStyle(
     fontSize = 18.sp
 )
 
+val Title5 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 16.sp
+)
+
+val Title6 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 14.sp
+)
+
 val Content1 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Normal,
