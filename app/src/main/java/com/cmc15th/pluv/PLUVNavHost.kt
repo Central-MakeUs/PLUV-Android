@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.HomeScreen
+import com.cmc15th.pluv.ui.home.migrate.common.screen.SelectSimilarMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectDestinationAppScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigratePlaylistScreen
@@ -200,14 +201,31 @@ fun PLUVNavHost(
                         navController.popBackStack()
 //                        navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
                     },
+                    navigateToSelectSimilarMusic = {
+                        navController.navigate(DestinationScreens.SelectSimilarMusic.route)
+                    },
+                    navigateToShowNotFoundMusic = {
+                        navController.navigate(DestinationScreens.ShowNotFoundMusic.route)
+                    },
                     navigateToExecuteMigrationScreen = {
-
+                        //TODO 마이그레이션 실행
                     },
                     viewModel = navController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
                         route = DestinationScreens.DirectMigrationRoot.route
                     )
                 )
+            }
+            composable(route = DestinationScreens.SelectSimilarMusic.route) { navBackStackEntry ->
+                SelectSimilarMusicScreen(
+                    viewModel = navController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    )
+                )
+            }
+            composable(route = DestinationScreens.ShowNotFoundMusic.route) { navBackStackEntry ->
+                //TODO 찾을 수 없는 음악 화면
             }
         }
         navigation(
