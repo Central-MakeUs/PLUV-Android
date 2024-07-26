@@ -59,15 +59,17 @@ class PlaylistRepositoryImpl @Inject constructor(
         playlistAppName: PlayListApp,
         accessToken: String,
         musics: List<SourceMusic>
-    ): Flow<ApiResult<List<ValidateMusic>>> = flow<ApiResult<List<ValidateMusic>>> {
-        migrationService.validateMusic(
-            playlistAppName,
-            ValidateMusicRequest(accessToken, musics)
-        ).map { result ->
-            Log.d("REPOSITORY", "validateMusic: $result")
-            result.data.map {
-                it.toValidateMusic()
+    ): Flow<ApiResult<List<ValidateMusic>>> = flow {
+        emit(
+            migrationService.validateMusic(
+                playlistAppName,
+                ValidateMusicRequest(accessToken, musics)
+            ).map { result ->
+                Log.d("REPOSITORY", "validateMusic: $result")
+                result.data.map {
+                    it.toValidateMusic()
+                }
             }
-        }
+        )
     }.flowOn(Dispatchers.IO)
 }
