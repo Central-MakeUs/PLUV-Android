@@ -18,7 +18,7 @@ data class ReadSourceMusicResponse(
 )
 
 data class ReadValidateSourceResponse(
-    @SerializedName("title") val title: String? = "",
+    @SerializedName("title") val title: String = "",
     @SerializedName("artistName") val artistName: String = "",
 )
 
