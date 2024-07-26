@@ -16,3 +16,15 @@ data class ReadSourceMusicResponse(
     @SerializedName("isrcCode") val isrcCode: String = "",
     @SerializedName("imageUrl") val thumbNailUrl: String = ""
 )
+
+data class ReadValidateSourceResponse(
+    @SerializedName("name") val name: String = "",
+    @SerializedName("artistName") val artistName: String = "",
+)
+
+data class ReadDestinationMusicResponse(
+    @SerializedName("id") val id: String = "",
+    @SerializedName("name") val title: String = "",
+    @SerializedName("artistName") val artistName: String = "",
+    @SerializedName("imageUrl") val thumbNailUrl: String = ""
+)
