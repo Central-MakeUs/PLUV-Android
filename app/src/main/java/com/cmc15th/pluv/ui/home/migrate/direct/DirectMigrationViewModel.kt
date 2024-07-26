@@ -125,16 +125,35 @@ class DirectMigrationViewModel @Inject constructor(
                 }
             }
 
+            is DirectMigrationUiEvent.SelectSimilarMusic -> {
+                val isSelectedMusicContain =
+                    _uiState.value.selectedSimilarMusics.contains(event.selectedMusic)
+
+                val selectedMusics = _uiState.value.selectedSimilarMusics.toMutableList()
+
+                when (isSelectedMusicContain) {
+                    true -> selectedMusics.remove(event.selectedMusic)
+                    false -> selectedMusics.add(event.selectedMusic)
+                }
+
+                _uiState.update {
+                    it.copy(
+                        selectedSimilarMusics = selectedMusics
+                    )
+                }
+            }
+
             is DirectMigrationUiEvent.SelectAllValidateMusic -> {
                 when (event.selectAllFlag) {
                     true -> {
                         _uiState.update {
-                            it.copy(selectedValidateMusics = emptyList())
+                            it.copy(selectedSimilarMusics = emptyList())
                         }
                     }
+
                     false -> {
                         _uiState.update {
-                            it.copy(selectedValidateMusics = it.validateMusics)
+                            it.copy(selectedSimilarMusics = it.similarMusics)
                         }
                     }
                 }

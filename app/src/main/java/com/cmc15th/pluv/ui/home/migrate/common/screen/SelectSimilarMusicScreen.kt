@@ -1,11 +1,14 @@
 package com.cmc15th.pluv.ui.home.migrate.common.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,12 +72,15 @@ fun SelectSimilarMusicScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .padding(start = 24.dp, end = 24.dp, top = 28.dp)
             ) {
                 SourceToDestinationText(
                     sourceApp = uiState.selectedSourceApp.appName,
                     destinationApp = uiState.selectedDestinationApp.appName
                 )
+
+                Spacer(modifier = Modifier.size(8.dp))
+
                 Text(text = "가장 유사한 항목을 옮길까요?", style = Title1)
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(text = "일부 정보만 일치하는 음악이에요.", style = Content1, color = Color(0xFF8E8E8E))
@@ -84,21 +90,36 @@ fun SelectSimilarMusicScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 12.dp),
-                    selectedMusicCount = uiState.selectedValidateMusics.size,
-                    isSelectedAll = uiState.selectedValidateMusics.size == uiState.validateMusics.size,
+                    selectedMusicCount = uiState.selectedSimilarMusics.size,
+                    isSelectedAll = uiState.selectedSimilarMusics.size == uiState.similarMusics.size,
                     onAllSelectedClick = {
                         viewModel.setEvent(DirectMigrationUiEvent.SelectAllValidateMusic(it))
                     }
                 )
             }
-//
-//            LazyColumn(
-//                modifier = Modifier
-//            ) {
-//                items(
-//
-//                )
-//            }
+
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(
+                    uiState.similarMusics,
+                    key = { it.sourceMusic.isrcCode }
+                ) { music ->
+                    MusicWithSimilarMusic(
+                        modifier = Modifier.fillMaxWidth(),
+                        isChecked = uiState.selectedSimilarMusics.contains(music),
+                        imageUrl = music.sourceMusic.thumbNailUrl,
+                        musicName = music.sourceMusic.title,
+                        artistName = music.sourceMusic.artistName,
+                        originalMusicImageUrl = music.destinationMusic.thumbNailUrl,
+                        originalMusicName = music.destinationMusic.title,
+                        originalArtistName = music.destinationMusic.artistName,
+                        onCheckedChange = {
+                            viewModel.setEvent(DirectMigrationUiEvent.SelectSimilarMusic(music))
+                        }
+                    )
+                }
+            }
         }
     }
 }
@@ -113,6 +134,7 @@ fun MusicWithSimilarMusic(
     originalMusicImageUrl: String = "",
     originalMusicName: String = "",
     originalArtistName: String = "",
+    onCheckedChange: (Boolean) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -123,11 +145,15 @@ fun MusicWithSimilarMusic(
             musicName = musicName,
             artistName = artistName,
             onCheckedChange = {
-
+                onCheckedChange(it)
             }
         )
         if (isChecked) {
             OriginalMusicItem(
+                modifier = Modifier
+                    .background(color = Color(0xFFCB84FF).copy(alpha = 0.08f))
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 10.dp),
                 imageUrl = originalMusicImageUrl,
                 musicName = originalMusicName,
                 artistName = originalArtistName
