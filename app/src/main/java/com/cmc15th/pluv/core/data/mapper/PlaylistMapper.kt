@@ -27,7 +27,7 @@ fun ReadSourceMusicResponse.toSourceMusic() = SourceMusic(
 )
 
 fun ReadValidateSourceResponse.toSourceMusic() = SourceMusic(
-    title = name,
+    title = title,
     artistName = artistName
 )
 
