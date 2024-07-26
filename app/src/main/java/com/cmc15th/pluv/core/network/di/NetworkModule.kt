@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.core.network.di
 
 import com.cmc15th.pluv.BuildConfig
+import com.cmc15th.pluv.core.network.adapter.ApiResultCallAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +31,7 @@ object NetworkModule {
         Retrofit.Builder()
             .baseUrl(BuildConfig.server_url)
             .client(okHttpClient)
+            .addCallAdapterFactory(ApiResultCallAdapter.Factory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

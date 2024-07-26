@@ -13,7 +13,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content2
@@ -28,8 +33,13 @@ import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.core.ui.component.MusicsHeader
-import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.component.SourceToDestinationText
+import com.cmc15th.pluv.domain.model.LoginMoment
+import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
+import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
+import kotlinx.coroutines.delay
+
+private const val DialogDuration = 800L
 
 @Composable
 fun SelectMigrationMusicScreen(
@@ -38,11 +48,67 @@ fun SelectMigrationMusicScreen(
     totalStep: Int = 0,
     onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
+    navigateToLoginScreen: (PlayListApp) -> Unit = {},
     navigateToSelectPlaylist: () -> Unit,
+    navigateToSelectSimilarMusic: () -> Unit = {},
+    navigateToShowNotFoundMusic: () -> Unit = {},
     navigateToExecuteMigrationScreen: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val selectedMusics by viewModel.selectedMusics
+
+    var dialogVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var dialogDescription by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is DirectMigrationUiEffect.OnValidateMusic -> {
+                    if (effect.needValidate) {
+                        dialogDescription = "앗, 찾을 수 없는 곡이\n몇 개 있네요!"
+                        dialogVisible = true
+                        delay(DialogDuration)
+                        dialogVisible = false
+
+                        if (uiState.similarMusics.isNotEmpty()) {
+                            navigateToSelectSimilarMusic()
+                        }
+
+                        if (uiState.similarMusics.isEmpty() && uiState.notFoundMusics.isNotEmpty()) {
+                            navigateToShowNotFoundMusic()
+                        }
+
+                    } else {
+                        dialogDescription = "플레이리스트의\n모든 음악을 찾았어요!"
+                        dialogVisible = true
+                        delay(DialogDuration)
+                        dialogVisible = false
+
+                        navigateToExecuteMigrationScreen()
+                    }
+                }
+
+                is DirectMigrationUiEffect.OnFailure -> {
+                    //TODO 에러 표시
+                }
+
+                else -> {}
+            }
+        }
+    }
+
+    if (uiState.isLoading || dialogVisible) {
+        LoadingDialog(
+            icon = { /*TODO*/ },
+            description = if (uiState.isLoading) "음악을\n찾는 중이에요!" else dialogDescription,
+            progressVisible = uiState.isLoading,
+            onDismissRequest = {}
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -60,9 +126,13 @@ fun SelectMigrationMusicScreen(
                     .fillMaxWidth()
                     .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
                     .size(58.dp),
-                isNextButtonEnabled = true,
+                isNextButtonEnabled = uiState.selectedSourceMusics.isNotEmpty(),
                 onPreviousClick = { navigateToSelectPlaylist() },
-                onMigrateClick = { }
+                onMigrateClick = {
+                    // 여기서 로그인은 이전 목적지의 음악 서비스의 로그인
+                    viewModel.setLoginMoment(LoginMoment.Destination)
+                    navigateToLoginScreen(uiState.selectedDestinationApp)
+                }
             )
         }
     ) { paddingValues ->
@@ -72,7 +142,9 @@ fun SelectMigrationMusicScreen(
                 .padding(paddingValues)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(24.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 28.dp)
             ) {
                 SourceToDestinationText(
                     uiState.selectedSourceApp.appName,
@@ -94,10 +166,14 @@ fun SelectMigrationMusicScreen(
 
                 MusicsHeader(
                     modifier = Modifier.fillMaxWidth(),
-                    selectedMusicCount = viewModel.selectedMusics.value.size,
-                    isSelectedAll = viewModel.selectedMusics.value.size == uiState.allMusics.size,
+                    selectedMusicCount = uiState.selectedSourceMusics.size,
+                    isSelectedAll = uiState.selectedSourceMusics.size == uiState.allSourceMusics.size,
                     onAllSelectedClick = { isSelectedAll ->
-                        viewModel.setEvent(DirectMigrationUiEvent.SelectAllMusic(isSelectedAll))
+                        viewModel.setEvent(
+                            DirectMigrationUiEvent.SelectAllSourceMusic(
+                                isSelectedAll
+                            )
+                        )
                     }
                 )
             }
@@ -107,16 +183,16 @@ fun SelectMigrationMusicScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(
-                    uiState.allMusics,
-                    key = { music -> music.id }
+                    uiState.allSourceMusics,
+                    key = { music -> music.isrcCode }
                 ) { music ->
                     MusicItem(
-                        isChecked = selectedMusics.contains(music.id),
+                        isChecked = uiState.selectedSourceMusics.contains(music),
                         imageUrl = music.thumbNailUrl,
-                        musicName = music.title,
-                        artistName = music.artist,
+                        musicName = music.title ?: "몰라",
+                        artistName = music.artistName,
                         onCheckedChange = { _ ->
-                            viewModel.setEvent(DirectMigrationUiEvent.SelectMusic(music.id))
+                            viewModel.setEvent(DirectMigrationUiEvent.SelectSourceMusic(music))
                         },
                     )
                 }
@@ -124,6 +200,7 @@ fun SelectMigrationMusicScreen(
         }
     }
 }
+
 
 @Composable
 fun PlaylistInfo(

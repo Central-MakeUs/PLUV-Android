@@ -9,6 +9,8 @@ sealed class DestinationScreens(val route: String) {
     data object SpotifyLogin : DestinationScreens(route = "SpotifyLogin")
     data object SelectMigratePlaylist : DestinationScreens(route = "SelectMigratePlaylist")
     data object SelectMigrationMusic : DestinationScreens(route = "SelectMigrationMusic")
+    data object SelectSimilarMusic : DestinationScreens(route = "SelectSimilarMusic")
+    data object ShowNotFoundMusic : DestinationScreens(route = "ShowNotFoundMusic")
     data object ScreenShotMigrationRoot : DestinationScreens(route = "ScreenShotMigrationRoot")
     data object UploadPlaylistScreenShot : DestinationScreens(route = "UploadPlaylistScreenShot")
 }

@@ -15,6 +15,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +31,11 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Title1
+import com.cmc15th.pluv.domain.model.LoginMoment
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.getAppNameRes
-import com.cmc15th.pluv.ui.home.migrate.component.FetchPlaylistLoadingIcon
-import com.cmc15th.pluv.ui.home.migrate.component.PreviousOrMigrateButton
+import com.cmc15th.pluv.ui.home.migrate.common.component.FetchPlaylistLoadingIcon
+import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
 
 @Composable
 fun DisplayMigrationPathScreen(
@@ -43,9 +45,26 @@ fun DisplayMigrationPathScreen(
     onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectDestinationApp: () -> Unit,
-    navigateToLoginSourceApp: (PlayListApp) -> Unit = {}
+    navigateToLoginSourceApp: (PlayListApp) -> Unit = {},
+    navigateToSelectPlaylist: () -> Unit = {}
 ) {
     val uiState = viewModel.uiState.collectAsState()
+
+    // 플레이리스트를 성공적으로 가져온 경우 플리 선택 화면으로 이동
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                DirectMigrationUiEffect.OnFetchPlaylistSuccess -> {
+                    navigateToSelectPlaylist()
+                }
+
+                DirectMigrationUiEffect.OnFailure -> {
+                    //TODO 에러 표시
+                }
+                else -> {}
+            }
+        }
+    }
 
     // 플레이리스트 목록 가져오는 중일 경우 Dialog 표시
     if (uiState.value.isLoading) {
@@ -77,7 +96,10 @@ fun DisplayMigrationPathScreen(
                     .size(58.dp),
                 isNextButtonEnabled = true,
                 onPreviousClick = { navigateToSelectDestinationApp() },
-                onMigrateClick = { navigateToLoginSourceApp(uiState.value.selectedSourceApp) }
+                onMigrateClick = {
+                    viewModel.setLoginMoment(LoginMoment.Source)
+                    navigateToLoginSourceApp(uiState.value.selectedSourceApp)
+                }
             )
         }
     ) { paddingValues ->
