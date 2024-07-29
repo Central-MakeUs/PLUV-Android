@@ -26,6 +26,7 @@ android {
         buildConfigField("String", "server_url", getProperty("server_url"))
         buildConfigField("String", "spotify_client_id", getProperty("spotify_client_id"))
         buildConfigField("String", "spotify_redirect_uri", getProperty("spotify_redirect_uri"))
+        buildConfigField("String", "google_auth_client_id", getProperty("google_auth_client_id"))
     }
 
     buildTypes {
@@ -64,6 +65,9 @@ fun getProperty(propertyKey: String): String {
 
 dependencies {
 
+    // google auth
+    implementation(libs.google.auth)
+    //spotify auth
     implementation(libs.spotify.auth)
     implementation ("androidx.browser:browser:1.4.0")
     // retrofit2 + okhttp3

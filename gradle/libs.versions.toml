@@ -16,9 +16,10 @@ retrofit = "2.9.0"
 okhttp = "4.12.0"
 spotify = "1.2.5"
 jetbrainsKotlinJvm = "1.9.0"
-
+googleAuth = "21.0.0"
 
 [libraries]
+google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googleAuth" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
