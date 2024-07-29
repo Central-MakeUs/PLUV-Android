@@ -6,5 +6,5 @@ import com.cmc15th.pluv.domain.model.PlayListApp
 import kotlinx.coroutines.flow.Flow
 
 interface LoginRepository {
-    fun loginWithGoogle(oauth: PlayListApp, idToken: String): Flow<ApiResult<JwtToken>>
+    fun login(oauth: PlayListApp, idToken: String): Flow<ApiResult<JwtToken>>
 }

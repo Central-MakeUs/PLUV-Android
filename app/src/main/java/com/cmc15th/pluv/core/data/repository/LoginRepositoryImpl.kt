@@ -16,7 +16,7 @@ class LoginRepositoryImpl @Inject constructor(
     private val loginService: LoginService
 ) : LoginRepository {
 
-    override fun loginWithGoogle(
+    override fun login(
         oauth: PlayListApp,
         idToken: String
     ): Flow<ApiResult<JwtToken>> = flow {
