@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.login
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,15 +24,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
+import com.cmc15th.pluv.ui.login.viewmodel.LoginUiEffect
+import com.cmc15th.pluv.ui.login.viewmodel.LoginUiEvent
+import com.cmc15th.pluv.ui.login.viewmodel.LoginViewModel
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = hiltViewModel(),
+    navigateToHome: () -> Unit = {}
 ) {
+
+    val googleLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = GoogleApiContract()
+    ) { task ->
+        viewModel.setEvent(LoginUiEvent.GoogleLogin(task))
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is LoginUiEffect.OnLoginSuccess -> {
+                    navigateToHome()
+                }
+                is LoginUiEffect.OnLoginFailure -> {
+                    //TODO show error message
+                }
+            }
+        }
+    }
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -72,7 +99,10 @@ fun LoginScreen(
                 LoginButtons(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(54.dp)
+                        .height(54.dp),
+                    onGoogleLoginClick = {
+                        googleLoginResultLauncher.launch(1)
+                    }
                 )
 
                 Spacer(modifier = Modifier.size(31.dp))

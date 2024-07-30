@@ -23,6 +23,7 @@ import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigratePlaylistScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigrationMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectSourceAppScreen
 import com.cmc15th.pluv.ui.home.migrate.screenshot.UploadPlaylistScreenShotScreen
+import com.cmc15th.pluv.ui.login.LoginScreen
 
 @Composable
 fun PLUVNavHost(
@@ -31,8 +32,16 @@ fun PLUVNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = DestinationScreens.Home.route
+        startDestination = DestinationScreens.Login.route
     ) {
+        composable(route = DestinationScreens.Login.route) { navBackStackEntry ->
+            LoginScreen(
+                viewModel = hiltViewModel(navBackStackEntry),
+                navigateToHome = {
+                    navController.navigateToHome()
+                }
+            )
+        }
 
         composable(route = DestinationScreens.Home.route) {
             HomeScreen(
