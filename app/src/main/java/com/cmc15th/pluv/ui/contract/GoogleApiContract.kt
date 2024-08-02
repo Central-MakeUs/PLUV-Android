@@ -16,6 +16,7 @@ class GoogleApiContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?
     override fun createIntent(context: Context, input: Int): Intent {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(BuildConfig.google_auth_client_id)
+            .requestServerAuthCode(BuildConfig.google_auth_client_id)
             .requestScopes(Scope("https://www.googleapis.com/auth/youtube.force-ssl"))
             .build()
 
