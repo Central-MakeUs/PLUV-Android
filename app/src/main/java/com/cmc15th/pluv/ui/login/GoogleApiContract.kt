@@ -3,11 +3,13 @@ package com.cmc15th.pluv.ui.login
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import com.cmc15th.pluv.BuildConfig
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 
 class GoogleApiContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?>() {
@@ -15,7 +17,7 @@ class GoogleApiContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?
     override fun createIntent(context: Context, input: Int): Intent {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(BuildConfig.google_auth_client_id)
-            .requestServerAuthCode(BuildConfig.google_auth_client_id)
+            .requestScopes(Scope("https://www.googleapis.com/auth/youtube.force-ssl"))
             .build()
 
         val intent = GoogleSignIn.getClient(context, gso)
