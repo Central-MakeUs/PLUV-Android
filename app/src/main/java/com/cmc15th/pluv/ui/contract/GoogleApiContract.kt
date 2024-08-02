@@ -1,4 +1,4 @@
-package com.cmc15th.pluv.ui.home.migrate.common.contract
+package com.cmc15th.pluv.ui.contract
 
 import android.app.Activity
 import android.content.Context
@@ -16,6 +16,7 @@ class GoogleApiContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?
     override fun createIntent(context: Context, input: Int): Intent {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(BuildConfig.google_auth_client_id)
+            .requestServerAuthCode(BuildConfig.google_auth_client_id)
             .requestScopes(Scope("https://www.googleapis.com/auth/youtube.force-ssl"))
             .build()
 

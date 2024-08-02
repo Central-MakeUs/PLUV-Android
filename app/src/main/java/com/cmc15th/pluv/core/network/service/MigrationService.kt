@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.core.network.service
 
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.network.request.GoogleAuthCode
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.response.CommonResponse
@@ -14,12 +15,17 @@ import retrofit2.http.Path
 
 interface MigrationService {
 
-    @POST("/playList/spotify/read")
+    @POST("/playlist/spotify/read")
     suspend fun fetchPlaylists(
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<List<ReadPlaylistResponse>>
 
-    @POST("/playList/spotify/{id}/read")
+    @POST("/playlist/youtube/read")
+    suspend fun fetchYoutubeMusicPlaylists(
+        @Body authCode: GoogleAuthCode
+    ): ApiResult<List<ReadPlaylistResponse>>
+
+    @POST("/playlist/spotify/{id}/read")
     suspend fun fetchMusicsByPlaylistId(
         @Path("id") playlistId: String,
         @Body accessToken: PlaylistAccessToken

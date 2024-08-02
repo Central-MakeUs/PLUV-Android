@@ -86,7 +86,7 @@ fun SelectMigratePlaylistScreen(
                     .fillMaxWidth()
                     .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
                     .size(58.dp),
-                isNextButtonEnabled = uiState.selectedPlaylist.isNotEmpty(),
+                isNextButtonEnabled = uiState.selectedPlaylist.id.isNotEmpty(),
                 onPreviousClick = { navigateToDisplayMigrationPath() },
                 onMigrateClick = { viewModel.setEvent(DirectMigrationUiEvent.FetchMusicsByPlaylist) }
             )
@@ -128,9 +128,9 @@ fun SelectMigratePlaylistScreen(
 @Composable
 fun PlaylistColumn(
     playlists: List<Playlist>,
-    selectedPlaylist: String,
+    selectedPlaylist: Playlist,
     modifier: Modifier = Modifier,
-    onPlaylistSelect: (String) -> Unit
+    onPlaylistSelect: (Playlist) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -148,10 +148,10 @@ fun PlaylistColumn(
                     modifier = Modifier
                         .size(140.dp)
                         .border(
-                            if (playlist.id == selectedPlaylist) 2.dp else 0.dp,
+                            if (playlist.id == selectedPlaylist.id) 2.dp else 0.dp,
                             colorResource(id = R.color.destination_app_title_color)
                         )
-                        .clickable { onPlaylistSelect(playlist.id) },
+                        .clickable { onPlaylistSelect(playlist) },
                     imageUrl = playlist.thumbNailUrl,
                 )
                 Spacer(modifier = Modifier.size(10.dp))

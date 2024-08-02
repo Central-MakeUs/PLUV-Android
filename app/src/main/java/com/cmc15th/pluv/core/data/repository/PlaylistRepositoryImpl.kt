@@ -8,6 +8,7 @@ import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.ValidateMusic
+import com.cmc15th.pluv.core.network.request.GoogleAuthCode
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.service.MigrationService
@@ -34,6 +35,19 @@ class PlaylistRepositoryImpl @Inject constructor(
                 }
         )
     }.flowOn(Dispatchers.IO)
+
+    override fun fetchYoutubeMusicPlaylists(
+        authCode: String
+    ): Flow<ApiResult<List<Playlist>>> = flow {
+        emit(
+            migrationService.fetchYoutubeMusicPlaylists(GoogleAuthCode(authCode))
+                .map { result ->
+                    result.map {
+                        it.toPlaylist()
+                    }
+                }
+        )
+    }
 
     override fun fetchMusics(
         playlistAppName: PlayListApp,

@@ -14,7 +14,7 @@ import com.cmc15th.pluv.domain.model.PlayListApp
 fun ReadPlaylistResponse.toPlaylist() = Playlist(
     id = id,
     thumbNailUrl = thumbNailUrl,
-    songCount = songCount,
+    songCount = songCount ?: 0,
     name = name,
     source = PlayListApp.toAppName(source)
 )
