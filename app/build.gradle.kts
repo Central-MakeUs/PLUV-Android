@@ -65,6 +65,7 @@ fun getProperty(propertyKey: String): String {
 
 dependencies {
 
+    implementation(libs.androidx.datastore.preferences)
     // google auth
     implementation(libs.google.auth)
     //spotify auth
