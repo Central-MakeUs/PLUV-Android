@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,8 +34,9 @@ import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.core.ui.component.MusicsHeader
-import com.cmc15th.pluv.domain.model.LoginMoment
 import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.ui.contract.GoogleApiContract
+import com.cmc15th.pluv.ui.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
 import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 import kotlinx.coroutines.delay
@@ -48,7 +50,6 @@ fun SelectMigrationMusicScreen(
     totalStep: Int = 0,
     onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
-    navigateToLoginScreen: (PlayListApp) -> Unit = {},
     navigateToSelectPlaylist: () -> Unit,
     navigateToSelectSimilarMusic: () -> Unit = {},
     navigateToShowNotFoundMusic: () -> Unit = {},
@@ -62,6 +63,18 @@ fun SelectMigrationMusicScreen(
 
     var dialogDescription by rememberSaveable {
         mutableStateOf("")
+    }
+
+    val googleLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = GoogleApiContract()
+    ) { task ->
+        viewModel.setEvent(DirectMigrationUiEvent.GoogleLogin(task))
+    }
+
+    val spotifyLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = SpotifyAuthContract()
+    ) { task ->
+        viewModel.setEvent(DirectMigrationUiEvent.SpotifyLogin(task))
     }
 
     LaunchedEffect(Unit) {
@@ -90,6 +103,10 @@ fun SelectMigrationMusicScreen(
 
                         navigateToExecuteMigrationScreen()
                     }
+                }
+
+                is DirectMigrationUiEffect.OnLoginSuccess -> {
+                    viewModel.setEvent(DirectMigrationUiEvent.OnDestinationLoginSuccess)
                 }
 
                 is DirectMigrationUiEffect.OnFailure -> {
@@ -129,9 +146,18 @@ fun SelectMigrationMusicScreen(
                 isNextButtonEnabled = uiState.selectedSourceMusics.isNotEmpty(),
                 onPreviousClick = { navigateToSelectPlaylist() },
                 onMigrateClick = {
-                    // 여기서 로그인은 이전 목적지의 음악 서비스의 로그인
-                    viewModel.setLoginMoment(LoginMoment.Destination)
-                    navigateToLoginScreen(uiState.selectedDestinationApp)
+                    when (uiState.selectedDestinationApp) {
+                        PlayListApp.spotify -> {
+                            spotifyLoginResultLauncher.launch(1)
+                        }
+
+                        PlayListApp.YOUTUBE_MUSIC -> {
+                            googleLoginResultLauncher.launch(1)
+                        }
+
+                        else -> {}
+
+                    }
                 }
             )
         }

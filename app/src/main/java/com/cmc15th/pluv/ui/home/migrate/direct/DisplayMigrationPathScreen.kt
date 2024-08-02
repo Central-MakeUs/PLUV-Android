@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,8 +32,9 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Title1
-import com.cmc15th.pluv.domain.model.LoginMoment
 import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.ui.contract.GoogleApiContract
+import com.cmc15th.pluv.ui.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.ui.home.migrate.common.component.FetchPlaylistLoadingIcon
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
@@ -45,15 +47,29 @@ fun DisplayMigrationPathScreen(
     onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectDestinationApp: () -> Unit,
-    navigateToLoginSourceApp: (PlayListApp) -> Unit = {},
     navigateToSelectPlaylist: () -> Unit = {}
 ) {
+    val googleLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = GoogleApiContract()
+    ) { task ->
+        viewModel.setEvent(DirectMigrationUiEvent.GoogleLogin(task))
+    }
+
+    val spotifyLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = SpotifyAuthContract()
+    ) { task ->
+        viewModel.setEvent(DirectMigrationUiEvent.SpotifyLogin(task))
+    }
+
     val uiState = viewModel.uiState.collectAsState()
 
     // 플레이리스트를 성공적으로 가져온 경우 플리 선택 화면으로 이동
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
+                DirectMigrationUiEffect.OnLoginSuccess -> {
+                    viewModel.setEvent(DirectMigrationUiEvent.OnSourceLoginSuccess)
+                }
                 DirectMigrationUiEffect.OnFetchPlaylistSuccess -> {
                     navigateToSelectPlaylist()
                 }
@@ -61,6 +77,7 @@ fun DisplayMigrationPathScreen(
                 DirectMigrationUiEffect.OnFailure -> {
                     //TODO 에러 표시
                 }
+
                 else -> {}
             }
         }
@@ -97,8 +114,19 @@ fun DisplayMigrationPathScreen(
                 isNextButtonEnabled = true,
                 onPreviousClick = { navigateToSelectDestinationApp() },
                 onMigrateClick = {
-                    viewModel.setLoginMoment(LoginMoment.Source)
-                    navigateToLoginSourceApp(uiState.value.selectedSourceApp)
+                    when (
+                        uiState.value.selectedSourceApp
+                    ) {
+                        PlayListApp.spotify -> {
+                            spotifyLoginResultLauncher.launch(1)
+                        }
+
+                        PlayListApp.YOUTUBE_MUSIC -> {
+                            googleLoginResultLauncher.launch(1)
+                        }
+
+                        else -> {}
+                    }
                 }
             )
         }
