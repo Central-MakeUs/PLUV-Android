@@ -12,4 +12,9 @@ interface LoginService {
     suspend fun googleLogin(
         @Body googleLoginRequest: GoogleLoginRequest
     ): ApiResult<CommonResponse<LoginResponse>>
+
+    @POST("/login/spotify")
+    suspend fun spotifyLogin(
+        @Body accessToken: String
+    ): ApiResult<CommonResponse<LoginResponse>>
 }

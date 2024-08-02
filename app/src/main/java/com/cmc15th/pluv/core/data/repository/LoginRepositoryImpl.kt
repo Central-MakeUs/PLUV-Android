@@ -22,4 +22,12 @@ class LoginRepositoryImpl @Inject constructor(
             }
         )
     }.flowOn(Dispatchers.IO)
+
+    override fun spotifyLogin(accessToken: String): Flow<ApiResult<JwtToken>> = flow {
+        emit(
+            loginService.spotifyLogin(accessToken).map { result ->
+                result.data.toJwtToken()
+            }
+        )
+    }
 }

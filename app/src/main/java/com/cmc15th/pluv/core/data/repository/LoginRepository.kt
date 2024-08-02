@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface LoginRepository {
     fun googleLogin(idToken: String): Flow<ApiResult<JwtToken>>
+
+    fun spotifyLogin(accessToken: String): Flow<ApiResult<JwtToken>>
 }
