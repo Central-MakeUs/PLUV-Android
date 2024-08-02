@@ -183,8 +183,9 @@ fun SelectMigrationMusicScreen(
                 Spacer(modifier = Modifier.size(28.dp))
 
                 PlaylistInfo(
+                    imageUrl = uiState.selectedPlaylist.thumbNailUrl,
                     appName = uiState.selectedSourceApp.appName,
-                    playlistName = "여유로운 오후의 취향 저격 팝",
+                    playlistName = uiState.selectedPlaylist.name,
                     totalSongCount = 10
                 )
 
@@ -215,7 +216,7 @@ fun SelectMigrationMusicScreen(
                     MusicItem(
                         isChecked = uiState.selectedSourceMusics.contains(music),
                         imageUrl = music.thumbNailUrl,
-                        musicName = music.title ?: "몰라",
+                        musicName = music.title,
                         artistName = music.artistName,
                         onCheckedChange = { _ ->
                             viewModel.setEvent(DirectMigrationUiEvent.SelectSourceMusic(music))
@@ -230,6 +231,7 @@ fun SelectMigrationMusicScreen(
 
 @Composable
 fun PlaylistInfo(
+    imageUrl: String,
     appName: String,
     playlistName: String,
     totalSongCount: Int,
@@ -239,7 +241,7 @@ fun PlaylistInfo(
         modifier = modifier
     ) {
         PlaylistCard(
-            imageUrl = "https://picsum.photos/140",
+            imageUrl = imageUrl,
             modifier = Modifier.size(86.dp)
         )
         Spacer(modifier = Modifier.size(16.dp))

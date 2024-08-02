@@ -93,7 +93,7 @@ class DirectMigrationViewModel @Inject constructor(
             is DirectMigrationUiEvent.SelectPlaylist -> {
                 _uiState.update {
                     it.copy(
-                        selectedPlaylist = event.selectedPlaylistId
+                        selectedPlaylist = event.playlist
                     )
                 }
             }
@@ -279,7 +279,7 @@ class DirectMigrationViewModel @Inject constructor(
             playlistRepository.fetchMusics(
                 accessToken = playlistAccessToken.value,
                 playlistAppName = _uiState.value.selectedSourceApp,
-                playlistId = _uiState.value.selectedPlaylist
+                playlistId = _uiState.value.selectedPlaylist.id
             ).collect { result ->
                 Log.d(TAG, "fetchMusicByPlaylist: $result")
                 result.onSuccess { data ->
