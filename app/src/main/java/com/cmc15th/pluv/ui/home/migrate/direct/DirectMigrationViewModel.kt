@@ -195,8 +195,6 @@ class DirectMigrationViewModel @Inject constructor(
         }
     }
 
-    private fun fetchPlaylists() {
-        // Fetch playlists
     private fun spotifyLogin(task: AuthorizationResponse) {
         when (task.type) {
             AuthorizationResponse.Type.TOKEN -> {
@@ -228,14 +226,29 @@ class DirectMigrationViewModel @Inject constructor(
         }
     }
 
+    private fun fetchPlaylists(sourcePlaylistApp: PlayListApp) {
         viewModelScope.launch {
-            Log.d(TAG, "fetchPlaylists: ${playlistAccessToken.value} ")
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            playlistRepository.fetchPlaylists(
-                playlistAccessToken.value
-            ).collect { result ->
+            when (sourcePlaylistApp) {
+                PlayListApp.spotify -> {
+                    playlistRepository.fetchPlaylists(
+                        accessToken = playlistAccessToken.value
+                    )
+                }
+
+                PlayListApp.YOUTUBE_MUSIC -> {
+                    playlistRepository.fetchYoutubeMusicPlaylists(
+                        authCode = youtubeMusicAuthCode.value
+                    )
+                }
+
+                else -> {
+                    //TODO 구현예정
+                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
+                }
+            }.collect { result ->
                 Log.d(TAG, "fetchPlaylists: $result")
                 result.onSuccess { data ->
                     _uiState.update {
