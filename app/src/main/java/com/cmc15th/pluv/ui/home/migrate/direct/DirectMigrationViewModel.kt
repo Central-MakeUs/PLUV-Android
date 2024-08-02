@@ -4,9 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
-import com.cmc15th.pluv.domain.model.LoginMoment
+import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.spotify.sdk.android.auth.AuthorizationResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,10 +38,8 @@ class DirectMigrationViewModel @Inject constructor(
     private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
 
-    private val _loginMoment: MutableStateFlow<LoginMoment> = MutableStateFlow(LoginMoment.Source)
-    val loginMoment: StateFlow<LoginMoment> = _loginMoment.asStateFlow()
-
     private val playlistAccessToken = MutableStateFlow("")
+    private val youtubeMusicAuthCode = MutableStateFlow("")
 
     init {
         subscribeEvents()
@@ -67,15 +70,23 @@ class DirectMigrationViewModel @Inject constructor(
                 setSelectedDestinationApp(event.selectedApp)
             }
 
+            is DirectMigrationUiEvent.SpotifyLogin -> {
+                spotifyLogin(event.task)
+            }
+
+            is DirectMigrationUiEvent.GoogleLogin -> {
+                googleLogin(event.task)
+            }
+
+            is DirectMigrationUiEvent.OnSourceLoginSuccess -> {
+                fetchPlaylists(_uiState.value.selectedSourceApp)
+            }
+
             is DirectMigrationUiEvent.ExecuteMigration -> {
                 //TODO Source App Login
             }
 
-            is DirectMigrationUiEvent.OnLoginSourceSuccess -> {
-                fetchPlaylists()
-            }
-
-            is DirectMigrationUiEvent.OnLoginDestinationSuccess -> {
+            is DirectMigrationUiEvent.OnDestinationLoginSuccess -> {
                 validateSelectedMusic()
             }
 
@@ -186,6 +197,37 @@ class DirectMigrationViewModel @Inject constructor(
 
     private fun fetchPlaylists() {
         // Fetch playlists
+    private fun spotifyLogin(task: AuthorizationResponse) {
+        when (task.type) {
+            AuthorizationResponse.Type.TOKEN -> {
+                playlistAccessToken.update { task.accessToken ?: "" }
+                sendEffect(DirectMigrationUiEffect.OnLoginSuccess)
+            }
+
+            else -> {
+                val error = task.error
+                sendEffect(DirectMigrationUiEffect.OnFailure)
+            }
+        }
+    }
+
+    private fun googleLogin(task: Task<GoogleSignInAccount>?) {
+        if (task == null) {
+            sendEffect(DirectMigrationUiEffect.OnFailure)
+            return
+        }
+
+        try {
+            val account = task.getResult(ApiException::class.java)
+            Log.d(TAG, "googleLogin: ${account.serverAuthCode}")
+            youtubeMusicAuthCode.update { account.serverAuthCode ?: "" }
+            sendEffect(DirectMigrationUiEffect.OnLoginSuccess)
+
+        } catch (e: ApiException) {
+            sendEffect(DirectMigrationUiEffect.OnFailure)
+        }
+    }
+
         viewModelScope.launch {
             Log.d(TAG, "fetchPlaylists: ${playlistAccessToken.value} ")
             _uiState.update {
@@ -318,10 +360,6 @@ class DirectMigrationViewModel @Inject constructor(
 
     fun setSpotifyAccessToken(accessToken: String?) {
         playlistAccessToken.update { accessToken ?: "" }
-    }
-
-    fun setLoginMoment(moment: LoginMoment) {
-        _loginMoment.update { moment }
     }
 
     companion object {
