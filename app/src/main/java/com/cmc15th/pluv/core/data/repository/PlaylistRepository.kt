@@ -12,6 +12,10 @@ interface PlaylistRepository {
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>>
 
+    fun fetchYoutubeMusicPlaylists(
+        authCode: String
+    ): Flow<ApiResult<List<Playlist>>>
+
     fun fetchMusics(
         playlistAppName: PlayListApp,
         accessToken: String,
