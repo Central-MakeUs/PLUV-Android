@@ -1,9 +1,8 @@
-package com.cmc15th.pluv.ui.login
+package com.cmc15th.pluv.ui.home.migrate.common.contract
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import com.cmc15th.pluv.BuildConfig
 import com.google.android.gms.auth.api.signin.GoogleSignIn
