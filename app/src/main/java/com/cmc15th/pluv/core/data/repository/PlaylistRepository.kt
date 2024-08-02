@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistRepository {
     fun fetchPlaylists(
-        playlistAppName: PlayListApp,
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>>
 

@@ -23,11 +23,10 @@ class PlaylistRepositoryImpl @Inject constructor(
 ) : PlaylistRepository {
 
     override fun fetchPlaylists(
-        playlistAppName: PlayListApp,
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>> = flow {
         emit(
-            migrationService.fetchPlaylists(playlistAppName, PlaylistAccessToken(accessToken))
+            migrationService.fetchPlaylists(PlaylistAccessToken(accessToken))
                 .map { result ->
                     result.map {
                         it.toPlaylist()
@@ -43,7 +42,6 @@ class PlaylistRepositoryImpl @Inject constructor(
     ): Flow<ApiResult<List<SourceMusic>>> = flow {
         emit(
             migrationService.fetchMusicsByPlaylistId(
-                source = playlistAppName,
                 playlistId = playlistId,
                 accessToken = PlaylistAccessToken(accessToken)
             ).map { result ->
