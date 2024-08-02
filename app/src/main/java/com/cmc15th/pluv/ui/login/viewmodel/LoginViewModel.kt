@@ -7,6 +7,7 @@ import com.cmc15th.pluv.core.data.repository.LoginRepository
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.spotify.sdk.android.auth.AuthorizationResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +49,7 @@ class LoginViewModel @Inject constructor(
                 handleGoogleSignInResult(event.task)
             }
             is LoginUiEvent.SpotifyLogin -> {
-                //TODO 스포티파이 로그인
+                handleSpotifyLoginResult(event.task)
             }
             is LoginUiEvent.AppleLogin -> {
                 //TODO 애플 로그인
@@ -87,10 +88,41 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    private fun handleSpotifyLoginResult(task: AuthorizationResponse) {
+        when (task.type) {
+            AuthorizationResponse.Type.TOKEN -> {
+                val accessToken = task.accessToken
+                Log.d(TAG, "handleSpotifyLoginResult:  $accessToken ")
+                spotifyLogin(accessToken)
+            }
+
+            else -> {
+                val error = task.error
+                Log.e(TAG, "handleSpotifyLoginResult: $error")
+                sendEffect(LoginUiEffect.OnLoginFailure(error))
+            }
+        }
+    }
+
     private fun googleLogin(token: String) {
         viewModelScope.launch {
             loginRepository.googleLogin(token).collect { result ->
                 Log.d(TAG, "getAccessTokenBySocialToken: $token")
+                result.onSuccess {
+                    //TODO datastore에 토큰 저장
+                    sendEffect(LoginUiEffect.OnLoginSuccess)
+                }
+
+                result.onFailure { i, s ->
+                    sendEffect(LoginUiEffect.OnLoginFailure(s ?: "알 수 없는 오류가 발생하였습니다."))
+                }
+            }
+        }
+    }
+
+    private fun spotifyLogin(token: String) {
+        viewModelScope.launch {
+            loginRepository.spotifyLogin(token).collect { result ->
                 result.onSuccess {
                     //TODO datastore에 토큰 저장
                     sendEffect(LoginUiEffect.OnLoginSuccess)

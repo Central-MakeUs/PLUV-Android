@@ -29,6 +29,8 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
+import com.cmc15th.pluv.ui.home.migrate.common.contract.GoogleApiContract
+import com.cmc15th.pluv.ui.home.migrate.common.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.login.viewmodel.LoginUiEffect
 import com.cmc15th.pluv.ui.login.viewmodel.LoginUiEvent
 import com.cmc15th.pluv.ui.login.viewmodel.LoginViewModel
@@ -44,6 +46,12 @@ fun LoginScreen(
         contract = GoogleApiContract()
     ) { task ->
         viewModel.setEvent(LoginUiEvent.GoogleLogin(task))
+    }
+
+    val spotifyLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = SpotifyAuthContract()
+    ) { task ->
+        viewModel.setEvent(LoginUiEvent.SpotifyLogin(task))
     }
 
     LaunchedEffect(Unit) {
@@ -102,6 +110,9 @@ fun LoginScreen(
                         .height(54.dp),
                     onGoogleLoginClick = {
                         googleLoginResultLauncher.launch(1)
+                    },
+                    onSpotifyLoginClick = {
+                        spotifyLoginResultLauncher.launch(1)
                     }
                 )
 
