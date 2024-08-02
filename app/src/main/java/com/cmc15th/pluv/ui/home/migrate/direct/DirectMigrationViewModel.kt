@@ -192,24 +192,25 @@ class DirectMigrationViewModel @Inject constructor(
                 it.copy(isLoading = true)
             }
             playlistRepository.fetchPlaylists(
-                _uiState.value.selectedSourceApp,
                 playlistAccessToken.value
             ).collect { result ->
                 Log.d(TAG, "fetchPlaylists: $result")
                 result.onSuccess { data ->
                     _uiState.update {
                         it.copy(
+                            isLoading = false,
                             allPlaylists = data,
-                            isLoading = false
                         )
                     }
                     sendEffect(DirectMigrationUiEffect.OnFetchPlaylistSuccess)
                 }
-                result.onFailure { i, s ->
+
+                result.onFailure { code, error ->
                     _uiState.update {
                         it.copy(isLoading = false)
                     }
                     sendEffect(DirectMigrationUiEffect.OnFailure)
+                    Log.d(TAG, "fetchPlaylists: $code, $error")
                 }
             }
         }
@@ -297,7 +298,10 @@ class DirectMigrationViewModel @Inject constructor(
                             notFoundMusics = notFoundMusics
                         )
                     }
-                    Log.d(TAG, "validateSelectedMusic:  $similarMusics, $notFoundMusics  $needValidate")
+                    Log.d(
+                        TAG,
+                        "validateSelectedMusic:  $similarMusics, $notFoundMusics  $needValidate"
+                    )
                     sendEffect(DirectMigrationUiEffect.OnValidateMusic(needValidate = needValidate))
                 }
 

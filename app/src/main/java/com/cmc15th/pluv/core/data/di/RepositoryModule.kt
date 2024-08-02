@@ -1,5 +1,7 @@
 package com.cmc15th.pluv.core.data.di
 
+import com.cmc15th.pluv.core.data.repository.LoginRepository
+import com.cmc15th.pluv.core.data.repository.LoginRepositoryImpl
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
 import com.cmc15th.pluv.core.data.repository.PlaylistRepositoryImpl
 import dagger.Binds
@@ -12,9 +14,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-     @Binds
-     @Singleton
-     abstract fun bindPlaylistRepository(
-         playlistRepositoryImpl: PlaylistRepositoryImpl
-     ): PlaylistRepository
+    @Binds
+    @Singleton
+    abstract fun bindPlaylistRepository(
+        playlistRepositoryImpl: PlaylistRepositoryImpl
+    ): PlaylistRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindLoginRepository(
+        loginRepositoryImpl: LoginRepositoryImpl
+    ): LoginRepository
 }

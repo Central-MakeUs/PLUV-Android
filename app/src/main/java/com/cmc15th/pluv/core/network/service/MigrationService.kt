@@ -14,22 +14,20 @@ import retrofit2.http.Path
 
 interface MigrationService {
 
-    @POST("{source}/playLists/read")
+    @POST("/playList/spotify/read")
     suspend fun fetchPlaylists(
-        @Path("source") source: PlayListApp,
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<List<ReadPlaylistResponse>>
 
-    @POST("{source}/playLists/{playlistId}/read")
+    @POST("/playList/spotify/{id}/read")
     suspend fun fetchMusicsByPlaylistId(
-        @Path("source") source: PlayListApp,
-        @Path("playlistId") playlistId: String,
+        @Path("id") playlistId: String,
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
-    @POST("{source}/music/search")
+    @POST("/music/{destination}/search")
     suspend fun validateMusic(
-        @Path("source") source: PlayListApp,
+        @Path("destination") source: PlayListApp,
         @Body validateMusicRequest: ValidateMusicRequest
     ): ApiResult<CommonResponse<List<ValidateMusicResponse>>>
 }
