@@ -29,8 +29,8 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
-import com.cmc15th.pluv.ui.contract.GoogleApiContract
-import com.cmc15th.pluv.ui.contract.SpotifyAuthContract
+import com.cmc15th.pluv.ui.common.contract.GoogleApiContract
+import com.cmc15th.pluv.ui.common.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.login.viewmodel.LoginUiEffect
 import com.cmc15th.pluv.ui.login.viewmodel.LoginUiEvent
 import com.cmc15th.pluv.ui.login.viewmodel.LoginViewModel

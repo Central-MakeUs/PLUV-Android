@@ -1,4 +1,4 @@
-package com.cmc15th.pluv.ui.contract
+package com.cmc15th.pluv.ui.common.contract
 
 import android.app.Activity
 import android.content.Context
