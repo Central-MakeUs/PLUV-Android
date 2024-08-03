@@ -10,8 +10,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import com.cmc15th.pluv.ui.feed.FeedScreen
 import com.cmc15th.pluv.ui.home.HomeScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.SelectSimilarMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.ShowNotFoundMusicScreen
@@ -22,6 +24,7 @@ import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigrationMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectSourceAppScreen
 import com.cmc15th.pluv.ui.home.migrate.screenshot.UploadPlaylistScreenShotScreen
 import com.cmc15th.pluv.ui.login.LoginScreen
+import com.cmc15th.pluv.ui.mypage.MypageScreen
 
 @Composable
 fun PLUVNavHost(
@@ -41,7 +44,7 @@ fun PLUVNavHost(
             )
         }
 
-        composable(route = DestinationScreens.Home.route) {
+        composable(route = BottomTab.HOME.route) {
             HomeScreen(
                 navigateToDirectMigration = {
                     navController.navigate(DestinationScreens.DirectMigrationRoot.route)
@@ -52,6 +55,13 @@ fun PLUVNavHost(
             )
         }
 
+        composable(route = BottomTab.FEED.route) {
+            FeedScreen()
+        }
+
+        composable(route = BottomTab.MY_PAGE.route) {
+            MypageScreen()
+        }
 
         navigation(
             route = DestinationScreens.DirectMigrationRoot.route,
@@ -217,7 +227,13 @@ fun NavController.navigateToHome() {
         popUpTo(graph.findStartDestination().id)
         launchSingleTop = true
     }
-    navigate(DestinationScreens.Home.route, navOptions)
+    navigate(BottomTab.HOME.route, navOptions)
+}
+
+@Composable
+fun NavController.isVisibleBottomBar(): Boolean {
+    // 현재 경로를 받아서 현재 경로가 TopLevel Destination에 속하는지 확인
+    return currentBackStackEntryAsState().value?.destination?.route in BottomTab.entries.map { it.route }
 }
 
 @Composable
