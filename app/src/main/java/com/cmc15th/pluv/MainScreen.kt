@@ -22,15 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title6
 
 @Composable
 fun MainScreen(
-    navController: NavHostController = rememberNavController()
+    pluvNavController: PLUVNavController = rememberPLUVNavController()
 ) {
     Scaffold(
         bottomBar = {
@@ -39,11 +37,11 @@ fun MainScreen(
                     .fillMaxWidth()
                     .height(90.dp)
                     .padding(horizontal = 33.dp),
-                isVisible = navController.isVisibleBottomBar(),
-                bottomTabs = BottomTab.entries,
-                currentTab = navController.currentDestination?.route.orEmpty(),
+                isVisible = pluvNavController.isVisibleBottomBar(),
+                bottomTabs = pluvNavController.bottomTabs,
+                currentTab = pluvNavController.currentBottomTab?.route.orEmpty(),
                 onSelected = { route ->
-                    navController.navigate(route)
+                    pluvNavController.navigate(route)
                 }
             )
         }
@@ -54,7 +52,7 @@ fun MainScreen(
                 .padding(paddingValues)
         ) {
             PLUVNavHost(
-                navController = navController
+                pluvNavController = pluvNavController
             )
         }
     }

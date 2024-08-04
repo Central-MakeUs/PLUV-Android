@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
+            val navController = rememberPLUVNavController(navController = rememberNavController())
             PLUVTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen(
-                        navController = navController
+                        pluvNavController = navController
                     )
                 }
             }
