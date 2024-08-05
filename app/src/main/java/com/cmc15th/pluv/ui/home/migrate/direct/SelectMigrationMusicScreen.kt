@@ -211,7 +211,6 @@ fun SelectMigrationMusicScreen(
             ) {
                 items(
                     uiState.allSourceMusics,
-                    key = { music -> music.isrcCode }
                 ) { music ->
                     MusicItem(
                         isChecked = uiState.selectedSourceMusics.contains(music),
