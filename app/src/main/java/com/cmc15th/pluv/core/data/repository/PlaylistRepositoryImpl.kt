@@ -23,11 +23,11 @@ class PlaylistRepositoryImpl @Inject constructor(
     private val migrationService: MigrationService
 ) : PlaylistRepository {
 
-    override fun fetchPlaylists(
+    override fun fetchSpotifyPlaylists(
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>> = flow {
         emit(
-            migrationService.fetchPlaylists(PlaylistAccessToken(accessToken))
+            migrationService.fetchSpotifyPlaylists(PlaylistAccessToken(accessToken))
                 .map { result ->
                     result.map {
                         it.toPlaylist()
@@ -37,10 +37,10 @@ class PlaylistRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     override fun fetchYoutubeMusicPlaylists(
-        authCode: String
+        accessToken: String
     ): Flow<ApiResult<List<Playlist>>> = flow {
         emit(
-            migrationService.fetchYoutubeMusicPlaylists(GoogleAuthCode(authCode))
+            migrationService.fetchYoutubeMusicPlaylists(PlaylistAccessToken(accessToken))
                 .map { result ->
                     result.map {
                         it.toPlaylist()

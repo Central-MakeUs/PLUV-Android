@@ -8,12 +8,12 @@ import com.cmc15th.pluv.domain.model.PlayListApp
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistRepository {
-    fun fetchPlaylists(
+    fun fetchSpotifyPlaylists(
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>>
 
     fun fetchYoutubeMusicPlaylists(
-        authCode: String
+        accessToken: String
     ): Flow<ApiResult<List<Playlist>>>
 
     fun fetchMusics(

@@ -215,6 +215,10 @@ class DirectMigrationViewModel @Inject constructor(
             return
         }
 
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
+
         try {
             val account = task.getResult(ApiException::class.java)
             Log.d(TAG, "googleLogin: ${account.serverAuthCode}")
@@ -237,14 +241,14 @@ class DirectMigrationViewModel @Inject constructor(
             }
             when (sourcePlaylistApp) {
                 PlayListApp.spotify -> {
-                    playlistRepository.fetchPlaylists(
+                    playlistRepository.fetchSpotifyPlaylists(
                         accessToken = playlistAccessToken.value
                     )
                 }
 
                 PlayListApp.YOUTUBE_MUSIC -> {
                     playlistRepository.fetchYoutubeMusicPlaylists(
-                        authCode = youtubeMusicAuthCode.value
+                        accessToken = playlistAccessToken.value
                     )
                 }
 

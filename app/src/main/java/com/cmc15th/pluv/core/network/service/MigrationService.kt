@@ -16,13 +16,13 @@ import retrofit2.http.Path
 interface MigrationService {
 
     @POST("/playlist/spotify/read")
-    suspend fun fetchPlaylists(
+    suspend fun fetchSpotifyPlaylists(
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<List<ReadPlaylistResponse>>
 
     @POST("/playlist/youtube/read")
     suspend fun fetchYoutubeMusicPlaylists(
-        @Body authCode: GoogleAuthCode
+        @Body accessToken: PlaylistAccessToken
     ): ApiResult<List<ReadPlaylistResponse>>
 
     @POST("/playlist/spotify/{id}/read")
