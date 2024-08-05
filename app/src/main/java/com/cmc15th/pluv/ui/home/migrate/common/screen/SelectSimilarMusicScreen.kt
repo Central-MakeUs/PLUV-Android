@@ -159,6 +159,42 @@ fun MusicWithSimilarMusic(
                 artistName = originalArtistName
             )
         }
+@Composable
+fun OriginalMusicItem(
+    imageUrl: String,
+    musicName: String,
+    artistName: String
+) {
+    MusicItem(
+        isChecked = false,
+        thumbNailContent = {
+            OriginalMusicPlaylistCard(
+                imageUrl = imageUrl
+            )
+        },
+        musicName = musicName,
+        artistName = artistName
+    )
+}
+
+@Composable
+fun OriginalMusicPlaylistCard(
+    imageUrl: String
+) {
+    Box(
+        modifier = Modifier.wrapContentSize(),
+    ) {
+        PlaylistCard(imageUrl = imageUrl, modifier = Modifier.size(50.dp))
+        Text(
+            text = "원곡",
+            style = Content4,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .background(Color.Black.copy(alpha = 0.5f), shape = RoundedCornerShape(2.dp))
+                .align(Alignment.TopStart)
+                .padding(6.dp)
+        )
     }
 }
 

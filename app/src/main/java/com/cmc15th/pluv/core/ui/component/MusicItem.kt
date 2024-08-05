@@ -113,57 +113,10 @@ fun AllSelectedText(
     }
 }
 
-@Composable
-fun OriginalMusicItem(
-    modifier: Modifier = Modifier,
-    imageUrl: String,
-    musicName: String,
-    artistName: String
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row {
-            Box(
-                modifier = Modifier.width(4.dp).height(38.dp).background(Color(0xFFCB84FF))
-            )
-
-            Spacer(modifier = Modifier.size(8.dp))
-
-            PlaylistCard(
-                imageUrl = imageUrl,
-                modifier = Modifier.size(38.dp)
-            )
-
-            Spacer(modifier = Modifier.size(12.dp))
-
-            Column {
-                Text(text = musicName, style = Title6)
-                Spacer(modifier = Modifier.size(6.dp))
-                Text(text = artistName, style = Content2)
-            }
-        }
-        Text(
-            text = "원곡",
-            style = Content3,
-            fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF5C5C5C),
-            modifier = Modifier
-                .background(
-                    Color(0xFFF2F2F2), shape = RoundedCornerShape(2.dp)
-                )
-                .padding(4.dp)
-        )
-    }
-}
-
 @Preview
 @Composable
 fun MusicItemPreview() {
     MusicItem(
-        imageUrl = "https://picsum.photos/140",
         musicName = "Dynamite",
         artistName = "BTS",
         onCheckedChange = {}
@@ -177,18 +130,4 @@ fun MusicHeaderPreview() {
         modifier = Modifier.fillMaxWidth(),
         selectedMusicCount = 5, isSelectedAll = false
     )
-}
-
-@Preview
-@Composable
-fun OriginalMusicItemPreview() {
-    OriginalMusicItem(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, Color(0XFFDEDEDE), RoundedCornerShape(4.dp))
-            .padding(horizontal = 12.dp, vertical = 10.dp),
-            imageUrl = "https://picsum.photos/140",
-            musicName = "Dynamite",
-            artistName = "BTS"
-        )
 }
