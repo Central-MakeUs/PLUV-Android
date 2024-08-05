@@ -147,18 +147,44 @@ fun MusicWithSimilarMusic(
             onCheckedChange = {
                 onCheckedChange(it)
             }
-        )
-        if (isChecked) {
-            OriginalMusicItem(
-                modifier = Modifier
-                    .background(color = Color(0xFFCB84FF).copy(alpha = 0.08f))
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 10.dp),
-                imageUrl = originalMusicImageUrl,
-                musicName = originalMusicName,
-                artistName = originalArtistName
-            )
+            if (isChecked) {
+                item {
+                    SimilarMusicItem(
+                        imageUrl = originalMusicImageUrl,
+                        musicName = originalMusicName,
+                        artistName = originalArtistName,
+                        isChecked = isChecked,
+                        onCheckedChange = onCheckedChange
+                    )
+                }
+            }
+
         }
+    }
+}
+
+@Composable
+fun ExpandSectionHeader(
+    modifier: Modifier = Modifier,
+    isExpanded: Boolean = false,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = "항목 더보기",
+            style = Content2,
+            color = Gray600,
+        )
+        Text(
+            text = if (isExpanded) "접기" else "펼치기",
+            style = Content3,
+            color = Gray600,
+        )
+    }
+}
+
 @Composable
 fun OriginalMusicItem(
     imageUrl: String,
@@ -196,6 +222,68 @@ fun OriginalMusicPlaylistCard(
                 .padding(6.dp)
         )
     }
+}
+
+@Composable
+fun SimilarMusicItem(
+    imageUrl: String,
+    musicName: String,
+    artistName: String,
+    isChecked: Boolean = false,
+    onCheckedChange: (Boolean) -> Unit = {}
+) {
+    MusicItem(
+        isChecked = isChecked,
+        thumbNailContent = {
+            SimilarMusicPlaylistCard(
+                imageUrl = imageUrl
+            )
+        },
+        musicName = musicName,
+        artistName = artistName,
+        onCheckedChange = { onCheckedChange(it) }
+    )
+}
+
+@Composable
+fun SimilarMusicPlaylistCard(
+    imageUrl: String,
+) {
+    Row {
+        Box(
+            modifier = Modifier
+                .width(4.dp)
+                .height(36.dp)
+                .background(Color(0xFFCB84FF))
+                .align(Alignment.CenterVertically)
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        PlaylistCard(
+            imageUrl = imageUrl,
+            modifier = Modifier.size(38.dp)
+        )
+    }
+}
+
+@Composable
+@Preview
+fun OriginalMusicItemPreview() {
+    OriginalMusicItem(
+        imageUrl = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+        musicName = "Music Name",
+        artistName = "Artist Name"
+    )
+}
+
+@Composable
+@Preview
+fun SimilarMusicItemPreview() {
+    SimilarMusicItem(
+        isChecked = true,
+        imageUrl = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+        musicName = "Music Name",
+        artistName = "Artist Name",
+    )
 }
 
 @Composable
