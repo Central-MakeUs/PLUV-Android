@@ -12,8 +12,8 @@ data class ReadPlaylistResponse(
 
 data class ReadSourceMusicResponse(
     @SerializedName("title") val title: String = "",
-    @SerializedName("artistNames") val artistName: String = "",
-    @SerializedName("isrcCode") val isrcCode: String = "",
+    @SerializedName("artistNames") val artistName: String? = "",
+    @SerializedName("isrcCode") val isrcCode: String? = "",
     @SerializedName("imageUrl") val thumbNailUrl: String = ""
 )
 
