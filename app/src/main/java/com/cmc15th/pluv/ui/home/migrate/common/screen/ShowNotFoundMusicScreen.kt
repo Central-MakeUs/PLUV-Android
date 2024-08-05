@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
@@ -94,7 +95,11 @@ fun ShowNotFoundMusicScreen(
                     uiState.notFoundMusics
                 ) { music ->
                     MusicItem(
-                        imageUrl = music.thumbNailUrl,
+                        thumbNailContent = {
+                            MusicThumbNail(
+                                imageUrl = music.thumbNailUrl
+                            )
+                        },
                         musicName = music.title,
                         artistName = music.artistName
                     )
@@ -102,6 +107,17 @@ fun ShowNotFoundMusicScreen(
             }
         }
     }
+}
+
+@Composable
+fun MusicThumbNail(
+    imageUrl: String,
+    modifier: Modifier = Modifier
+) {
+    PlaylistCard(
+        imageUrl = imageUrl,
+        modifier = modifier
+    )
 }
 
 @Preview

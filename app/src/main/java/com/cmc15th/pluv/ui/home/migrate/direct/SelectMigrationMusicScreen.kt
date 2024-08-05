@@ -214,7 +214,12 @@ fun SelectMigrationMusicScreen(
                 ) { music ->
                     MusicItem(
                         isChecked = uiState.selectedSourceMusics.contains(music),
-                        imageUrl = music.thumbNailUrl,
+                        thumbNailContent = {
+                            MusicThumbNail(
+                                imageUrl = music.thumbNailUrl,
+                                modifier = Modifier.size(50.dp)
+                            )
+                        },
                         musicName = music.title,
                         artistName = music.artistName,
                         onCheckedChange = { _ ->
@@ -226,7 +231,6 @@ fun SelectMigrationMusicScreen(
         }
     }
 }
-
 
 @Composable
 fun PlaylistInfo(
@@ -266,6 +270,17 @@ fun PlaylistInfo(
             Text(text = "총 ${totalSongCount}곡", style = SelectedAppName)
         }
     }
+}
+
+@Composable
+fun MusicThumbNail(
+    imageUrl: String,
+    modifier: Modifier = Modifier
+) {
+    PlaylistCard(
+        imageUrl = imageUrl,
+        modifier = modifier
+    )
 }
 
 @Preview
