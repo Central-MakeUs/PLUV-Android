@@ -1,7 +1,6 @@
 package com.cmc15th.pluv.core.network.service
 
 import com.cmc15th.pluv.core.model.ApiResult
-import com.cmc15th.pluv.core.network.request.GoogleAuthCode
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.response.CommonResponse
@@ -26,10 +25,17 @@ interface MigrationService {
     ): ApiResult<List<ReadPlaylistResponse>>
 
     @POST("/playlist/spotify/{id}/read")
-    suspend fun fetchMusicsByPlaylistId(
+    suspend fun fetchSpotifyMusicsByPlaylistId(
         @Path("id") playlistId: String,
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
+
+    @POST("/playlist/youtube/{id}/read")
+    suspend fun fetchYoutubeMusicsByPlaylistId(
+        @Path("id") playlistId: String,
+        @Body accessToken: PlaylistAccessToken
+    ): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
+
 
     @POST("/music/{destination}/search")
     suspend fun validateMusic(

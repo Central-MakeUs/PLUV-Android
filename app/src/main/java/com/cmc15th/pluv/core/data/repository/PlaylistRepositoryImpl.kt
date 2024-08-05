@@ -8,7 +8,6 @@ import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.ValidateMusic
-import com.cmc15th.pluv.core.network.request.GoogleAuthCode
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.service.MigrationService
@@ -49,32 +48,47 @@ class PlaylistRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun fetchMusics(
-        playlistAppName: PlayListApp,
+    override fun fetchSpotifyMusics(
         accessToken: String,
         playlistId: String
     ): Flow<ApiResult<List<SourceMusic>>> = flow {
         emit(
-            migrationService.fetchMusicsByPlaylistId(
+            migrationService.fetchSpotifyMusicsByPlaylistId(
                 playlistId = playlistId,
                 accessToken = PlaylistAccessToken(accessToken)
             ).map { result ->
                 result.data.map {
-                    Log.d("REPOSITORY", "fetchMusics: $it ")
                     it.toSourceMusic()
                 }
             }
         )
     }.flowOn(Dispatchers.IO)
 
+    override fun fetchYoutubeMusics(
+        accessToken: String,
+        playlistId: String
+    ): Flow<ApiResult<List<SourceMusic>>> = flow {
+        emit(
+            migrationService.fetchYoutubeMusicsByPlaylistId(
+                playlistId = playlistId,
+                accessToken = PlaylistAccessToken(accessToken)
+            ).map { result ->
+                result.data.map {
+                    it.toSourceMusic()
+                }
+            }
+        )
+    }
+
+
     override fun validateMusic(
-        playlistAppName: PlayListApp,
+        playlistApp: PlayListApp,
         accessToken: String,
         musics: List<SourceMusic>
     ): Flow<ApiResult<List<ValidateMusic>>> = flow {
         emit(
             migrationService.validateMusic(
-                playlistAppName,
+                playlistApp,
                 ValidateMusicRequest(accessToken, musics)
             ).map { result ->
                 Log.d("REPOSITORY", "validateMusic: $result")
