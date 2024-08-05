@@ -218,15 +218,19 @@ class DirectMigrationViewModel @Inject constructor(
         try {
             val account = task.getResult(ApiException::class.java)
             Log.d(TAG, "googleLogin: ${account.serverAuthCode}")
-            youtubeMusicAuthCode.update { account.serverAuthCode ?: "" }
-            sendEffect(DirectMigrationUiEffect.OnLoginSuccess)
+            getGoogleAccessToken(account.serverAuthCode ?: "")
 
         } catch (e: ApiException) {
             sendEffect(DirectMigrationUiEffect.OnFailure)
         }
     }
 
-    private fun fetchPlaylists(sourcePlaylistApp: PlayListApp) {
+    private fun getGoogleAccessToken(authCode: String) {
+        if (authCode.isEmpty()) {
+            sendEffect(DirectMigrationUiEffect.OnFailure)
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isLoading = true)
