@@ -3,6 +3,7 @@ package com.cmc15th.pluv.ui.home.migrate.direct
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc15th.pluv.core.data.repository.LoginRepository
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.domain.model.PlayListApp
@@ -26,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DirectMigrationViewModel @Inject constructor(
-    private val playlistRepository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository,
+    private val loginRepository: LoginRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DirectMigrationUiState> =
@@ -99,7 +101,7 @@ class DirectMigrationViewModel @Inject constructor(
             }
 
             is DirectMigrationUiEvent.FetchMusicsByPlaylist -> {
-                fetchMusicByPlaylist()
+                fetchMusicByPlaylist(_uiState.value.selectedSourceApp)
             }
 
             is DirectMigrationUiEvent.SelectSourceMusic -> {
@@ -215,32 +217,60 @@ class DirectMigrationViewModel @Inject constructor(
             return
         }
 
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
+
         try {
             val account = task.getResult(ApiException::class.java)
             Log.d(TAG, "googleLogin: ${account.serverAuthCode}")
-            youtubeMusicAuthCode.update { account.serverAuthCode ?: "" }
-            sendEffect(DirectMigrationUiEffect.OnLoginSuccess)
+            getGoogleAccessToken(account.serverAuthCode ?: "")
 
         } catch (e: ApiException) {
+            _uiState.update {
+                it.copy(isLoading = false)
+            }
             sendEffect(DirectMigrationUiEffect.OnFailure)
+        }
+    }
+
+    private fun getGoogleAccessToken(authCode: String) {
+        if (authCode.isEmpty()) {
+            sendEffect(DirectMigrationUiEffect.OnFailure)
+            return
+        }
+
+        viewModelScope.launch {
+            loginRepository.getGoogleAccessToken(authCode).collect { result ->
+                result.onSuccess { token ->
+                    Log.d(TAG, "getGoogleAccessToken: ${token.accessToken}")
+                    playlistAccessToken.update { token.accessToken }
+                    sendEffect(DirectMigrationUiEffect.OnLoginSuccess)
+                }
+
+                result.onFailure { code, error ->
+                    _uiState.update {
+                        it.copy(isLoading = false)
+                    }
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
+                    Log.d(TAG, "getGoogleAccessToken: $code, $error")
+                }
+            }
         }
     }
 
     private fun fetchPlaylists(sourcePlaylistApp: PlayListApp) {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(isLoading = true)
-            }
             when (sourcePlaylistApp) {
                 PlayListApp.spotify -> {
-                    playlistRepository.fetchPlaylists(
+                    playlistRepository.fetchSpotifyPlaylists(
                         accessToken = playlistAccessToken.value
                     )
                 }
 
                 PlayListApp.YOUTUBE_MUSIC -> {
                     playlistRepository.fetchYoutubeMusicPlaylists(
-                        authCode = youtubeMusicAuthCode.value
+                        accessToken = playlistAccessToken.value
                     )
                 }
 
@@ -271,16 +301,33 @@ class DirectMigrationViewModel @Inject constructor(
         }
     }
 
-    private fun fetchMusicByPlaylist() {
+    private fun fetchMusicByPlaylist(sourcePlaylistApp: PlayListApp) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            playlistRepository.fetchMusics(
-                accessToken = playlistAccessToken.value,
-                playlistAppName = _uiState.value.selectedSourceApp,
-                playlistId = _uiState.value.selectedPlaylist.id
-            ).collect { result ->
+            Log.d(TAG, "fetchMusicByPlaylist: ${_uiState.value.selectedPlaylist}")
+            when (sourcePlaylistApp) {
+                PlayListApp.spotify -> {
+                    playlistRepository.fetchSpotifyMusics(
+                        accessToken = playlistAccessToken.value,
+                        playlistId = _uiState.value.selectedPlaylist.id,
+                    )
+                }
+
+                PlayListApp.YOUTUBE_MUSIC -> {
+                    Log.d(TAG, "fetchMusicByPlaylist: ${playlistAccessToken.value}")
+                    playlistRepository.fetchYoutubeMusics(
+                        accessToken = playlistAccessToken.value,
+                        playlistId = _uiState.value.selectedPlaylist.id
+                    )
+                }
+
+                else -> {
+                    //TODO 구현예정
+                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
+                }
+            }.collect { result ->
                 Log.d(TAG, "fetchMusicByPlaylist: $result")
                 result.onSuccess { data ->
                     _uiState.update {

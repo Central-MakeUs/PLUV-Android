@@ -8,16 +8,20 @@ import com.cmc15th.pluv.domain.model.PlayListApp
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistRepository {
-    fun fetchPlaylists(
+    fun fetchSpotifyPlaylists(
         accessToken: String
     ): Flow<ApiResult<List<Playlist>>>
 
     fun fetchYoutubeMusicPlaylists(
-        authCode: String
+        accessToken: String
     ): Flow<ApiResult<List<Playlist>>>
 
-    fun fetchMusics(
-        playlistAppName: PlayListApp,
+    fun fetchSpotifyMusics(
+        accessToken: String,
+        playlistId: String
+    ): Flow<ApiResult<List<SourceMusic>>>
+
+    fun fetchYoutubeMusics(
         accessToken: String,
         playlistId: String
     ): Flow<ApiResult<List<SourceMusic>>>

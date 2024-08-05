@@ -1,7 +1,9 @@
 package com.cmc15th.pluv.core.data.repository
 
+import com.cmc15th.pluv.core.data.mapper.toAccessToken
 import com.cmc15th.pluv.core.data.mapper.toJwtToken
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.model.GoogleAccessToken
 import com.cmc15th.pluv.core.model.JwtToken
 import com.cmc15th.pluv.core.network.request.GoogleLoginRequest
 import com.cmc15th.pluv.core.network.service.LoginService
@@ -19,6 +21,14 @@ class LoginRepositoryImpl @Inject constructor(
         emit(
             loginService.googleLogin(GoogleLoginRequest(idToken)).map { result ->
                 result.data.toJwtToken()
+            }
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override fun getGoogleAccessToken(authCode: String): Flow<ApiResult<GoogleAccessToken>> = flow {
+        emit(
+            loginService.getGoogleAccessToken(authCode).map { result ->
+                result.data.toAccessToken()
             }
         )
     }.flowOn(Dispatchers.IO)

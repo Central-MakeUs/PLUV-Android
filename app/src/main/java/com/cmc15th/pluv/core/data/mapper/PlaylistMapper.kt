@@ -21,8 +21,8 @@ fun ReadPlaylistResponse.toPlaylist() = Playlist(
 
 fun ReadSourceMusicResponse.toSourceMusic() = SourceMusic(
     title = title,
-    artistName = artistName,
-    isrcCode = isrcCode,
+    artistName = artistName ?: "",
+    isrcCode = isrcCode ?: "",
     thumbNailUrl = thumbNailUrl
 )
 
