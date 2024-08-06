@@ -40,8 +40,8 @@ fun MusicItem(
         modifier = modifier
             .fillMaxWidth()
             .background(color = backgroundColor)
-            .padding(vertical = 10.dp, horizontal = 24.dp)
-            .clickable { onCheckedChange(!isChecked) },
+            .clickable { onCheckedChange(!isChecked) }
+            .padding(vertical = 10.dp, horizontal = 24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
