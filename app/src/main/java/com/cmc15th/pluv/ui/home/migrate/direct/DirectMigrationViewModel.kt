@@ -41,7 +41,6 @@ class DirectMigrationViewModel @Inject constructor(
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
 
     private val playlistAccessToken = MutableStateFlow("")
-    private val youtubeMusicAuthCode = MutableStateFlow("")
 
     init {
         subscribeEvents()
@@ -363,6 +362,7 @@ class DirectMigrationViewModel @Inject constructor(
                             validateMusic
                         }
                     }
+
                     // isEqual = true, isFound = true 인 경우는 유저가 선택한 음악이 Destination App에 존재하는 경우 (검증 필요X)
                     val similarMusics = updatedData.filter {
                         !it.isEqual && it.isFound
@@ -370,15 +370,25 @@ class DirectMigrationViewModel @Inject constructor(
 
                     val notFoundMusics = updatedData.filter {
                         !it.isEqual && !it.isFound
-                    }.map { it.destinationMusic }
+                    }.map {
+                        it.destinationMusic.first()
+                    }
 
                     val needValidate = similarMusics.isNotEmpty() || notFoundMusics.isNotEmpty()
 
+                    // 유사 음악의 첫번째 음악의 id를 선택된 유사 음악으로 설정, 없을 경우 빈 리스트 + 선택된 유사 음악 빈 문자열로 설정
                     _uiState.update {
                         it.copy(
                             isLoading = false,
                             similarMusics = similarMusics,
-                            selectedSimilarMusics = similarMusics,
+                            selectedSimilarMusicsId = similarMusics.map { musics ->
+                                musics.destinationMusic.firstOrNull()?.id ?: ""
+                            },
+//                            if (similarMusics.isNotEmpty()) {
+//                                similarMusics.map { musics -> musics.destinationMusic[0].id }
+//                            } else {
+//                                emptyList()
+//                            },
                             notFoundMusics = notFoundMusics
                         )
                     }
@@ -398,10 +408,6 @@ class DirectMigrationViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun setSpotifyAccessToken(accessToken: String?) {
-        playlistAccessToken.update { accessToken ?: "" }
     }
 
     companion object {
