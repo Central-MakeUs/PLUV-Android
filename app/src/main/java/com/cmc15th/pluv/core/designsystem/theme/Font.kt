@@ -70,6 +70,12 @@ val Content3 = TextStyle(
     fontSize = 12.sp
 )
 
+val Content4 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 10.sp
+)
+
 val MigrateAppName = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Normal,
@@ -90,5 +96,3 @@ val SelectAllContent = TextStyle(
     fontSize = 14.sp,
     color = Color(0xFF9E22FF)
 )
-
-

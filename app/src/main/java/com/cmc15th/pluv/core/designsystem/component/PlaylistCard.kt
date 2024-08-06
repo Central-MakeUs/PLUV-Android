@@ -14,7 +14,7 @@ fun PlaylistCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(2.dp),
     ) {
         AsyncImage(
             modifier = modifier,
