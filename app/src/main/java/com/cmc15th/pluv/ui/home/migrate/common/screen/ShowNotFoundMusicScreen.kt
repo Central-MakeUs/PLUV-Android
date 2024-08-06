@@ -77,7 +77,7 @@ fun ShowNotFoundMusicScreen(
 
                 Spacer(modifier = Modifier.size(8.dp))
 
-                Text(text = "${uiState.selectedDestinationApp}에서\n찾을 수 없는 음악이에요", style = Title1)
+                Text(text = "${uiState.selectedDestinationApp.appName}에서\n찾을 수 없는 음악이에요", style = Title1)
 
                 Spacer(modifier = Modifier.size(28.dp))
                 
@@ -95,6 +95,7 @@ fun ShowNotFoundMusicScreen(
                     uiState.notFoundMusics
                 ) { music ->
                     MusicItem(
+                        isChecked = false,
                         thumbNailContent = {
                             MusicThumbNail(
                                 imageUrl = music.thumbNailUrl
@@ -112,11 +113,10 @@ fun ShowNotFoundMusicScreen(
 @Composable
 fun MusicThumbNail(
     imageUrl: String,
-    modifier: Modifier = Modifier
 ) {
     PlaylistCard(
         imageUrl = imageUrl,
-        modifier = modifier
+        modifier = Modifier.size(50.dp)
     )
 }
 
