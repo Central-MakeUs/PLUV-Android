@@ -176,6 +176,12 @@ fun PLUVNavHost(
                     ),
                     onCloseClick = {
                         pluvNavController.navigateToBottomTab(BottomTab.HOME)
+                    },
+                    navigateToSelectMigrationMusic = {
+                        pluvNavController.popBackStack()
+                    },
+                    navigateToShowNotFoundMusic = {
+                        pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic.route)
                     }
                 )
             }

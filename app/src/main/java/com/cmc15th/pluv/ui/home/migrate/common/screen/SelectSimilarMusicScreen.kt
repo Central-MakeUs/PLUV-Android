@@ -79,8 +79,16 @@ fun SelectSimilarMusicScreen(
                     .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
                     .size(58.dp),
                 isNextButtonEnabled = true,
-                onPreviousClick = { },
-                onMigrateClick = { }
+                onPreviousClick = {
+                    navigateToSelectMigrationMusic()
+                },
+                onMigrateClick = {
+                    if (uiState.notFoundMusics.isNotEmpty()) {
+                        navigateToShowNotFoundMusic()
+                    } else {
+                        viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -119,7 +127,9 @@ fun SelectSimilarMusicScreen(
             }
 
             LazyColumn(
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
 
             ) {
@@ -194,8 +204,7 @@ fun MusicWithSimilarMusic(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
                 .border(width = 1.dp, color = Gray200, shape = RoundedCornerShape(4.dp))
-                .padding(horizontal = 9.dp, vertical = 12.dp)
-            ,
+                .padding(horizontal = 9.dp, vertical = 12.dp),
             isExpanded = isExpanded,
             onExpandClick = {
                 isExpanded = it
@@ -316,8 +325,7 @@ fun ExtendHeaderPreview() {
         modifier = Modifier
             .border(width = 1.dp, color = Gray200, shape = RoundedCornerShape(4.dp))
             .padding(horizontal = 9.dp, vertical = 12.dp)
-            .fillMaxWidth()
-        ,
+            .fillMaxWidth(),
         isExpanded = true,
     )
 }
