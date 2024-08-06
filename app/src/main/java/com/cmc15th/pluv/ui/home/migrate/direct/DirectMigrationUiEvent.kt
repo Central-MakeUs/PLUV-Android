@@ -2,7 +2,6 @@ package com.cmc15th.pluv.ui.home.migrate.direct
 
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
-import com.cmc15th.pluv.core.model.ValidateMusic
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
@@ -20,6 +19,5 @@ sealed class DirectMigrationUiEvent {
     data object FetchMusicsByPlaylist : DirectMigrationUiEvent()
     class SelectSourceMusic(val selectedMusic: SourceMusic) : DirectMigrationUiEvent()
     class SelectAllSourceMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
-    class SelectSimilarMusic(val selectedMusic: ValidateMusic) : DirectMigrationUiEvent()
-    class SelectAllValidateMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
+    class SelectSimilarMusic(val index: Int, val selectedMusicId: String) : DirectMigrationUiEvent()
 }

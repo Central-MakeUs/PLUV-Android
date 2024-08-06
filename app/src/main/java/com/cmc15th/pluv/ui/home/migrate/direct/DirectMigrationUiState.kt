@@ -18,6 +18,6 @@ data class DirectMigrationUiState(
     val allSourceMusics: List<SourceMusic> = emptyList(),
     val selectedSourceMusics: List<SourceMusic> = emptyList(),
     val similarMusics: List<ValidateMusic> = emptyList(),
-    val selectedSimilarMusics: List<ValidateMusic> = emptyList(),
+    val selectedSimilarMusicsId: List<String> = emptyList(), // Index, Music Ids
     val notFoundMusics: List<DestinationMusic> = emptyList()
 )
