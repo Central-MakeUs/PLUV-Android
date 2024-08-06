@@ -1,30 +1,48 @@
 package com.cmc15th.pluv.ui.home.migrate.common.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content1
+import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Content3
+import com.cmc15th.pluv.core.designsystem.theme.Content4
+import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Title1
+import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.core.ui.component.MusicItem
-import com.cmc15th.pluv.core.ui.component.MusicsHeader
-import com.cmc15th.pluv.core.ui.component.OriginalMusicItem
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
 import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
@@ -86,36 +104,36 @@ fun SelectSimilarMusicScreen(
                 Text(text = "일부 정보만 일치하는 음악이에요.", style = Content1, color = Color(0xFF8E8E8E))
 
                 Spacer(modifier = Modifier.size(28.dp))
-                MusicsHeader(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                    selectedMusicCount = uiState.selectedSimilarMusics.size,
-                    isSelectedAll = uiState.selectedSimilarMusics.size == uiState.similarMusics.size,
-                    onAllSelectedClick = {
-                        viewModel.setEvent(DirectMigrationUiEvent.SelectAllValidateMusic(it))
-                    }
-                )
+//                MusicsHeader(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(vertical = 12.dp),
+//                    selectedMusicCount = uiState.selectedSimilarMusic.size,
+//                    isSelectedAll = uiState.selectedSimilarMusic.size == uiState.similarMusics.size,
+//                    onAllSelectedClick = {
+//                        viewModel.setEvent(DirectMigrationUiEvent.SelectAllValidateMusic(it))
+//                    }
+//                )
             }
 
             LazyColumn(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+
             ) {
-                items(
+                itemsIndexed(
                     uiState.similarMusics,
-                    key = { it.sourceMusic.isrcCode }
-                ) { music ->
+//                    key = { it.sourceMusic.isrcCode }
+                ) { index, music ->
                     MusicWithSimilarMusic(
                         modifier = Modifier.fillMaxWidth(),
-                        isChecked = uiState.selectedSimilarMusics.contains(music),
+                        checkedMusicId = uiState.selectedSimilarMusicsId[index],
                         imageUrl = music.sourceMusic.thumbNailUrl,
                         musicName = music.sourceMusic.title,
                         artistName = music.sourceMusic.artistName,
-                        originalMusicImageUrl = music.destinationMusic.thumbNailUrl,
-                        originalMusicName = music.destinationMusic.title,
-                        originalArtistName = music.destinationMusic.artistName,
-                        onCheckedChange = {
-                            viewModel.setEvent(DirectMigrationUiEvent.SelectSimilarMusic(music))
+                        similarMusics = music.destinationMusic,
+                        onCheckedChange = { id ->
+                            viewModel.setEvent(DirectMigrationUiEvent.SelectSimilarMusic(index, id))
                         }
                     )
                 }
@@ -127,39 +145,57 @@ fun SelectSimilarMusicScreen(
 @Composable
 fun MusicWithSimilarMusic(
     modifier: Modifier = Modifier,
-    isChecked: Boolean = true,
+    checkedMusicId: String = "",
     imageUrl: String = "",
     musicName: String = "",
     artistName: String = "",
-    originalMusicImageUrl: String = "",
-    originalMusicName: String = "",
-    originalArtistName: String = "",
-    onCheckedChange: (Boolean) -> Unit = {}
+    similarMusics: List<DestinationMusic> = emptyList(),
+    onCheckedChange: (String) -> Unit = {},
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
     ) {
-        MusicItem(
-            isChecked = isChecked,
+        OriginalMusicItem(
             imageUrl = imageUrl,
             musicName = musicName,
             artistName = artistName,
-            onCheckedChange = {
-                onCheckedChange(it)
-            }
-            if (isChecked) {
-                item {
+        )
+        Column {
+            if (isExpanded) {
+                similarMusics.forEach { music ->
                     SimilarMusicItem(
-                        imageUrl = originalMusicImageUrl,
-                        musicName = originalMusicName,
-                        artistName = originalArtistName,
-                        isChecked = isChecked,
-                        onCheckedChange = onCheckedChange
+                        isChecked = checkedMusicId == music.id,
+                        imageUrl = music.thumbNailUrl,
+                        musicName = music.title,
+                        artistName = music.artistName,
+                        onCheckedChange = { onCheckedChange(music.id) }
+                    )
+                }
+            } else {
+                similarMusics.take(1).forEach { music ->
+                    SimilarMusicItem(
+                        isChecked = checkedMusicId == music.id,
+                        imageUrl = music.thumbNailUrl,
+                        musicName = music.title,
+                        artistName = music.artistName,
+                        onCheckedChange = { onCheckedChange(music.id) }
                     )
                 }
             }
-
         }
+        Spacer(modifier = Modifier.size(8.dp))
+
+        ExpandSectionHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 24.dp),
+            isExpanded = isExpanded,
+            onExpandClick = {
+                isExpanded = it
+            }
+        )
     }
 }
 
@@ -167,9 +203,12 @@ fun MusicWithSimilarMusic(
 fun ExpandSectionHeader(
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
+    onExpandClick: (Boolean) -> Unit = {},
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.clickable {
+            onExpandClick(!isExpanded)
+        },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
