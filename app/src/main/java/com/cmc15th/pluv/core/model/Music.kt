@@ -15,8 +15,8 @@ data class DestinationMusic(
 )
 
 data class ValidateMusic(
-    val isEqual: Boolean,
-    val isFound: Boolean,
-    val sourceMusic: SourceMusic,
-    val destinationMusic: DestinationMusic
+    val isEqual: Boolean = true,
+    val isFound: Boolean = true,
+    val sourceMusic: SourceMusic = SourceMusic(),
+    val destinationMusic: List<DestinationMusic> = emptyList()
 )
