@@ -40,6 +40,9 @@ class DirectMigrationViewModel @Inject constructor(
     private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
 
+    // 이전할 음악 목록들
+    private val destinationMusicsIds: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+
     private val playlistAccessToken = MutableStateFlow("")
 
     init {
@@ -349,6 +352,17 @@ class DirectMigrationViewModel @Inject constructor(
                 Log.d(TAG, "validateSelectedMusic: $result")
                 result.onSuccess { data ->
 
+                    // isEqual = true, isFound = true 인 경우는 유저가 선택한 음악이 Destination App에 존재하는 경우 (검증 필요X)
+                    // 여기선 유효성 검사에 걸리는 음악은 제외되고 추가됨
+                    destinationMusicsIds.update {
+                        val validMusicIds = data
+                            .filter { it.isFound && it.isEqual }
+                            .flatMap { it.destinationMusic }
+                            .map { it.id }
+
+                        validMusicIds
+                    }
+
                     val updatedData = data.map { validateMusic ->
                         val matchingSourceMusic =
                             _uiState.value.selectedSourceMusics.find { sourceMusic ->
@@ -370,8 +384,8 @@ class DirectMigrationViewModel @Inject constructor(
 
                     val notFoundMusics = updatedData.filter {
                         !it.isEqual && !it.isFound
-                    }.map {
-                        it.destinationMusic.first()
+                    }.flatMap {
+                        it.destinationMusic
                     }
 
                     val needValidate = similarMusics.isNotEmpty() || notFoundMusics.isNotEmpty()
