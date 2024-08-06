@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.ui.home.migrate.common.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Content3
 import com.cmc15th.pluv.core.designsystem.theme.Content4
+import com.cmc15th.pluv.core.designsystem.theme.Gray200
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.model.DestinationMusic
@@ -190,7 +192,10 @@ fun MusicWithSimilarMusic(
         ExpandSectionHeader(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp, top = 24.dp),
+                .padding(horizontal = 24.dp)
+                .border(width = 1.dp, color = Gray200, shape = RoundedCornerShape(4.dp))
+                .padding(horizontal = 9.dp, vertical = 12.dp)
+            ,
             isExpanded = isExpanded,
             onExpandClick = {
                 isExpanded = it
@@ -302,6 +307,19 @@ fun SimilarMusicPlaylistCard(
             modifier = Modifier.size(38.dp)
         )
     }
+}
+
+@Composable
+@Preview
+fun ExtendHeaderPreview() {
+    ExpandSectionHeader(
+        modifier = Modifier
+            .border(width = 1.dp, color = Gray200, shape = RoundedCornerShape(4.dp))
+            .padding(horizontal = 9.dp, vertical = 12.dp)
+            .fillMaxWidth()
+        ,
+        isExpanded = true,
+    )
 }
 
 @Composable
