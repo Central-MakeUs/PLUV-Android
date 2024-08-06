@@ -11,10 +11,11 @@ import coil.compose.AsyncImage
 @Composable
 fun PlaylistCard(
     imageUrl: String,
+    shape: RoundedCornerShape = RoundedCornerShape(2.dp),
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(2.dp),
+        shape = shape,
     ) {
         AsyncImage(
             modifier = modifier,
