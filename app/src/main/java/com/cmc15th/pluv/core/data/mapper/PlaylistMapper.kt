@@ -42,5 +42,7 @@ fun ValidateMusicResponse.toValidateMusic() = ValidateMusic(
     isEqual = isEqual,
     isFound = isFound,
     sourceMusic = sourceMusic.toSourceMusic(),
-    destinationMusic = destinationMusic.toDestinationMusic()
+    destinationMusic = destinationMusic.map {
+        it.toDestinationMusic()
+    }
 )
