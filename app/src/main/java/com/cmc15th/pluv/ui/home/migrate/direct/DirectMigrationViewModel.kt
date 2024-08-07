@@ -40,6 +40,9 @@ class DirectMigrationViewModel @Inject constructor(
     private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
 
+    // 이전할 음악 목록들
+    private val destinationMusicsIds: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+
     private val playlistAccessToken = MutableStateFlow("")
 
     init {
@@ -81,10 +84,6 @@ class DirectMigrationViewModel @Inject constructor(
 
             is DirectMigrationUiEvent.OnSourceLoginSuccess -> {
                 fetchPlaylists(_uiState.value.selectedSourceApp)
-            }
-
-            is DirectMigrationUiEvent.ExecuteMigration -> {
-                //TODO Source App Login
             }
 
             is DirectMigrationUiEvent.OnDestinationLoginSuccess -> {
@@ -151,6 +150,10 @@ class DirectMigrationViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(selectedSimilarMusicsId = selectedSimilarMusicsId)
                 }
+            }
+
+            is DirectMigrationUiEvent.ExecuteMigration -> {
+                migratePlaylist()
             }
         }
     }
@@ -349,6 +352,17 @@ class DirectMigrationViewModel @Inject constructor(
                 Log.d(TAG, "validateSelectedMusic: $result")
                 result.onSuccess { data ->
 
+                    // isEqual = true, isFound = true 인 경우는 유저가 선택한 음악이 Destination App에 존재하는 경우 (검증 필요X)
+                    // 여기선 유효성 검사에 걸리는 음악은 제외되고 추가됨
+                    destinationMusicsIds.update {
+                        val validMusicIds = data
+                            .filter { it.isFound && it.isEqual }
+                            .flatMap { it.destinationMusic }
+                            .map { it.id }
+
+                        validMusicIds
+                    }
+
                     val updatedData = data.map { validateMusic ->
                         val matchingSourceMusic =
                             _uiState.value.selectedSourceMusics.find { sourceMusic ->
@@ -370,8 +384,8 @@ class DirectMigrationViewModel @Inject constructor(
 
                     val notFoundMusics = updatedData.filter {
                         !it.isEqual && !it.isFound
-                    }.map {
-                        it.destinationMusic.first()
+                    }.flatMap {
+                        it.destinationMusic
                     }
 
                     val needValidate = similarMusics.isNotEmpty() || notFoundMusics.isNotEmpty()
@@ -409,6 +423,46 @@ class DirectMigrationViewModel @Inject constructor(
             }
         }
     }
+
+    private fun migratePlaylist() {
+        viewModelScope.launch {
+            val migrateTargetMusicIds =
+                destinationMusicsIds.value + _uiState.value.selectedSimilarMusicsId
+
+            when (_uiState.value.selectedDestinationApp) {
+                PlayListApp.spotify -> {
+                    playlistRepository.migrateToSpotify(
+                        playlistName = _uiState.value.selectedPlaylist.name,
+                        accessToken = playlistAccessToken.value,
+                        musicIds = migrateTargetMusicIds
+                    )
+                }
+
+                PlayListApp.YOUTUBE_MUSIC -> {
+                    playlistRepository.migrateToYoutubeMusic(
+                        playlistName = _uiState.value.selectedPlaylist.name,
+                        accessToken = playlistAccessToken.value,
+                        musicIds = migrateTargetMusicIds
+                    )
+                }
+
+                else -> {
+                    //TODO 구현예정
+                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
+                }
+            }.collect { result ->
+
+                result.onSuccess { data ->
+                    Log.d(TAG, "migratePlaylist: $data")
+                }
+
+                result.onFailure { code, error ->
+                    Log.d(TAG, "migratePlaylist: $code, $error")
+                }
+            }
+        }
+    }
+
 
     companion object {
         private const val TAG = "DirectMigrationViewModel"

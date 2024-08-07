@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.core.designsystem.component
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
@@ -11,13 +12,15 @@ import coil.compose.AsyncImage
 @Composable
 fun PlaylistCard(
     imageUrl: String,
+    shape: RoundedCornerShape = RoundedCornerShape(2.dp),
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(2.dp),
+        shape = shape,
+        modifier = modifier
     ) {
         AsyncImage(
-            modifier = modifier,
+            modifier = Modifier.fillMaxSize(),
             model = imageUrl,
             contentDescription = "Playlist Cover",
             contentScale = ContentScale.Crop

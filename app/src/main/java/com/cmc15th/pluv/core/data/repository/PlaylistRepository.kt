@@ -31,4 +31,16 @@ interface PlaylistRepository {
         accessToken: String,
         musics: List<SourceMusic>
     ): Flow<ApiResult<List<ValidateMusic>>>
+
+    fun migrateToSpotify(
+        playlistName: String,
+        accessToken: String,
+        musicIds: List<String>
+    ): Flow<ApiResult<String>>
+
+    fun migrateToYoutubeMusic(
+        playlistName: String,
+        accessToken: String,
+        musicIds: List<String>
+    ): Flow<ApiResult<String>>
 }
