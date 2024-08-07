@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc15th.pluv.ui.feed.FeedScreen
 import com.cmc15th.pluv.ui.home.HomeScreen
+import com.cmc15th.pluv.ui.home.migrate.common.screen.MigratedResultScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.SelectSimilarMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.ShowNotFoundMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
@@ -194,6 +195,15 @@ fun PLUVNavHost(
                     onCloseClick = {
                         pluvNavController.navigateToBottomTab(BottomTab.HOME)
                     }
+                )
+            }
+
+            composable(route = DestinationScreens.MigratedResult.route) { navBackStackEntry ->
+                MigratedResultScreen(
+                    viewModel = pluvNavController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.DirectMigrationRoot.route
+                    ),
                 )
             }
         }
