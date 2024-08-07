@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.core.network.service
 
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.network.request.MigratePlaylistRequest
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.response.CommonResponse
@@ -36,10 +37,19 @@ interface MigrationService {
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
-
     @POST("/music/{destination}/search")
     suspend fun validateMusic(
         @Path("destination") source: PlayListApp,
         @Body validateMusicRequest: ValidateMusicRequest
     ): ApiResult<CommonResponse<List<ValidateMusicResponse>>>
+
+    @POST("music/spotify/add")
+    suspend fun migrateToSpotify(
+        @Body migratePlaylistRequest: MigratePlaylistRequest
+    ): ApiResult<CommonResponse<String>>
+
+    @POST("music/youtube/add")
+    suspend fun migrateToYoutubeMusic(
+        @Body migratePlaylistRequest: MigratePlaylistRequest
+    ): ApiResult<CommonResponse<String>>
 }
