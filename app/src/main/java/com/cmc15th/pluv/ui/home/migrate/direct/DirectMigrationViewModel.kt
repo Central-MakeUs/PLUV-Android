@@ -86,10 +86,6 @@ class DirectMigrationViewModel @Inject constructor(
                 fetchPlaylists(_uiState.value.selectedSourceApp)
             }
 
-            is DirectMigrationUiEvent.ExecuteMigration -> {
-                //TODO Source App Login
-            }
-
             is DirectMigrationUiEvent.OnDestinationLoginSuccess -> {
                 validateSelectedMusic()
             }
@@ -154,6 +150,10 @@ class DirectMigrationViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(selectedSimilarMusicsId = selectedSimilarMusicsId)
                 }
+            }
+
+            is DirectMigrationUiEvent.ExecuteMigration -> {
+                migratePlaylist()
             }
         }
     }
@@ -423,6 +423,46 @@ class DirectMigrationViewModel @Inject constructor(
             }
         }
     }
+
+    private fun migratePlaylist() {
+        viewModelScope.launch {
+            val migrateTargetMusicIds =
+                destinationMusicsIds.value + _uiState.value.selectedSimilarMusicsId
+
+            when (_uiState.value.selectedDestinationApp) {
+                PlayListApp.spotify -> {
+                    playlistRepository.migrateToSpotify(
+                        playlistName = _uiState.value.selectedPlaylist.name,
+                        accessToken = playlistAccessToken.value,
+                        musicIds = migrateTargetMusicIds
+                    )
+                }
+
+                PlayListApp.YOUTUBE_MUSIC -> {
+                    playlistRepository.migrateToYoutubeMusic(
+                        playlistName = _uiState.value.selectedPlaylist.name,
+                        accessToken = playlistAccessToken.value,
+                        musicIds = migrateTargetMusicIds
+                    )
+                }
+
+                else -> {
+                    //TODO 구현예정
+                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
+                }
+            }.collect { result ->
+
+                result.onSuccess { data ->
+                    Log.d(TAG, "migratePlaylist: $data")
+                }
+
+                result.onFailure { code, error ->
+                    Log.d(TAG, "migratePlaylist: $code, $error")
+                }
+            }
+        }
+    }
+
 
     companion object {
         private const val TAG = "DirectMigrationViewModel"
