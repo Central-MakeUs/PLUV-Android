@@ -20,6 +20,7 @@ data class ReadSourceMusicResponse(
 data class ReadValidateSourceResponse(
     @SerializedName("title") val title: String = "",
     @SerializedName("artistName") val artistName: String = "",
+    @SerializedName("imageUrl") val thumbNailUrl: String = ""
 )
 
 data class ReadDestinationMusicResponse(

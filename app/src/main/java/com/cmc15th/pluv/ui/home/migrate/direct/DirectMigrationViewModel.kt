@@ -363,26 +363,12 @@ class DirectMigrationViewModel @Inject constructor(
                         validMusicIds
                     }
 
-                    val updatedData = data.map { validateMusic ->
-                        val matchingSourceMusic =
-                            _uiState.value.selectedSourceMusics.find { sourceMusic ->
-                                sourceMusic.title == validateMusic.sourceMusic.title
-                            }
-
-                        // `validateMusic`의 `sourceMusic`을 업데이트된 `matchingSourceMusic`으로 교체
-                        if (matchingSourceMusic != null) {
-                            validateMusic.copy(sourceMusic = matchingSourceMusic)
-                        } else {
-                            validateMusic
-                        }
-                    }
-
                     // isEqual = true, isFound = true 인 경우는 유저가 선택한 음악이 Destination App에 존재하는 경우 (검증 필요X)
-                    val similarMusics = updatedData.filter {
+                    val similarMusics = data.filter {
                         !it.isEqual && it.isFound
                     }
 
-                    val notFoundMusics = updatedData.filter {
+                    val notFoundMusics = data.filter {
                         !it.isEqual && !it.isFound
                     }.flatMap {
                         it.destinationMusic
@@ -398,11 +384,6 @@ class DirectMigrationViewModel @Inject constructor(
                             selectedSimilarMusicsId = similarMusics.map { musics ->
                                 musics.destinationMusic.firstOrNull()?.id ?: ""
                             },
-//                            if (similarMusics.isNotEmpty()) {
-//                                similarMusics.map { musics -> musics.destinationMusic[0].id }
-//                            } else {
-//                                emptyList()
-//                            },
                             notFoundMusics = notFoundMusics
                         )
                     }

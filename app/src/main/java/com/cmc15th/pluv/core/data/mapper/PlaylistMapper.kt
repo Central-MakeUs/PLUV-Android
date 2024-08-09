@@ -28,7 +28,8 @@ fun ReadSourceMusicResponse.toSourceMusic() = SourceMusic(
 
 fun ReadValidateSourceResponse.toSourceMusic() = SourceMusic(
     title = title,
-    artistName = artistName
+    artistName = artistName,
+    thumbNailUrl = thumbNailUrl,
 )
 
 fun ReadDestinationMusicResponse.toDestinationMusic() = DestinationMusic(
