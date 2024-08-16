@@ -18,8 +18,10 @@ spotify = "1.2.5"
 jetbrainsKotlinJvm = "1.9.0"
 googleAuth = "21.0.0"
 dataStore = "1.1.1"
+collapseTollbar = "2.3.5"
 
 [libraries]
+onebone-toolbar-collapse = { group = "me.onebone", name = "toolbar-compose", version.ref = "collapseTollbar" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
 google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googleAuth" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
