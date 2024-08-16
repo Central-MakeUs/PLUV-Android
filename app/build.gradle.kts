@@ -16,7 +16,7 @@ android {
         applicationId = "com.cmc15th.pluv"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 4
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -65,12 +65,14 @@ fun getProperty(propertyKey: String): String {
 
 dependencies {
 
+    // collapse-toolbar
+    implementation(libs.onebone.toolbar.collapse)
     implementation(libs.androidx.datastore.preferences)
     // google auth
     implementation(libs.google.auth)
     //spotify auth
     implementation(libs.spotify.auth)
-    implementation ("androidx.browser:browser:1.4.0")
+    implementation ("androidx.browser:browser:1.0.0")
     // retrofit2 + okhttp3
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
