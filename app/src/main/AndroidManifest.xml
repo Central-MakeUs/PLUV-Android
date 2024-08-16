@@ -32,8 +32,8 @@
             <category android:name="android.intent.category.BROWSABLE"/>
 
             <data
-                android:host="localhost:8080"
-                android:scheme="http"/>
+                android:host="${redirectHostName}"
+                android:scheme="${redirectSchemeName}"/>
             </intent-filter>
         </activity>
     </application>

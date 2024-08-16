@@ -27,6 +27,9 @@ android {
         buildConfigField("String", "spotify_client_id", getProperty("spotify_client_id"))
         buildConfigField("String", "spotify_redirect_uri", getProperty("spotify_redirect_uri"))
         buildConfigField("String", "google_auth_client_id", getProperty("google_auth_client_id"))
+        manifestPlaceholders["redirectHostName"] = "localhost:8080"
+        manifestPlaceholders["redirectSchemeName"] = "http"
+
     }
 
     buildTypes {
@@ -65,14 +68,14 @@ fun getProperty(propertyKey: String): String {
 
 dependencies {
 
+    implementation(files("libs/spotify-auth-release-2.1.0.aar"))
     // collapse-toolbar
-    implementation(libs.onebone.toolbar.collapse)
     implementation(libs.androidx.datastore.preferences)
     // google auth
     implementation(libs.google.auth)
     //spotify auth
-    implementation(libs.spotify.auth)
-    implementation ("androidx.browser:browser:1.0.0")
+//    implementation(libs.spotify.auth)
+    implementation("androidx.browser:browser:1.0.0")
     // retrofit2 + okhttp3
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
