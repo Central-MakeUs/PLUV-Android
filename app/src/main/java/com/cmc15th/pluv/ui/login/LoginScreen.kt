@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.login
 
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -41,7 +42,6 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToHome: () -> Unit = {}
 ) {
-
     val googleLoginResultLauncher = rememberLauncherForActivityResult(
         contract = GoogleApiContract()
     ) { task ->
@@ -58,9 +58,12 @@ fun LoginScreen(
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 is LoginUiEffect.OnLoginSuccess -> {
+                    Log.d("LoginScreen", "LoginScreen: LoginSuccess")
                     navigateToHome()
                 }
                 is LoginUiEffect.OnLoginFailure -> {
+                    Log.d("LoginScreen", "LoginScreen: LoginF")
+
                     //TODO show error message
                 }
             }
@@ -152,11 +155,6 @@ fun LoginButtons(
         )
 
         Spacer(modifier = Modifier.size(14.dp))
-
-        AppleLoginButton(
-            modifier = modifier,
-            onClick = { onAppleLoginClick() }
-        )
     }
 }
 
@@ -206,33 +204,12 @@ fun SpotifyLoginButton(
     )
 }
 
-@Composable
-fun AppleLoginButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
-) {
-    PLUVButton(
-        modifier = modifier,
-        onClick = { onClick() },
-        containerColor = Color.Black,
-        contentColor = Color.White,
-        content = {
-            Icon(
-                painter = painterResource(id = R.drawable.applelogin),
-                contentDescription = "Apple Login",
-                modifier = Modifier.size(24.dp),
-                tint = Color.Unspecified
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            Text(text = stringResource(id = R.string.apple_login), style = Title5)
-        }
-    )
-}
 
 @Composable
 @Preview
 fun LoginScreenPreview() {
     LoginScreen()
 }
+
 
 
