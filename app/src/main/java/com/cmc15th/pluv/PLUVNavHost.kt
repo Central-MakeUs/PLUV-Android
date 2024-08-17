@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc15th.pluv.ui.feed.FeedInfoScreen
+import com.cmc15th.pluv.ui.feed.FeedScreen
 import com.cmc15th.pluv.ui.home.HomeScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.MigratedResultScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.SelectSimilarMusicScreen
@@ -27,14 +28,8 @@ fun PLUVNavHost(
 
     NavHost(
         navController = pluvNavController.navController,
-        startDestination = DestinationScreens.FeedInfo.route
+        startDestination = DestinationScreens.Login.route
     ) {
-
-        composable(route = DestinationScreens.FeedInfo.route) {
-            FeedInfoScreen(
-                showSnackBar = showSnackBar
-            )
-        }
 
         composable(route = DestinationScreens.Login.route) { navBackStackEntry ->
             LoginScreen(
@@ -56,20 +51,20 @@ fun PLUVNavHost(
             )
         }
 
-//        navigation(
-//            route = BottomTab.FEED.route,
-//            startDestination = BottomTab.FEED.route
-//        ) {
-//            composable(route = BottomTab.FEED.route) {
-//                FeedScreen()
-//            }
-//
-////            composable(route = DestinationScreens.FeedInfo.route) {
-////                FeedInfoScreen(
-////                    showSnackBar = showSnackBar
-////                )
-////            }
-//        }
+        navigation(
+            route = BottomTab.FEED.route,
+            startDestination = DestinationScreens.Feed.route
+        ) {
+            composable(route = DestinationScreens.Feed.route) {
+                FeedScreen()
+            }
+
+            composable(route = DestinationScreens.FeedInfo.route) {
+                FeedInfoScreen(
+                    showSnackBar = showSnackBar
+                )
+            }
+        }
 
         composable(route = BottomTab.MY_PAGE.route) {
             MypageScreen()
