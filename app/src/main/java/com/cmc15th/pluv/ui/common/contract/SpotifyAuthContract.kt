@@ -12,7 +12,6 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 class SpotifyAuthContract : ActivityResultContract<Int, AuthorizationResponse>() {
 
     override fun createIntent(context: Context, input: Int): Intent {
-        AuthorizationClient.clearCookies(context)
         val authRequest = AuthorizationRequest.Builder(
             BuildConfig.spotify_client_id,
             AuthorizationResponse.Type.TOKEN,
