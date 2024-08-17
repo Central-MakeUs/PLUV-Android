@@ -3,6 +3,7 @@ package com.cmc15th.pluv.ui.feed
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,7 +37,9 @@ import com.cmc15th.pluv.core.designsystem.theme.Title5
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeedInfoScreen() {
+fun FeedInfoScreen(
+    showSnackBar: (String) -> Unit = {}
+) {
     Scaffold(
         topBar = {
             Row(
@@ -76,7 +79,9 @@ fun FeedInfoScreen() {
                     totalMusicCount = 10,
                     lastUpdateDate = "w",
                     userName = "커트",
-                    onBookmarkClick = {}
+                    onBookmarkClick = {
+                        showSnackBar("플레이리스트를 저장했어요")
+                    }
                 )
                 Divider(modifier = Modifier.fillMaxWidth(), color = Gray200, thickness = 1.dp)
             }
@@ -101,7 +106,7 @@ fun PlaylistInfo(
     totalMusicCount: Int,
     lastUpdateDate: String,
     userName: String,
-    isBookmarked: Boolean = false,
+    isBookmarked: Boolean = true,
     onBookmarkClick: () -> Unit
 ) {
     Column(
@@ -130,6 +135,16 @@ fun PlaylistInfo(
                     style = Title2,
                 )
             }
+            Icon(
+                painter =
+                if (isBookmarked) painterResource(id = R.drawable.bookmarked)
+                else painterResource(id = R.drawable.unbookmark),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(30.dp)
+                    .clickable { onBookmarkClick() }
+            )
         }
 
         Row {
