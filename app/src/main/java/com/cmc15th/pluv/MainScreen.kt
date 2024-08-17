@@ -14,22 +14,44 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.cmc15th.pluv.core.designsystem.component.PLUVSnackBar
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title6
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private const val SnackBarDuration = 1000L
 
 @Composable
 fun MainScreen(
     pluvNavController: PLUVNavController = rememberPLUVNavController()
 ) {
+    val snackBarState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
+    val showSnackBar: (String) -> Unit = { message ->
+        coroutineScope.launch {
+            val job = launch {
+                snackBarState.showSnackbar(message)
+            }
+            delay(SnackBarDuration)
+            job.cancel()
+        }
+    }
+
     Scaffold(
         bottomBar = {
             PLUVBottomBar(
@@ -44,6 +66,16 @@ fun MainScreen(
                     pluvNavController.navigate(route)
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarState,
+                snackbar = { data ->
+                    PLUVSnackBar(
+                        content = data.visuals.message,
+                    )
+                }
+            )
         }
     ) { paddingValues ->
         Box(
@@ -52,7 +84,10 @@ fun MainScreen(
                 .padding(paddingValues)
         ) {
             PLUVNavHost(
-                pluvNavController = pluvNavController
+                pluvNavController = pluvNavController,
+                showSnackBar = { message ->
+                    showSnackBar(message)
+                }
             )
         }
     }

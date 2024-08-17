@@ -13,4 +13,5 @@ sealed class DestinationScreens(val route: String) {
     data object ScreenShotMigrationRoot : DestinationScreens(route = "ScreenShotMigrationRoot")
     data object UploadPlaylistScreenShot : DestinationScreens(route = "UploadPlaylistScreenShot")
     data object MigratedResult : DestinationScreens(route = "MigratedResult")
+    data object FeedInfo : DestinationScreens(route = "FeedInfo")
 }
