@@ -28,7 +28,7 @@ fun PLUVNavHost(
 
     NavHost(
         navController = pluvNavController.navController,
-        startDestination = DestinationScreens.Login.route
+        startDestination = BottomTab.HOME.route
     ) {
 
         composable(route = DestinationScreens.Login.route) { navBackStackEntry ->
@@ -51,20 +51,23 @@ fun PLUVNavHost(
             )
         }
 
-        navigation(
-            route = BottomTab.FEED.route,
-            startDestination = DestinationScreens.Feed.route
-        ) {
-            composable(route = DestinationScreens.Feed.route) {
-                FeedScreen()
-            }
-
-            composable(route = DestinationScreens.FeedInfo.route) {
-                FeedInfoScreen(
-                    showSnackBar = showSnackBar
-                )
-            }
+        composable(route = BottomTab.FEED.route) {
+            FeedScreen(
+                navigateToFeedInfo = {
+                    pluvNavController.navigate(DestinationScreens.FeedInfo.route)
+                }
+            )
         }
+
+        composable(route = DestinationScreens.FeedInfo.route) {
+            FeedInfoScreen(
+                onBackClick = {
+                    pluvNavController.popBackStack()
+                },
+                showSnackBar = showSnackBar
+            )
+        }
+
 
         composable(route = BottomTab.MY_PAGE.route) {
             MypageScreen()

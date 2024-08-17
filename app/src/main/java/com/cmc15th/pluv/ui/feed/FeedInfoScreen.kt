@@ -38,6 +38,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Title5
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FeedInfoScreen(
+    onBackClick: () -> Unit = {},
     showSnackBar: (String) -> Unit = {}
 ) {
     Scaffold(
@@ -49,7 +50,7 @@ fun FeedInfoScreen(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.leftarrow),
-                    modifier = Modifier.size(24.dp), contentDescription = null
+                    modifier = Modifier.size(24.dp).clickable { onBackClick() }, contentDescription = null
                 )
             }
         }

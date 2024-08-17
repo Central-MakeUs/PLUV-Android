@@ -1,10 +1,14 @@
 package com.cmc15th.pluv.ui.feed
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +24,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Title4
 @Composable
 fun FeedScreen(
     modifier: Modifier = Modifier,
+    navigateToFeedInfo: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -31,16 +36,21 @@ fun FeedScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-//        LazyVerticalGrid(columns = 2) {
-//
-//        }
-        PlaylistInfo(
-            modifier = Modifier.fillMaxWidth(),
-            imageUrl = "https://picsum.photos/200/300",
-            title = "Playlist Title",
-            musicNames = listOf("Music1", "Music2", "Music3", "Music4", "Music5", "Music6", "Music7", "Music8", "Music9", "Music10"),
-            userName = "User Name"
-        )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+        ) {
+            items(10) { index ->
+                PlaylistInfo(
+                    modifier = Modifier.fillMaxWidth().clickable { navigateToFeedInfo() },
+                    imageUrl = "https://picsum.photos/200/300",
+                    title = "Playlist Title",
+                    musicNames = listOf("Music1", "Music2", "Music3", "Music4", "Music5", "Music6", "Music7", "Music8", "Music9", "Music10"),
+                    userName = "User Name",
+                )
+            }
+        }
     }
 }
 
