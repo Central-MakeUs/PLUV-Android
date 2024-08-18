@@ -87,11 +87,17 @@ class PlaylistRepositoryImpl @Inject constructor(
         accessToken: String,
         musics: List<SourceMusic>
     ): Flow<ApiResult<List<ValidateMusic>>> = flow {
-        emit(
-            migrationService.validateMusic(
-                playlistApp,
-                ValidateMusicRequest(accessToken, musics)
-            ).map { result ->
+        emit (
+            when (playlistApp) {
+                PlayListApp.spotify -> migrationService.validateSpotifyMusic(
+                    ValidateMusicRequest(accessToken, musics)
+                )
+
+                PlayListApp.YOUTUBE_MUSIC -> migrationService.validateYoutubeMusic(
+                    ValidateMusicRequest(accessToken, musics)
+                )
+                else -> ApiResult.Unexpected(IllegalArgumentException("Unexpected playlist app"))
+            }.map { result ->
                 Log.d("REPOSITORY", "validateMusic: $result")
                 result.data.map {
                     it.toValidateMusic()
