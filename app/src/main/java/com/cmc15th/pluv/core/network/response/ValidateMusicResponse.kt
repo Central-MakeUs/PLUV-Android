@@ -6,5 +6,5 @@ data class ValidateMusicResponse(
     @SerializedName("isEqual") val isEqual: Boolean,
     @SerializedName("isFound") val isFound: Boolean,
     @SerializedName("sourceMusic") val sourceMusic: ReadValidateSourceResponse,
-    @SerializedName("destinationMusic") val destinationMusic: List<ReadDestinationMusicResponse>
+    @SerializedName("destinationMusics") val destinationMusics: List<ReadDestinationMusicResponse>
 )
