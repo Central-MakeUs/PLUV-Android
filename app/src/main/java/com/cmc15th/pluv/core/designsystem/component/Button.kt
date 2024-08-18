@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.core.designsystem.component
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -16,6 +17,7 @@ fun PLUVButton(
     enabled: Boolean = true,
     containerColor: Color,
     contentColor: Color,
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     elevation: ButtonElevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 0.dp),
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit
@@ -27,6 +29,7 @@ fun PLUVButton(
             containerColor = containerColor,
             contentColor = contentColor
         ),
+        contentPadding = contentPadding,
         elevation = elevation,
         content = content,
         modifier = modifier,
