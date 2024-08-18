@@ -7,9 +7,8 @@ fun PlayListApp.getAppIconRes(): Int {
     return when (this) {
         PlayListApp.EMPTY -> R.drawable.grayplaceholder
         PlayListApp.spotify -> R.drawable.spotify
-        PlayListApp.APPLE_MUSIC -> R.drawable.applemusic
+//        PlayListApp.APPLE_MUSIC -> R.drawable.applemusic
         PlayListApp.YOUTUBE_MUSIC -> R.drawable.youtubemusic
-        PlayListApp.MELON -> R.drawable.melon
     }
 }
 
@@ -17,9 +16,8 @@ fun PlayListApp.getSelectedIconRes(): Int {
     return when (this) {
         PlayListApp.EMPTY -> R.drawable.grayplaceholder
         PlayListApp.spotify -> R.drawable.spotify_selected
-        PlayListApp.APPLE_MUSIC -> R.drawable.applemusic_selected
+//        PlayListApp.APPLE_MUSIC -> R.drawable.applemusic_selected
         PlayListApp.YOUTUBE_MUSIC -> R.drawable.youtubemusic_selected
-        PlayListApp.MELON -> R.drawable.melon_selected
     }
 }
 
@@ -27,8 +25,7 @@ fun PlayListApp.getAppNameRes(): Int {
     return when (this) {
         PlayListApp.EMPTY -> R.string.empty
         PlayListApp.spotify -> R.string.spotify
-        PlayListApp.APPLE_MUSIC -> R.string.apple_music
+//        PlayListApp.APPLE_MUSIC -> R.string.apple_music
         PlayListApp.YOUTUBE_MUSIC -> R.string.youtube_music
-        PlayListApp.MELON -> R.string.melon
     }
 }
