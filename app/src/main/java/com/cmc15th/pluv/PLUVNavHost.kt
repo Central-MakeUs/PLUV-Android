@@ -70,7 +70,36 @@ fun PLUVNavHost(
 
 
         composable(route = BottomTab.MY_PAGE.route) {
-            MypageScreen()
+            MypageScreen(
+                navigateToUserInfo = {
+                    pluvNavController.navigate(DestinationScreens.UserInfo.route)
+                },
+                navigateToWebView = { title, url ->
+                    pluvNavController.navigate("webView?title=${Uri.encode(title)}&url=${Uri.encode(url)}")
+                }
+            )
+        }
+
+        composable(route = DestinationScreens.WebView.route) { navBackStackEntry ->
+            val title = navBackStackEntry.arguments?.getString("title") ?: ""
+            val url = navBackStackEntry.arguments?.getString("url") ?: ""
+            WebViewScreen(
+                title = title,
+                url = url,
+                onBackClick = {
+                    pluvNavController.popBackStack()
+                }
+            )
+        }
+
+        composable(route = DestinationScreens.UserInfo.route) {
+            UserInfoScreen(
+                viewModel = hiltViewModel(),
+                onBackClick = {
+                    pluvNavController.popBackStack()
+                },
+                showSnackBar = showSnackBar
+            )
         }
 
         navigation(

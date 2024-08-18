@@ -15,4 +15,6 @@ sealed class DestinationScreens(val route: String) {
     data object MigratedResult : DestinationScreens(route = "MigratedResult")
     data object Feed : DestinationScreens(route = "Feed")
     data object FeedInfo : DestinationScreens(route = "FeedInfo")
+    data object UserInfo : DestinationScreens(route = "UserInfo")
+    data object WebView : DestinationScreens("webView?title={title}&url={url}")
 }
