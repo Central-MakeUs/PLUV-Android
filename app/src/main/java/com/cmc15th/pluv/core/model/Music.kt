@@ -1,8 +1,10 @@
 package com.cmc15th.pluv.core.model
 
+import com.google.gson.annotations.SerializedName
+
 data class SourceMusic(
     val isrcCode: String = "",
-    val thumbNailUrl: String = "",
+    @SerializedName("imageUrl") val thumbNailUrl: String = "",
     val title: String = "",
     val artistName: String = "",
 )

@@ -8,7 +8,6 @@ import com.cmc15th.pluv.core.network.response.CommonResponse
 import com.cmc15th.pluv.core.network.response.ReadPlaylistResponse
 import com.cmc15th.pluv.core.network.response.ReadSourceMusicResponse
 import com.cmc15th.pluv.core.network.response.ValidateMusicResponse
-import com.cmc15th.pluv.domain.model.PlayListApp
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -37,9 +36,13 @@ interface MigrationService {
         @Body accessToken: PlaylistAccessToken
     ): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
-    @POST("/music/{destination}/search")
-    suspend fun validateMusic(
-        @Path("destination") source: PlayListApp,
+    @POST("/music/spotify/search")
+    suspend fun validateSpotifyMusic(
+        @Body validateMusicRequest: ValidateMusicRequest
+    ): ApiResult<CommonResponse<List<ValidateMusicResponse>>>
+
+    @POST("/music/youtube/search")
+    suspend fun validateYoutubeMusic(
         @Body validateMusicRequest: ValidateMusicRequest
     ): ApiResult<CommonResponse<List<ValidateMusicResponse>>>
 
