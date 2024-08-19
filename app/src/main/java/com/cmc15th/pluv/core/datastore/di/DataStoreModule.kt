@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -22,7 +22,7 @@ private val Context.authDataStore: DataStore<Preferences> by preferencesDataStor
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
-    @Binds
+    @Provides
     @Singleton
-    fun bindAuthDataStore(@ApplicationContext context: Context) = context.authDataStore
+    fun provideAuthDataStore(@ApplicationContext context: Context) = context.authDataStore
 }
