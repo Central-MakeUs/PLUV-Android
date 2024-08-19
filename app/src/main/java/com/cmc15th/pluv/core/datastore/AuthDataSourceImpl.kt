@@ -20,7 +20,7 @@ class AuthDataSourceImpl @Inject constructor(
         }
     }
 
-    override fun getAccessToken(token: String): Flow<String> = flow {
+    override fun getAccessToken(): Flow<String> = flow {
         authDataStore.data.map { preferences ->
             preferences[ACCESS_TOKEN] ?: ""
         }.catch {
