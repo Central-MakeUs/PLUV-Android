@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -20,13 +19,13 @@ class AuthDataSourceImpl @Inject constructor(
         }
     }
 
-    override fun getAccessToken(): Flow<String> = flow {
+    override fun getAccessToken(): Flow<String> =
         authDataStore.data.map { preferences ->
             preferences[ACCESS_TOKEN] ?: ""
         }.catch {
             emit("")
         }
-    }
+
 
     private companion object {
         val ACCESS_TOKEN = stringPreferencesKey("access_token")
