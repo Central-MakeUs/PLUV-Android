@@ -3,6 +3,7 @@ package com.cmc15th.pluv.ui.login.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc15th.pluv.core.data.repository.AuthRepository
 import com.cmc15th.pluv.core.data.repository.LoginRepository
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _uiEvent: MutableSharedFlow<LoginUiEvent> = MutableSharedFlow()
 
@@ -109,7 +111,7 @@ class LoginViewModel @Inject constructor(
             loginRepository.googleLogin(token).collect { result ->
                 Log.d(TAG, "getAccessTokenBySocialToken: $token")
                 result.onSuccess {
-                    //TODO datastore에 토큰 저장
+                    saveJwtToken(it.accessToken)
                     sendEffect(LoginUiEffect.OnLoginSuccess)
                 }
 
@@ -124,7 +126,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             loginRepository.spotifyLogin(token).collect { result ->
                 result.onSuccess {
-                    //TODO datastore에 토큰 저장
+                    saveJwtToken(it.accessToken)
                     sendEffect(LoginUiEffect.OnLoginSuccess)
                 }
 
@@ -132,6 +134,13 @@ class LoginViewModel @Inject constructor(
                     sendEffect(LoginUiEffect.OnLoginFailure(s ?: "알 수 없는 오류가 발생하였습니다."))
                 }
             }
+        }
+    }
+
+    private fun saveJwtToken(token: String) {
+        viewModelScope.launch {
+            Log.d(TAG, "saveJwtToken: $token")
+            authRepository.saveAccessToken(token)
         }
     }
 
