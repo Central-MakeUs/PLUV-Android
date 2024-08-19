@@ -344,8 +344,7 @@ class DirectMigrationViewModel @Inject constructor(
                 it.copy(isLoading = true)
             }
             playlistRepository.validateMusic(
-                //FIXME playlistAppName = _uiState.value.selectedDestinationApp,
-                playlistAppName = PlayListApp.spotify,
+                playlistAppName = _uiState.value.selectedDestinationApp,
                 accessToken = playlistAccessToken.value,
                 musics = _uiState.value.selectedSourceMusics
             ).collect { result ->
