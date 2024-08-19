@@ -1,10 +1,10 @@
 package com.cmc15th.pluv.domain.model
 
-enum class PlayListApp(val appName: String) {
-    EMPTY(""),
-    spotify("스포티파이"),
+enum class PlayListApp(val appName: String, val sourceName: String) {
+    EMPTY("", ""),
+    SPOTIFY("스포티파이", "spotify"),
 //    APPLE_MUSIC("애플뮤직"),
-    YOUTUBE_MUSIC("유튜브뮤직");
+    YOUTUBE_MUSIC("유튜브뮤직", "youtube");
 //    MELON("멜론");
 
     companion object {

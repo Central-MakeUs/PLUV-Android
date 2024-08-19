@@ -117,7 +117,7 @@ fun DisplayMigrationPathScreen(
                     when (
                         uiState.value.selectedSourceApp
                     ) {
-                        PlayListApp.spotify -> {
+                        PlayListApp.SPOTIFY -> {
                             spotifyLoginResultLauncher.launch(1)
                         }
 
