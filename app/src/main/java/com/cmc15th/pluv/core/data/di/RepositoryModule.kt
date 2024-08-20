@@ -1,5 +1,7 @@
 package com.cmc15th.pluv.core.data.di
 
+import com.cmc15th.pluv.core.data.repository.AuthRepository
+import com.cmc15th.pluv.core.data.repository.AuthRepositoryImpl
 import com.cmc15th.pluv.core.data.repository.LoginRepository
 import com.cmc15th.pluv.core.data.repository.LoginRepositoryImpl
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindLoginRepository(
         loginRepositoryImpl: LoginRepositoryImpl
     ): LoginRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 }
