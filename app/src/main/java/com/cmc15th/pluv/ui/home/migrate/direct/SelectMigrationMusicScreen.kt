@@ -147,7 +147,7 @@ fun SelectMigrationMusicScreen(
                 onPreviousClick = { navigateToSelectPlaylist() },
                 onMigrateClick = {
                     when (uiState.selectedDestinationApp) {
-                        PlayListApp.spotify -> {
+                        PlayListApp.SPOTIFY -> {
                             spotifyLoginResultLauncher.launch(1)
                         }
 

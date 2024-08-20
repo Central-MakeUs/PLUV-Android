@@ -15,12 +15,12 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideMigrationService(retrofit: Retrofit): MigrationService =
+    fun provideMigrationService(@NetworkModule.AuthenticatedClient retrofit: Retrofit): MigrationService =
         retrofit.create(MigrationService::class.java)
 
     @Provides
     @Singleton
-    fun provideLoginService(retrofit: Retrofit): LoginService =
+    fun provideLoginService(@NetworkModule.BaseClient retrofit: Retrofit): LoginService =
         retrofit.create(LoginService::class.java)
 
 }

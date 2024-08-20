@@ -17,7 +17,7 @@ class SpotifyAuthContract : ActivityResultContract<Int, AuthorizationResponse>()
             AuthorizationResponse.Type.TOKEN,
             BuildConfig.spotify_redirect_uri
         ).apply {
-            setScopes(arrayOf("user-read-private", "playlist-read"))
+            setScopes(arrayOf("user-read-private", "playlist-read", "playlist-modify-public"))
         }.build()
 
         return AuthorizationClient.createLoginActivityIntent(context as Activity, authRequest)

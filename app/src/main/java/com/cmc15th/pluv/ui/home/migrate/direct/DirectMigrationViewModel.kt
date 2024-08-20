@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.cmc15th.pluv.core.data.repository.LoginRepository
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -184,6 +185,7 @@ class DirectMigrationViewModel @Inject constructor(
     private fun spotifyLogin(task: AuthorizationResponse) {
         when (task.type) {
             AuthorizationResponse.Type.TOKEN -> {
+                Log.d(TAG, "spotifyLogin: ${task.accessToken}")
                 playlistAccessToken.update { task.accessToken ?: "" }
                 sendEffect(DirectMigrationUiEffect.OnLoginSuccess)
             }
@@ -246,7 +248,7 @@ class DirectMigrationViewModel @Inject constructor(
     private fun fetchPlaylists(sourcePlaylistApp: PlayListApp) {
         viewModelScope.launch {
             when (sourcePlaylistApp) {
-                PlayListApp.spotify -> {
+                PlayListApp.SPOTIFY -> {
                     playlistRepository.fetchSpotifyPlaylists(
                         accessToken = playlistAccessToken.value
                     )
@@ -292,7 +294,7 @@ class DirectMigrationViewModel @Inject constructor(
             }
             Log.d(TAG, "fetchMusicByPlaylist: ${_uiState.value.selectedPlaylist}")
             when (sourcePlaylistApp) {
-                PlayListApp.spotify -> {
+                PlayListApp.SPOTIFY -> {
                     playlistRepository.fetchSpotifyMusics(
                         accessToken = playlistAccessToken.value,
                         playlistId = _uiState.value.selectedPlaylist.id,
@@ -383,13 +385,9 @@ class DirectMigrationViewModel @Inject constructor(
                             selectedSimilarMusicsId = similarMusics.map { musics ->
                                 musics.destinationMusic.firstOrNull()?.id ?: ""
                             },
-                            notFoundMusics = notFoundMusics
+                            notFoundMusics = notFoundMusics,
                         )
                     }
-                    Log.d(
-                        TAG,
-                        "validateSelectedMusic:  $similarMusics, $notFoundMusics  $needValidate"
-                    )
                     sendEffect(DirectMigrationUiEffect.OnValidateMusic(needValidate = needValidate))
                 }
 
@@ -406,41 +404,79 @@ class DirectMigrationViewModel @Inject constructor(
 
     private fun migratePlaylist() {
         viewModelScope.launch {
+
             val migrateTargetMusicIds =
                 destinationMusicsIds.value + _uiState.value.selectedSimilarMusicsId
 
-            when (_uiState.value.selectedDestinationApp) {
-                PlayListApp.spotify -> {
-                    playlistRepository.migrateToSpotify(
-                        playlistName = _uiState.value.selectedPlaylist.name,
-                        accessToken = playlistAccessToken.value,
-                        musicIds = migrateTargetMusicIds
-                    )
-                }
+            val notTransferMusics = getNotTransferMusic()
 
-                PlayListApp.YOUTUBE_MUSIC -> {
-                    playlistRepository.migrateToYoutubeMusic(
-                        playlistName = _uiState.value.selectedPlaylist.name,
-                        accessToken = playlistAccessToken.value,
-                        musicIds = migrateTargetMusicIds
-                    )
-                }
+//            Log.d(TAG, "migratePlaylist: $migrateTargetMusicIds, $notTransferMusics")
+//            when (_uiState.value.selectedDestinationApp) {
+//                PlayListApp.SPOTIFY -> {
+//                    playlistRepository.migrateToSpotify(
+//                        playlistName = _uiState.value.selectedPlaylist.name,
+//                        accessToken = playlistAccessToken.value,
+//                        musicIds = migrateTargetMusicIds,
+//                        thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
+//                        source = _uiState.value.selectedSourceApp.sourceName,
+//                        transferFailMusics = notTransferMusics
+//                    )
+//                }
+//
+//                PlayListApp.YOUTUBE_MUSIC -> {
+//                    playlistRepository.migrateToYoutubeMusic(
+//                        playlistName = _uiState.value.selectedPlaylist.name,
+//                        accessToken = playlistAccessToken.value,
+//                        musicIds = migrateTargetMusicIds,
+//                        thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
+//                        source = _uiState.value.selectedSourceApp.sourceName,
+//                        transferFailMusics = notTransferMusics
+//                    )
+//                }
+//
+//                else -> {
+//                    //TODO 구현예정
+//                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
+//                }
+//            }.collect { result ->
+//
+//                result.onSuccess { data ->
+//                    Log.d(TAG, "migratePlaylist: $data")
+//                }
+//
+//                result.onFailure { code, error ->
+//                    Log.d(TAG, "migratePlaylist: $code, $error")
+//                }
+//            }
+        }
+    }
 
-                else -> {
-                    //TODO 구현예정
-                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
-                }
-            }.collect { result ->
 
-                result.onSuccess { data ->
-                    Log.d(TAG, "migratePlaylist: $data")
-                }
+    private fun getNotTransferMusic(): List<DestinationMusic> {
+        val unSelectedSimilarMusicsIndex = mutableListOf<Int>()
 
-                result.onFailure { code, error ->
-                    Log.d(TAG, "migratePlaylist: $code, $error")
-                }
+        _uiState.value.selectedSimilarMusicsId.mapIndexed { index, music ->
+            if (music.isBlank()) {
+                unSelectedSimilarMusicsIndex.add(index)
             }
         }
+
+        val notSelectedSimilarSourceMusics =
+            _uiState.value.similarMusics.filterIndexed { index, similarMusic ->
+                index in unSelectedSimilarMusicsIndex
+            }.map { it.sourceMusic }
+
+        // notFoundMusic + similarMusics에서 선택하지 않은 목록
+        val notTransferMusics = _uiState.value.notFoundMusics + notSelectedSimilarSourceMusics.map {
+            DestinationMusic(
+                id = "",
+                thumbNailUrl = it.thumbNailUrl,
+                title = it.title,
+                artistName = it.artistName
+            )
+        }
+        Log.d(TAG, "getNotTransferMusic: $notTransferMusics")
+        return notTransferMusics
     }
 
 

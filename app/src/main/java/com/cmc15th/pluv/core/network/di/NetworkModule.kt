@@ -1,7 +1,9 @@
 package com.cmc15th.pluv.core.network.di
 
 import com.cmc15th.pluv.BuildConfig
+import com.cmc15th.pluv.core.data.repository.AuthRepository
 import com.cmc15th.pluv.core.network.adapter.ApiResultCallAdapter
+import com.cmc15th.pluv.core.network.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,6 +12,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 private const val MaxTimeout = 15_000L
@@ -17,6 +20,15 @@ private const val MaxTimeout = 15_000L
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class BaseClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class AuthenticatedClient
+
+    @BaseClient
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient =
@@ -25,9 +37,20 @@ object NetworkModule {
             .writeTimeout(MaxTimeout, TimeUnit.MILLISECONDS)
             .build()
 
+    @AuthenticatedClient
     @Singleton
     @Provides
-    fun provideRetrofitClient(okHttpClient: OkHttpClient): Retrofit =
+    fun provideOkHttpClientWithInterceptor(authRepository: AuthRepository): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(authRepository))
+            .readTimeout(MaxTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(MaxTimeout, TimeUnit.MILLISECONDS)
+            .build()
+
+    @BaseClient
+    @Singleton
+    @Provides
+    fun provideRetrofitClient(@BaseClient okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl(BuildConfig.server_url)
             .client(okHttpClient)
@@ -35,4 +58,14 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+    @AuthenticatedClient
+    @Singleton
+    @Provides
+    fun provideRetrofitClientWithInterceptor(@AuthenticatedClient okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.server_url)
+            .client(okHttpClient)
+            .addCallAdapterFactory(ApiResultCallAdapter.Factory())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 }

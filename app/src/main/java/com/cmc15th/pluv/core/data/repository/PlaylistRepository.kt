@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.core.data.repository
 
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.ValidateMusic
@@ -35,12 +36,18 @@ interface PlaylistRepository {
     fun migrateToSpotify(
         playlistName: String,
         accessToken: String,
-        musicIds: List<String>
+        musicIds: List<String>,
+        transferFailMusics: List<DestinationMusic>,
+        thumbnailUrl: String,
+        source: String
     ): Flow<ApiResult<String>>
 
     fun migrateToYoutubeMusic(
         playlistName: String,
         accessToken: String,
-        musicIds: List<String>
+        musicIds: List<String>,
+        transferFailMusics: List<DestinationMusic>,
+        thumbnailUrl: String,
+        source: String
     ): Flow<ApiResult<String>>
 }

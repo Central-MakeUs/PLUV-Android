@@ -5,11 +5,13 @@ import com.cmc15th.pluv.core.data.mapper.toPlaylist
 import com.cmc15th.pluv.core.data.mapper.toSourceMusic
 import com.cmc15th.pluv.core.data.mapper.toValidateMusic
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.ValidateMusic
 import com.cmc15th.pluv.core.network.request.MigratePlaylistRequest
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
+import com.cmc15th.pluv.core.network.request.TransferFailMusics
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.service.MigrationService
 import com.cmc15th.pluv.domain.model.PlayListApp
@@ -87,15 +89,16 @@ class PlaylistRepositoryImpl @Inject constructor(
         accessToken: String,
         musics: List<SourceMusic>
     ): Flow<ApiResult<List<ValidateMusic>>> = flow {
-        emit (
+        emit(
             when (playlistApp) {
-                PlayListApp.spotify -> migrationService.validateSpotifyMusic(
+                PlayListApp.SPOTIFY -> migrationService.validateSpotifyMusic(
                     ValidateMusicRequest(accessToken, musics)
                 )
 
                 PlayListApp.YOUTUBE_MUSIC -> migrationService.validateYoutubeMusic(
                     ValidateMusicRequest(accessToken, musics)
                 )
+
                 else -> ApiResult.Unexpected(IllegalArgumentException("Unexpected playlist app"))
             }.map { result ->
                 Log.d("REPOSITORY", "validateMusic: $result")
@@ -109,14 +112,26 @@ class PlaylistRepositoryImpl @Inject constructor(
     override fun migrateToSpotify(
         playlistName: String,
         accessToken: String,
-        musicIds: List<String>
+        musicIds: List<String>,
+        transferFailMusics: List<DestinationMusic>,
+        thumbnailUrl: String,
+        source: String
     ): Flow<ApiResult<String>> = flow {
         emit(
             migrationService.migrateToSpotify(
                 MigratePlaylistRequest(
                     playlistName = playlistName,
                     destinationAccessToken = accessToken,
-                    musicIds = musicIds
+                    musicIds = musicIds,
+                    transferFailMusics = transferFailMusics.map {
+                        TransferFailMusics(
+                            title = it.title,
+                            artistName = it.artistName,
+                            thumbnailUrl = it.thumbNailUrl
+                        )
+                    },
+                    thumbnailUrl = thumbnailUrl,
+                    source = source
                 )
             ).map { result -> result.data }
         )
@@ -125,14 +140,26 @@ class PlaylistRepositoryImpl @Inject constructor(
     override fun migrateToYoutubeMusic(
         playlistName: String,
         accessToken: String,
-        musicIds: List<String>
+        musicIds: List<String>,
+        transferFailMusics: List<DestinationMusic>,
+        thumbnailUrl: String,
+        source: String
     ): Flow<ApiResult<String>> = flow {
         emit(
             migrationService.migrateToYoutubeMusic(
                 MigratePlaylistRequest(
                     playlistName = playlistName,
                     destinationAccessToken = accessToken,
-                    musicIds = musicIds
+                    musicIds = musicIds,
+                    transferFailMusics = transferFailMusics.map {
+                        TransferFailMusics(
+                            title = it.title,
+                            artistName = it.artistName,
+                            thumbnailUrl = it.thumbNailUrl
+                        )
+                    },
+                    thumbnailUrl = thumbnailUrl,
+                    source = source
                 )
             ).map { result -> result.data }
         )
