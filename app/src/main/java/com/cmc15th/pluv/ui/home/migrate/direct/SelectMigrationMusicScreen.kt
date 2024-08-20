@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +67,7 @@ fun SelectMigrationMusicScreen(
     var dialogDescription by rememberSaveable {
         mutableStateOf("")
     }
+
 
     val googleLoginResultLauncher = rememberLauncherForActivityResult(
         contract = GoogleApiContract()
@@ -118,9 +122,21 @@ fun SelectMigrationMusicScreen(
         }
     }
 
+    val dialogIcon: @Composable () -> Unit = when {
+        uiState.isLoading -> {
+            { Icon(painterResource(id = R.drawable.findicon), contentDescription = null, modifier = Modifier.fillMaxSize(), tint = Color.Unspecified) }
+        }
+        dialogVisible -> {
+            { Icon(painterResource(id = R.drawable.warningicon), contentDescription = null,modifier = Modifier.fillMaxSize(), tint = Color.Unspecified) }
+        }
+        else -> {
+            { Icon(imageVector = Icons.Default.Check, contentDescription = null, modifier = Modifier.fillMaxSize(), tint = Color.Unspecified) }
+        }
+    }
+
     if (uiState.isLoading || dialogVisible) {
         LoadingDialog(
-            icon = { /*TODO*/ },
+            icon = { dialogIcon() },
             description = if (uiState.isLoading) "음악을\n찾는 중이에요!" else dialogDescription,
             progressVisible = uiState.isLoading,
             onDismissRequest = {}
