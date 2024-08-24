@@ -248,13 +248,13 @@ class DirectMigrationViewModel @Inject constructor(
     private fun fetchPlaylists(sourcePlaylistApp: PlayListApp) {
         viewModelScope.launch {
             when (sourcePlaylistApp) {
-                PlayListApp.SPOTIFY -> {
+                PlayListApp.Spotify -> {
                     playlistRepository.fetchSpotifyPlaylists(
                         accessToken = playlistAccessToken.value
                     )
                 }
 
-                PlayListApp.YOUTUBE_MUSIC -> {
+                PlayListApp.YoutubeMusic -> {
                     playlistRepository.fetchYoutubeMusicPlaylists(
                         accessToken = playlistAccessToken.value
                     )
@@ -294,14 +294,14 @@ class DirectMigrationViewModel @Inject constructor(
             }
             Log.d(TAG, "fetchMusicByPlaylist: ${_uiState.value.selectedPlaylist}")
             when (sourcePlaylistApp) {
-                PlayListApp.SPOTIFY -> {
+                PlayListApp.Spotify -> {
                     playlistRepository.fetchSpotifyMusics(
                         accessToken = playlistAccessToken.value,
                         playlistId = _uiState.value.selectedPlaylist.id,
                     )
                 }
 
-                PlayListApp.YOUTUBE_MUSIC -> {
+                PlayListApp.YoutubeMusic -> {
                     Log.d(TAG, "fetchMusicByPlaylist: ${playlistAccessToken.value}")
                     playlistRepository.fetchYoutubeMusics(
                         accessToken = playlistAccessToken.value,
@@ -410,44 +410,44 @@ class DirectMigrationViewModel @Inject constructor(
 
             val notTransferMusics = getNotTransferMusic()
 
-//            Log.d(TAG, "migratePlaylist: $migrateTargetMusicIds, $notTransferMusics")
-//            when (_uiState.value.selectedDestinationApp) {
-//                PlayListApp.SPOTIFY -> {
-//                    playlistRepository.migrateToSpotify(
-//                        playlistName = _uiState.value.selectedPlaylist.name,
-//                        accessToken = playlistAccessToken.value,
-//                        musicIds = migrateTargetMusicIds,
-//                        thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
-//                        source = _uiState.value.selectedSourceApp.sourceName,
-//                        transferFailMusics = notTransferMusics
-//                    )
-//                }
-//
-//                PlayListApp.YOUTUBE_MUSIC -> {
-//                    playlistRepository.migrateToYoutubeMusic(
-//                        playlistName = _uiState.value.selectedPlaylist.name,
-//                        accessToken = playlistAccessToken.value,
-//                        musicIds = migrateTargetMusicIds,
-//                        thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
-//                        source = _uiState.value.selectedSourceApp.sourceName,
-//                        transferFailMusics = notTransferMusics
-//                    )
-//                }
-//
-//                else -> {
-//                    //TODO 구현예정
-//                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
-//                }
-//            }.collect { result ->
-//
-//                result.onSuccess { data ->
-//                    Log.d(TAG, "migratePlaylist: $data")
-//                }
-//
-//                result.onFailure { code, error ->
-//                    Log.d(TAG, "migratePlaylist: $code, $error")
-//                }
-//            }
+            Log.d(TAG, "migratePlaylist: $migrateTargetMusicIds, $notTransferMusics")
+            when (_uiState.value.selectedDestinationApp) {
+                PlayListApp.Spotify -> {
+                    playlistRepository.migrateToSpotify(
+                        playlistName = _uiState.value.selectedPlaylist.name,
+                        accessToken = playlistAccessToken.value,
+                        musicIds = migrateTargetMusicIds,
+                        thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
+                        source = _uiState.value.selectedSourceApp.sourceName,
+                        transferFailMusics = notTransferMusics
+                    )
+                }
+
+                PlayListApp.YoutubeMusic -> {
+                    playlistRepository.migrateToYoutubeMusic(
+                        playlistName = _uiState.value.selectedPlaylist.name,
+                        accessToken = playlistAccessToken.value,
+                        musicIds = migrateTargetMusicIds,
+                        thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
+                        source = _uiState.value.selectedSourceApp.sourceName,
+                        transferFailMusics = notTransferMusics
+                    )
+                }
+
+                else -> {
+                    //TODO 구현예정
+                    flow<ApiResult.Failure> { ApiResult.Failure(-1, "구현중") }
+                }
+            }.collect { result ->
+
+                result.onSuccess { data ->
+                    Log.d(TAG, "migratePlaylist: $data")
+                }
+
+                result.onFailure { code, error ->
+                    Log.d(TAG, "migratePlaylist: $code, $error")
+                }
+            }
         }
     }
 
