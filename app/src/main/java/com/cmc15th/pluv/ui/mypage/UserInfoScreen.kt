@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.ui.mypage
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.component.PLUVTextField
 import com.cmc15th.pluv.core.designsystem.component.TopAppBar
+import com.cmc15th.pluv.core.designsystem.theme.Content0
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
@@ -35,7 +37,8 @@ import com.cmc15th.pluv.ui.mypage.viewmodel.MypageViewModel
 fun UserInfoScreen(
     viewModel: MypageViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
-    showSnackBar: (String) -> Unit = {}
+    showSnackBar: (String) -> Unit = {},
+    navigateToUnregister: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -61,6 +64,13 @@ fun UserInfoScreen(
                 modifiedNickName = uiState.modifiedNickName,
             )
         }
+        Text(
+            text = "회원 탈퇴하기",
+            style = Content0,
+            modifier = Modifier
+                .clickable { navigateToUnregister() }
+                .padding(horizontal = 24.dp)
+        )
     }
 }
 
@@ -93,7 +103,9 @@ fun ModifyNickNameArea(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         PLUVTextField(
-            modifier = Modifier.weight(4f).border(1.dp, Gray300, RoundedCornerShape(8.dp)),
+            modifier = Modifier
+                .weight(4f)
+                .border(1.dp, Gray300, RoundedCornerShape(8.dp)),
             value = modifiedNickName,
             onValueChange = { onNickNameChange(it) }
         )
