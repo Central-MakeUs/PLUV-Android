@@ -46,6 +46,13 @@ class PLUVNavController(
         navController.navigate(route, navOptions)
     }
 
+    fun navigateToLogin() {
+        navController.navigate(DestinationScreens.Login.route) {
+            popUpTo(navController.graph.findStartDestination().id)
+            launchSingleTop = true
+        }
+    }
+
     fun popBackStack() {
         navController.popBackStack()
     }

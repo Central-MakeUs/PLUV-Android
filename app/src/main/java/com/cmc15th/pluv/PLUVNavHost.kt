@@ -22,6 +22,7 @@ import com.cmc15th.pluv.ui.home.migrate.direct.SelectSourceAppScreen
 import com.cmc15th.pluv.ui.home.migrate.screenshot.UploadPlaylistScreenShotScreen
 import com.cmc15th.pluv.ui.login.LoginScreen
 import com.cmc15th.pluv.ui.mypage.MypageScreen
+import com.cmc15th.pluv.ui.mypage.UnregisterScreen
 import com.cmc15th.pluv.ui.mypage.UserInfoScreen
 
 @Composable
@@ -32,7 +33,7 @@ fun PLUVNavHost(
 
     NavHost(
         navController = pluvNavController.navController,
-        startDestination = BottomTab.HOME.route
+        startDestination = DestinationScreens.Login.route
     ) {
 
         composable(route = DestinationScreens.Login.route) { navBackStackEntry ->
@@ -82,16 +83,45 @@ fun PLUVNavHost(
             }
         }
 
-        composable(route = BottomTab.MY_PAGE.route) {
-            MypageScreen(
-                navigateToUserInfo = {
-                    pluvNavController.navigate(DestinationScreens.UserInfo.route)
-                },
-                navigateToWebView = { title, url ->
-                    pluvNavController.navigate("webView?title=${Uri.encode(title)}&url=${Uri.encode(url)}")
-                }
-            )
+        navigation(route = DestinationScreens.Mypage.route, startDestination = BottomTab.MY_PAGE.route) {
+            composable(route = BottomTab.MY_PAGE.route) {
+                MypageScreen(
+                    navigateToUserInfo = {
+                        pluvNavController.navigate(DestinationScreens.UserInfo.route)
+                    },
+                    navigateToWebView = { title, url ->
+                        pluvNavController.navigate("webView?title=${Uri.encode(title)}&url=${Uri.encode(url)}")
+                    },
+                    navigateToHome = {
+                        pluvNavController.navigateToLogin()
+                    }
+                )
+            }
+
+            composable(route = DestinationScreens.UserInfo.route) {
+                UserInfoScreen(
+                    viewModel = hiltViewModel(),
+                    onBackClick = {
+                        pluvNavController.popBackStack()
+                    },
+                    showSnackBar = showSnackBar
+                )
+            }
+
+            composable(route = DestinationScreens.Unregister.route) {
+                UnregisterScreen(
+                    viewModel = hiltViewModel(),
+                    showSnackBar = showSnackBar,
+                    onBackClicked = {
+                        pluvNavController.popBackStack()
+                    },
+                    navigateToLogin = {
+                        pluvNavController.navigateToLogin()
+                    }
+                )
+            }
         }
+
 
         composable(route = DestinationScreens.WebView.route) { navBackStackEntry ->
             val title = navBackStackEntry.arguments?.getString("title") ?: ""
@@ -111,7 +141,10 @@ fun PLUVNavHost(
                 onBackClick = {
                     pluvNavController.popBackStack()
                 },
-                showSnackBar = showSnackBar
+                showSnackBar = showSnackBar,
+                navigateToUnregister = {
+                    pluvNavController.navigate(DestinationScreens.Unregister.route)
+                }
             )
         }
 

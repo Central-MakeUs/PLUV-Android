@@ -1,6 +1,7 @@
 package com.cmc15th.pluv
 
 sealed class DestinationScreens(val route: String) {
+    data object Mypage : DestinationScreens(route = "Mypage")
     data object Login : DestinationScreens(route = "Login")
     data object DirectMigrationRoot : DestinationScreens(route = "DirectMigrationRoot")
     data object DirectMigrationSelectSourceApp : DestinationScreens(route = "DirectMigrationSelectSourceApp")
@@ -17,4 +18,5 @@ sealed class DestinationScreens(val route: String) {
     data object FeedInfo : DestinationScreens(route = "FeedInfo")
     data object UserInfo : DestinationScreens(route = "UserInfo")
     data object WebView : DestinationScreens("webView?title={title}&url={url}")
+    data object Unregister : DestinationScreens(route = "Unregister")
 }
