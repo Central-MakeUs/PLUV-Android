@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCheckBox
@@ -38,10 +39,9 @@ fun MusicItem(
 
     Row(
         modifier = modifier
-            .fillMaxWidth()
             .background(color = backgroundColor)
             .clickable { onCheckedChange(!isChecked) }
-            .padding(vertical = 10.dp, horizontal = 24.dp),
+            .padding(vertical = 8.dp, horizontal = 24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -50,7 +50,10 @@ fun MusicItem(
             Spacer(modifier = Modifier.size(16.dp))
 
             Column {
-                Text(text = musicName, style = Title5)
+                Text(
+                    text = musicName, style = Title5, overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
                 Spacer(modifier = Modifier.size(6.dp))
                 Text(text = artistName, style = Content1)
             }

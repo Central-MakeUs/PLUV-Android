@@ -241,6 +241,8 @@ fun OriginalMusicItem(
     artistName: String
 ) {
     MusicItem(
+        modifier = Modifier
+            .fillMaxWidth(),
         isChecked = false,
         thumbNailContent = {
             OriginalMusicPlaylistCard(
@@ -282,6 +284,8 @@ fun SimilarMusicItem(
     onCheckedChange: (Boolean) -> Unit = {}
 ) {
     MusicItem(
+        modifier = Modifier
+            .fillMaxWidth(),
         isChecked = isChecked,
         thumbNailContent = {
             SimilarMusicPlaylistCard(
