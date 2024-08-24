@@ -55,23 +55,32 @@ fun PLUVNavHost(
             )
         }
 
-        composable(route = BottomTab.FEED.route) {
-            FeedScreen(
-                navigateToFeedInfo = {
-                    pluvNavController.navigate(DestinationScreens.FeedInfo.route)
-                }
-            )
-        }
+        navigation(
+            route = DestinationScreens.Feed.route,
+            startDestination = BottomTab.FEED.route
+        ) {
+            composable(route = BottomTab.FEED.route) { navBackStackEntry ->
+                FeedScreen(
+                    viewModel = hiltViewModel(navBackStackEntry),
+                    navigateToFeedInfo = {
+                        pluvNavController.navigate(DestinationScreens.FeedInfo.route)
+                    }
+                )
+            }
 
-        composable(route = DestinationScreens.FeedInfo.route) {
-            FeedInfoScreen(
-                onBackClick = {
-                    pluvNavController.popBackStack()
-                },
-                showSnackBar = showSnackBar
-            )
+            composable(route = DestinationScreens.FeedInfo.route) { navBackStackEntry ->
+                FeedInfoScreen(
+                    viewModel = pluvNavController.sharedViewModel(
+                        navBackStackEntry,
+                        BottomTab.FEED.route
+                    ),
+                    onBackClick = {
+                        pluvNavController.popBackStack()
+                    },
+                    showSnackBar = showSnackBar
+                )
+            }
         }
-
 
         composable(route = BottomTab.MY_PAGE.route) {
             MypageScreen(
@@ -210,6 +219,8 @@ fun PLUVNavHost(
                     navigateToShowNotFoundMusic = {
                         pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic.route)
                     },
+                    onShowSnackBar = showSnackBar,
+
                     navigateToExecuteMigrationScreen = {
                         //TODO 마이그레이션 실행
                     },
@@ -225,14 +236,21 @@ fun PLUVNavHost(
                         navBackStackEntry = navBackStackEntry,
                         route = DestinationScreens.DirectMigrationRoot.route
                     ),
+                    currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
+                    totalStep = totalSteps,
                     onCloseClick = {
                         pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
                     },
+                    onShowSnackBar = showSnackBar,
+
                     navigateToSelectMigrationMusic = {
                         pluvNavController.popBackStack()
                     },
                     navigateToShowNotFoundMusic = {
                         pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic.route)
+                    },
+                    navigateToShowMigrationResult = {
+                        pluvNavController.navigate(DestinationScreens.MigratedResult.route)
                     }
                 )
             }
@@ -242,6 +260,7 @@ fun PLUVNavHost(
                         navBackStackEntry = navBackStackEntry,
                         route = DestinationScreens.DirectMigrationRoot.route
                     ),
+                    onShowSnackBar = showSnackBar,
                     onCloseClick = {
                         pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
                     }
@@ -254,6 +273,10 @@ fun PLUVNavHost(
                         navBackStackEntry = navBackStackEntry,
                         route = DestinationScreens.DirectMigrationRoot.route
                     ),
+                    showSnackBar = showSnackBar,
+                    navigateToHome = {
+                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                    }
                 )
             }
         }
@@ -274,25 +297,19 @@ object DirectMigrationRoutes {
     private val selectSourceAndDestinationRoute = listOf(
         DestinationScreens.DirectMigrationSelectSourceApp.route,
         DestinationScreens.DirectMigrationSelectDestinationApp.route,
-        DestinationScreens.ExecuteDirectMigration.route
+        DestinationScreens.ExecuteDirectMigration.route,
+        DestinationScreens.SelectMigratePlaylist.route,
+        DestinationScreens.SelectMigrationMusic.route,
+        DestinationScreens.SelectSimilarMusic.route,
+        DestinationScreens.ShowNotFoundMusic.route
     )
 
-    private val directMigrationRoutes = listOf(
-        selectSourceAndDestinationRoute,
-        listOf(
-            DestinationScreens.SelectMigratePlaylist.route
-        ),
-        listOf(
-            DestinationScreens.SelectMigrationMusic.route
-        )
-    )
-
-    fun getRouteSize(): Int = directMigrationRoutes.size
+    fun getRouteSize(): Int = selectSourceAndDestinationRoute.size
 
     fun getCurrentStep(currentRoute: String?): Int {
-        directMigrationRoutes.forEachIndexed { index, routeList ->
-            if (routeList.contains(currentRoute)) {
-                return index + 1  // 단계는 1부터 시작
+        selectSourceAndDestinationRoute.forEachIndexed { index, route ->
+            if (route == currentRoute) {
+                return index + 1
             }
         }
         return 0

@@ -41,7 +41,6 @@ import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.common.contract.GoogleApiContract
 import com.cmc15th.pluv.ui.common.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 import kotlinx.coroutines.delay
 
 private const val DialogDuration = 800L
@@ -51,6 +50,7 @@ fun SelectMigrationMusicScreen(
     modifier: Modifier = Modifier,
     currentStep: Int = 0,
     totalStep: Int = 0,
+    onShowSnackBar: (String) -> Unit = {},
     onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectPlaylist: () -> Unit,
@@ -105,7 +105,9 @@ fun SelectMigrationMusicScreen(
                         delay(DialogDuration)
                         dialogVisible = false
 
-                        navigateToExecuteMigrationScreen()
+//                        onShowSnackBar("플레이리스트를 이전했어요")
+//                        onCloseClick()
+//                        navigateToExecuteMigrationScreen()
                     }
                 }
 
@@ -148,6 +150,8 @@ fun SelectMigrationMusicScreen(
             TopBarWithProgress(
                 totalStep = totalStep,
                 currentStep = currentStep,
+                sourceApp = uiState.selectedSourceApp.name,
+                destinationApp = uiState.selectedDestinationApp.name,
                 onCloseClick = {
                     onCloseClick()
                 }
@@ -163,11 +167,11 @@ fun SelectMigrationMusicScreen(
                 onPreviousClick = { navigateToSelectPlaylist() },
                 onMigrateClick = {
                     when (uiState.selectedDestinationApp) {
-                        PlayListApp.SPOTIFY -> {
+                        PlayListApp.Spotify -> {
                             spotifyLoginResultLauncher.launch(1)
                         }
 
-                        PlayListApp.YOUTUBE_MUSIC -> {
+                        PlayListApp.YoutubeMusic -> {
                             googleLoginResultLauncher.launch(1)
                         }
 
@@ -188,11 +192,6 @@ fun SelectMigrationMusicScreen(
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 24.dp, top = 28.dp)
             ) {
-                SourceToDestinationText(
-                    uiState.selectedSourceApp.appName,
-                    uiState.selectedDestinationApp.appName
-                )
-                Spacer(modifier = Modifier.size(8.dp))
 
                 Text(text = "플레이리스트의 음악이\n일치하는지 확인해 주세요", style = Title1)
 

@@ -46,7 +46,6 @@ import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 
@@ -55,10 +54,12 @@ fun SelectSimilarMusicScreen(
     modifier: Modifier = Modifier,
     currentStep: Int = 0,
     totalStep: Int = 0,
+    onShowSnackBar: (String) -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     onCloseClick: () -> Unit = {},
     navigateToSelectMigrationMusic: () -> Unit = {},
-    navigateToShowNotFoundMusic: () -> Unit = {}
+    navigateToShowNotFoundMusic: () -> Unit = {},
+    navigateToShowMigrationResult: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -67,6 +68,8 @@ fun SelectSimilarMusicScreen(
             TopBarWithProgress(
                 totalStep = totalStep,
                 currentStep = currentStep,
+                sourceApp = uiState.selectedSourceApp.name,
+                destinationApp = uiState.selectedDestinationApp.name,
                 onCloseClick = {
                     onCloseClick()
                 }
@@ -86,7 +89,10 @@ fun SelectSimilarMusicScreen(
                     if (uiState.notFoundMusics.isNotEmpty()) {
                         navigateToShowNotFoundMusic()
                     } else {
+//                        onShowSnackBar("플레이리스트를 이전했어요")
+//                        onCloseClick()
                         viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+                        navigateToShowMigrationResult()
                     }
                 }
             )
@@ -102,13 +108,6 @@ fun SelectSimilarMusicScreen(
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 24.dp, top = 28.dp)
             ) {
-                SourceToDestinationText(
-                    sourceApp = uiState.selectedSourceApp.appName,
-                    destinationApp = uiState.selectedDestinationApp.appName
-                )
-
-                Spacer(modifier = Modifier.size(8.dp))
-
                 Text(text = "가장 유사한 항목을 옮길까요?", style = Title1)
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(text = "일부 정보만 일치하는 음악이에요.", style = Content1, color = Color(0xFF8E8E8E))

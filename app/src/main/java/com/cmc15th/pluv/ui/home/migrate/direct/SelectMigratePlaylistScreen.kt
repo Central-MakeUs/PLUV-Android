@@ -33,7 +33,6 @@ import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 
 @Composable
 fun SelectMigratePlaylistScreen(
@@ -75,6 +74,8 @@ fun SelectMigratePlaylistScreen(
             TopBarWithProgress(
                 totalStep = totalStep,
                 currentStep = currentStep,
+                sourceApp = uiState.selectedSourceApp.name,
+                destinationApp = uiState.selectedDestinationApp.name,
                 onCloseClick = {
                     onCloseClick()
                 }
@@ -98,11 +99,7 @@ fun SelectMigratePlaylistScreen(
                 .padding(paddingValues)
                 .padding(24.dp)
         ) {
-            SourceToDestinationText(
-                sourceApp = uiState.selectedSourceApp.appName,
-                destinationApp = uiState.selectedDestinationApp.appName
-            )
-            Spacer(modifier = Modifier.size(8.dp))
+
             Text(text = "옮길 플레이리스트를 선택 해주세요", style = Title1)
             Spacer(modifier = Modifier.size(28.dp))
             Text(

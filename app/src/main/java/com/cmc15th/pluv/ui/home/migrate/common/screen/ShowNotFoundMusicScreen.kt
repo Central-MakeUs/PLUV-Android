@@ -23,7 +23,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 
 @Composable
@@ -32,6 +32,7 @@ fun ShowNotFoundMusicScreen(
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     currentStep: Int = 0,
     totalStep: Int = 0,
+    onShowSnackBar: (String) -> Unit = {},
     onCloseClick: () -> Unit = {},
     navigateToPrevious: () -> Unit = {},
     executeMigration: () -> Unit = {}
@@ -43,6 +44,8 @@ fun ShowNotFoundMusicScreen(
             TopBarWithProgress(
                 totalStep = totalStep,
                 currentStep = currentStep,
+                sourceApp = uiState.selectedSourceApp.name,
+                destinationApp = uiState.selectedDestinationApp.name,
                 onCloseClick = {
                     onCloseClick()
                 }
@@ -54,9 +57,13 @@ fun ShowNotFoundMusicScreen(
                     .fillMaxWidth()
                     .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
                     .size(58.dp),
-                isNextButtonEnabled = true,
+                isNextButtonEnabled = false,
                 onPreviousClick = { },
-                onMigrateClick = { }
+                onMigrateClick = {
+//                    onShowSnackBar("플레이리스트를 이전했어요")
+//                    onCloseClick()
+                    viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+                }
             )
         }
     ) { paddingValues ->
@@ -70,13 +77,6 @@ fun ShowNotFoundMusicScreen(
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 24.dp, top = 28.dp)
             ) {
-                SourceToDestinationText(
-                    sourceApp = uiState.selectedSourceApp.appName,
-                    destinationApp = uiState.selectedDestinationApp.appName
-                )
-
-                Spacer(modifier = Modifier.size(8.dp))
-
                 Text(text = "${uiState.selectedDestinationApp.appName}에서\n찾을 수 없는 음악이에요", style = Title1)
 
                 Spacer(modifier = Modifier.size(28.dp))

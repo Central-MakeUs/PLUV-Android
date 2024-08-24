@@ -1,8 +1,10 @@
 package com.cmc15th.pluv.core.designsystem.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
 
 @Composable
 fun TopAppBar(
@@ -51,26 +54,38 @@ fun TopBarWithProgress(
     modifier: Modifier = Modifier,
     totalStep: Int,
     currentStep: Int,
+    sourceApp: String = "",
+    destinationApp: String = "",
     onCloseClick: () -> Unit
 ) {
 
     val progress = currentStep.toFloat() / totalStep
 
     Column {
-        IconButton(
-            onClick = {
-                onCloseClick()
-            },
+
+        Row(
             modifier = Modifier
-                .align(Alignment.End)
-                .padding(horizontal = 14.dp, vertical = 7.dp)
-                .size(32.dp)
+                .fillMaxWidth()
+                .padding(start = 24.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Close",
-            )
+            SourceToDestinationText(sourceApp = sourceApp, destinationApp = destinationApp)
+            IconButton(
+                onClick = {
+                    onCloseClick()
+                },
+                modifier = Modifier
+                    .padding(horizontal = 14.dp, vertical = 7.dp)
+                    .size(32.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Close",
+                )
+            }
         }
+
         LinearProgressIndicator(
             progress = progress,
             modifier = Modifier
