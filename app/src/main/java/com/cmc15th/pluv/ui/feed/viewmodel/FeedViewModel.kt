@@ -59,9 +59,7 @@ class FeedViewModel @Inject constructor(
                 result.onSuccess { feed ->
                     Log.d(TAG, "getAllFeeds: success $feed")
                     _uiState.update {
-                        it.copy(allFeeds = feed.filterIndexed {
-                            index, _ -> index > 6
-                        })
+                        it.copy(allFeeds = feed)
                     }
                 }
 

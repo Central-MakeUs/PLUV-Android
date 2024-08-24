@@ -14,6 +14,9 @@ val PrimaryDefault = Color(0xFF9E22FF)
 val PrimaryDisabled = Color(0xFFDBACFF)
 val PrimaryBg = Color(0xFFFBF5FF)
 
+val HomePurple = Color(0XFFC274FF)
+val HomeWhite = Color(0XFFF7F7F7)
+
 val Gray100 = Color(0xFFF7F7F7)
 val Gray200 = Color(0xFFF2F2F2)
 val Gray300 = Color(0xFFDEDEDE)

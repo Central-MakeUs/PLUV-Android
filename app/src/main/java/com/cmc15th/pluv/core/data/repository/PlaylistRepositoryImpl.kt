@@ -91,11 +91,11 @@ class PlaylistRepositoryImpl @Inject constructor(
     ): Flow<ApiResult<List<ValidateMusic>>> = flow {
         emit(
             when (playlistApp) {
-                PlayListApp.SPOTIFY -> migrationService.validateSpotifyMusic(
+                PlayListApp.Spotify -> migrationService.validateSpotifyMusic(
                     ValidateMusicRequest(accessToken, musics)
                 )
 
-                PlayListApp.YOUTUBE_MUSIC -> migrationService.validateYoutubeMusic(
+                PlayListApp.YoutubeMusic -> migrationService.validateYoutubeMusic(
                     ValidateMusicRequest(accessToken, musics)
                 )
 

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">PLUV</string>
     <string name="login_welcome">반가워요!\n로그인 후 모든 서비스를 이용해보세요.</string>
-    <string name="google_login">구글로 시작하기</string>
-    <string name="spotify_login">스포티파이로 시작하기</string>
+    <string name="google_login">Google 계정으로 로그인</string>
+    <string name="spotify_login">Spotify 계정으로 로그인</string>
     <string name="apple_login">애플로 시작하기</string>
     <string name="migration_direct">직접 옮기기</string>
     <string name="migration_screenshot">스크린샷으로 옮기기</string>
@@ -20,4 +20,7 @@
     <string name="home">홈</string>
     <string name="feed">피드</string>
     <string name="mypage">마이페이지</string>
+    <string name="migration_direct_description">음원 스트리밍 서비스 연동</string>
+    <string name="migration_screenshot_description">이미지로 간편하게</string>
+    <string name="pluv">플럽</string>
 </resources>

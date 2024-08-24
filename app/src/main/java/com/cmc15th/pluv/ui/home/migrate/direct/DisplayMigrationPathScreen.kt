@@ -117,11 +117,11 @@ fun DisplayMigrationPathScreen(
                     when (
                         uiState.value.selectedSourceApp
                     ) {
-                        PlayListApp.SPOTIFY -> {
+                        PlayListApp.Spotify -> {
                             spotifyLoginResultLauncher.launch(1)
                         }
 
-                        PlayListApp.YOUTUBE_MUSIC -> {
+                        PlayListApp.YoutubeMusic -> {
                             googleLoginResultLauncher.launch(1)
                         }
 
