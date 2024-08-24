@@ -16,7 +16,7 @@ android {
         applicationId = "com.cmc15th.pluv"
         minSdk = 24
         targetSdk = 34
-        versionCode = 5
+        versionCode = 9
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -27,8 +27,8 @@ android {
         buildConfigField("String", "spotify_client_id", getProperty("spotify_client_id"))
         buildConfigField("String", "spotify_redirect_uri", getProperty("spotify_redirect_uri"))
         buildConfigField("String", "google_auth_client_id", getProperty("google_auth_client_id"))
-        manifestPlaceholders["redirectHostName"] = "localhost:8080"
-        manifestPlaceholders["redirectSchemeName"] = "http"
+        manifestPlaceholders["redirectHostName"] = "spotify/callback"
+        manifestPlaceholders["redirectSchemeName"] = "pluv.kro.kr"
 
     }
 
