@@ -16,6 +16,12 @@ val pretendardFamily = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.Normal, FontStyle.Normal),
 )
 
+val robotoFamily = FontFamily(
+    Font(R.font.roboto_bold, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.roboto_medium, FontWeight.Medium, FontStyle.Normal),
+    Font(R.font.roboto_regular, FontWeight.Normal, FontStyle.Normal),
+)
+
 val Title1 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
@@ -50,6 +56,12 @@ val Title6 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 14.sp
+)
+
+val Content0 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 18.sp
 )
 
 val Content1 = TextStyle(
@@ -95,4 +107,13 @@ val SelectAllContent = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 14.sp,
     color = Color(0xFF9E22FF)
+)
+
+val GoogleLogin = TextStyle(
+    fontFamily = robotoFamily,
+    fontWeight = FontWeight.Medium,
+    fontSize = 14.sp,
+    color = Color(0xFF000000).copy(
+        alpha = 0.54f
+    )
 )

@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
+import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.GoogleLogin
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
 import com.cmc15th.pluv.ui.common.contract.GoogleApiContract
@@ -168,15 +171,23 @@ fun GoogleLoginButton(
         onClick = { onClick() },
         containerColor = Color.White,
         contentColor = Color.Black,
+        contentPadding = PaddingValues(0.dp),
         content = {
-            Icon(
-                painter = painterResource(id = R.drawable.googlelogin),
-                contentDescription = "Google Login",
-                modifier = Modifier.size(24.dp),
-                tint = Color.Unspecified
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            Text(text = stringResource(id = R.string.google_login), style = Title5)
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.googlelogin),
+                    contentDescription = "Google Login",
+                    modifier = Modifier.padding(start = 24.dp).size(18.dp).align(Alignment.CenterStart),
+                    tint = Color.Unspecified
+                )
+                Text(
+                    text = stringResource(id = R.string.google_login),
+                    style = GoogleLogin,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
     )
 }
@@ -191,15 +202,19 @@ fun SpotifyLoginButton(
         onClick = { onClick() },
         containerColor = Color(0xFF1ED760),
         contentColor = Color.Black,
+        contentPadding = PaddingValues(0.dp),
         content = {
-            Icon(
-                painter = painterResource(id = R.drawable.spotifylogin),
-                contentDescription = "Spotify Login",
-                modifier = Modifier.size(24.dp),
-                tint = Color.Unspecified
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            Text(text = stringResource(id = R.string.spotify_login), style = Title5)
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.spotifylogin),
+                    contentDescription = "Spotify Login",
+                    modifier = Modifier.padding(start = 24.dp).size(18.dp).align(Alignment.CenterStart),
+                    tint = Color.Unspecified
+                )
+                Text(text = stringResource(id = R.string.spotify_login), style = Content2, modifier = Modifier.align(Alignment.Center))
+            }
         }
     )
 }
