@@ -17,7 +17,7 @@ class GoogleApiContract : ActivityResultContract<Int, Task<GoogleSignInAccount>?
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(BuildConfig.google_auth_client_id)
             .requestServerAuthCode(BuildConfig.google_auth_client_id)
-            .requestScopes(Scope("https://www.googleapis.com/auth/youtube.force-ssl"))
+            .requestScopes(Scope("https://www.googleapis.com/auth/youtube"))
             .build()
 
         val intent = GoogleSignIn.getClient(context, gso)
