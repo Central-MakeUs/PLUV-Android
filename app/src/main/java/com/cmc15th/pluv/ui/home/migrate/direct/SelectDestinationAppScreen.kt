@@ -60,7 +60,7 @@ fun SelectDestinationAppScreen(
                     .fillMaxWidth()
                     .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
                     .size(58.dp),
-                isNextButtonEnabled = true,
+                isNextButtonEnabled = false,
                 onPreviousClick = { navigateToSelectSource() },
                 onMigrateClick = { navigateToDisplayMigrationPath() }
             )

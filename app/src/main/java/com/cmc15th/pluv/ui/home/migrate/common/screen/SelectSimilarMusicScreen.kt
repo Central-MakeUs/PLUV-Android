@@ -89,10 +89,7 @@ fun SelectSimilarMusicScreen(
                     if (uiState.notFoundMusics.isNotEmpty()) {
                         navigateToShowNotFoundMusic()
                     } else {
-//                        onShowSnackBar("플레이리스트를 이전했어요")
-//                        onCloseClick()
                         viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
-                        navigateToShowMigrationResult()
                     }
                 }
             )

@@ -104,10 +104,6 @@ fun SelectMigrationMusicScreen(
                         dialogVisible = true
                         delay(DialogDuration)
                         dialogVisible = false
-
-//                        onShowSnackBar("플레이리스트를 이전했어요")
-//                        onCloseClick()
-//                        navigateToExecuteMigrationScreen()
                     }
                 }
 

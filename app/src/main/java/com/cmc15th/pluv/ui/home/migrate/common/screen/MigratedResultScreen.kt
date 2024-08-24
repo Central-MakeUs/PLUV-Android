@@ -57,7 +57,9 @@ import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 @Composable
 fun MigratedResultScreen(
     modifier: Modifier = Modifier,
-    viewModel: DirectMigrationViewModel = hiltViewModel()
+    showSnackBar: (String) -> Unit,
+    viewModel: DirectMigrationViewModel = hiltViewModel(),
+    navigateToHome: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(
@@ -128,6 +130,29 @@ fun MigratedResultScreen(
                 isSheetVisible = true
             },
         )
+
+        PLUVButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 20.dp)
+                .border(1.dp, Gray300, RoundedCornerShape(8.dp)),
+            containerColor = Color.Black,
+            contentColor = Color.White,
+            content = {
+                Text(
+                    text = "확인",
+                    style = Title5
+                )
+            },
+            onClick = {
+                navigateToHome()
+            },
+        )
+//        Divider(
+//            modifier = Modifier.fillMaxWidth(),
+//            thickness = 1.dp,
+//            color = Gray300
+//        )
     }
 }
 

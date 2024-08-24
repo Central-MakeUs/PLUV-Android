@@ -23,7 +23,6 @@ import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
-import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 
 @Composable
@@ -60,9 +59,7 @@ fun ShowNotFoundMusicScreen(
                 isNextButtonEnabled = false,
                 onPreviousClick = { },
                 onMigrateClick = {
-//                    onShowSnackBar("플레이리스트를 이전했어요")
-//                    onCloseClick()
-                    viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+
                 }
             )
         }
@@ -77,10 +74,13 @@ fun ShowNotFoundMusicScreen(
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 24.dp, top = 28.dp)
             ) {
-                Text(text = "${uiState.selectedDestinationApp.appName}에서\n찾을 수 없는 음악이에요", style = Title1)
+                Text(
+                    text = "${uiState.selectedDestinationApp.appName}에서\n찾을 수 없는 음악이에요",
+                    style = Title1
+                )
 
                 Spacer(modifier = Modifier.size(28.dp))
-                
+
                 Text(
                     modifier = Modifier.padding(vertical = 12.dp),
                     text = "${uiState.notFoundMusics.size}곡",
