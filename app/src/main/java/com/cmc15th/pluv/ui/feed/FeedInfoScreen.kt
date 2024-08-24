@@ -1,7 +1,6 @@
 package com.cmc15th.pluv.ui.feed
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,12 +19,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray200
@@ -33,14 +36,19 @@ import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title2
 import com.cmc15th.pluv.core.designsystem.theme.Title5
+import com.cmc15th.pluv.ui.feed.viewmodel.FeedViewModel
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FeedInfoScreen(
+    viewModel: FeedViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     showSnackBar: (String) -> Unit = {}
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val feed = uiState.selectedFeed
+
     Scaffold(
         topBar = {
             Row(
@@ -50,7 +58,9 @@ fun FeedInfoScreen(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.leftarrow),
-                    modifier = Modifier.size(24.dp).clickable { onBackClick() }, contentDescription = null
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable { onBackClick() }, contentDescription = null
                 )
             }
         }
@@ -61,13 +71,13 @@ fun FeedInfoScreen(
                 .padding(paddingValues)
         ) {
             item {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(390.dp),
                     contentScale = ContentScale.Crop,
-                    contentDescription = null
+                    model = feed.thumbNailUrl,
+                    contentDescription = "feed image"
                 )
             }
             stickyHeader {
@@ -76,10 +86,10 @@ fun FeedInfoScreen(
                         .fillMaxWidth()
                         .background(Color.White)
                         .padding(24.dp),
-                    playlistName = "여유로운 오후 취향의 음악",
+                    playlistName = feed.title,
                     totalMusicCount = 10,
-                    lastUpdateDate = "w",
-                    userName = "커트",
+                    lastUpdateDate = "2023.08.22",
+                    userName = feed.creatorName,
                     onBookmarkClick = {
                         showSnackBar("플레이리스트를 저장했어요")
                     }
