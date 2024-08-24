@@ -35,7 +35,8 @@ import com.cmc15th.pluv.core.designsystem.theme.Title4
 @Composable
 fun MypageScreen(
     navigateToUserInfo: () -> Unit = {},
-    navigateToWebView: (String, String) -> Unit
+    navigateToWebView: (String, String) -> Unit,
+    navigateToHome: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier.background(Gray200)
@@ -91,7 +92,7 @@ fun MypageScreen(
                     onClick = {
                         navigateToWebView(
                             "개인정보처리방침",
-                            "https://pluv.notion.site/ba3f60c0d84c4194a0d200bb39df729b?pvs=4"
+                            "https://pluv.kro.kr/personal"
                         )
                     }
                 )
@@ -103,7 +104,7 @@ fun MypageScreen(
             item {
                 UserInteractionSection(
                     description = "로그아웃",
-                    onClick = {}
+                    onClick = { navigateToHome() }
                 )
             }
         }
@@ -134,7 +135,7 @@ fun ProfileInfo(
             Spacer(modifier = Modifier.size(16.dp))
             Column {
                 Text(
-                    text = "User Name",
+                    text = "음악듣는 원숭이",
                     style = Title2,
                     color = Gray800,
                 )
