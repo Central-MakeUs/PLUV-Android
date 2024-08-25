@@ -7,3 +7,19 @@ data class FeedResponse(
     val artistNames: String,
     val creatorName: String
 )
+
+data class FeedInfoResponse(
+    val id: Long,
+    val songCount: Int,
+    val title: String,
+    val imageUrl: String,
+    val creatorName: String,
+    val isBookMarked: Boolean,
+    val createdAt: String
+)
+
+data class FeedMusicResponse(
+    val title: String,
+    val imageUrl: String,
+    val artistNames: String,
+)

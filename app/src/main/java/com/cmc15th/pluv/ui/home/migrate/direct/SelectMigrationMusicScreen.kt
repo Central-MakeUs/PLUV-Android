@@ -224,6 +224,8 @@ fun SelectMigrationMusicScreen(
                     uiState.allSourceMusics,
                 ) { music ->
                     MusicItem(
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         isChecked = uiState.selectedSourceMusics.contains(music),
                         thumbNailContent = {
                             MusicThumbNail(

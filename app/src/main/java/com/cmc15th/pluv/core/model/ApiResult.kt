@@ -6,6 +6,7 @@ import java.net.ConnectException
 /**
  * 네트워크 응답을 래핑하는 인터페이스
  */
+private const val DEFAULT_ERROR_MESSAGE = "알 수 없는 에러가 발생하였습니다."
 sealed interface ApiResult<out T> {
     data class Success<out T>(val data: T) : ApiResult<T>
     data class Failure(val code: Int, val error: String?) : ApiResult<Nothing>
@@ -25,12 +26,12 @@ sealed interface ApiResult<out T> {
         if (this is Success) block(data)
     }
 
-    fun onFailure(block: (Int, String?) -> Unit) {
-        if (this is Failure) block(code, error)
+    fun onFailure(block: (Int, String) -> Unit) {
+        if (this is Failure) block(code, error ?: DEFAULT_ERROR_MESSAGE)
         if (this is NetworkError) {
             if (exception is ConnectException) block(600, "서버 에러가 발생하였습니다. 관리자에게 문의 바랍니다.")
             block(601, "네트워크 에러가 발생하였습니다. 인터넷 연결을 확인해주세요.")
         }
-        if (this is Unexpected) block(500, t?.message)
+        if (this is Unexpected) block(500, t?.message ?: DEFAULT_ERROR_MESSAGE)
     }
 }

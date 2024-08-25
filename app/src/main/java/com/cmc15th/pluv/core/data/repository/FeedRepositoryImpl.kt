@@ -1,8 +1,12 @@
 package com.cmc15th.pluv.core.data.repository
 
 import com.cmc15th.pluv.core.data.mapper.toFeed
+import com.cmc15th.pluv.core.data.mapper.toFeedInfo
+import com.cmc15th.pluv.core.data.mapper.toFeedMusic
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.Feed
+import com.cmc15th.pluv.core.model.FeedInfo
+import com.cmc15th.pluv.core.model.FeedMusic
 import com.cmc15th.pluv.core.network.service.FeedService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,12 +23,32 @@ class FeedRepositoryImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
+    override fun getFeedById(id: Long): Flow<ApiResult<FeedInfo>> = flow {
+        emit(
+            feedService.getFeedById(id).map { response -> response.data.toFeedInfo() }
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override fun getFeedMusics(id: Long): Flow<ApiResult<List<FeedMusic>>> = flow {
+        emit(
+            feedService.getFeedMusics(id).map { response -> response.data.map { it.toFeedMusic() } }
+        )
+    }.flowOn(Dispatchers.IO)
+
     override fun getSavedFeed() {
         TODO("Not yet implemented")
     }
 
-    override fun saveFeed() {
-        TODO("Not yet implemented")
-    }
+    override fun bookmarkFeed(id: Long): Flow<ApiResult<String>> = flow {
+        emit(
+            feedService.bookmarkFeed(id).map { response -> response.data }
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override fun unBookmarkFeed(id: Long): Flow<ApiResult<String>> = flow {
+        emit(
+            feedService.unBookmarkFeed(id).map { response -> response.data }
+        )
+    }.flowOn(Dispatchers.IO)
 
 }

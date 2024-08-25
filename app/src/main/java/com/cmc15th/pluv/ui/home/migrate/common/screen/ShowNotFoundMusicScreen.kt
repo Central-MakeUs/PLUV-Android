@@ -95,6 +95,7 @@ fun ShowNotFoundMusicScreen(
                     uiState.notFoundMusics
                 ) { music ->
                     MusicItem(
+                        modifier = Modifier.fillMaxWidth(),
                         isChecked = false,
                         thumbNailContent = {
                             MusicThumbNail(
