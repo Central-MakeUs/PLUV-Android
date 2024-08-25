@@ -54,6 +54,17 @@ class FeedViewModel @Inject constructor(
                 getFeedById(event.feedId)
                 getFeedMusics(event.feedId)
             }
+            is FeedUiEvent.ToggleBookmark -> {
+                val bookmarkState = _uiState.value.feedInfo.isBookMarked
+                // 먼저 UI를 업데이트 한 후에 네트워크 요청 보내고, 성공/실패에 따라 다시 UI 업데이트
+                _uiState.update {
+                    it.copy(feedInfo = it.feedInfo.copy(isBookMarked = !bookmarkState))
+                }
+                when (bookmarkState) {
+                    true -> unBookmarkFeed(event.feedId)
+                    false -> bookmarkFeed(event.feedId)
+                }
+            }
         }
     }
 
@@ -108,6 +119,28 @@ class FeedViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun bookmarkFeed(id: Long) {
+        viewModelScope.launch {
+            feedRepository.bookmarkFeed(id).collect { result ->
+                result.onSuccess {
+                    _uiState.update {
+                        it.copy(feedInfo = it.feedInfo.copy(isBookMarked = true))
+                    }
+                }
+                result.onFailure { code, msg ->
+                    _uiState.update {
+                        it.copy(feedInfo = it.feedInfo.copy(isBookMarked = false))
+                    }
+                    sendEffect(FeedUiEffect.OnFailure("플레이리스트 저장에 실패했어요"))
+                }
+            }
+        }
+    }
+
+    private fun unBookmarkFeed(feedId: Long) {
+        TODO("Not yet implemented")
     }
 
     companion object {

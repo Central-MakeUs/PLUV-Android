@@ -16,5 +16,7 @@ interface FeedRepository {
 
     fun getSavedFeed()
 
-    fun saveFeed()
+    fun bookmarkFeed(id: Long): Flow<ApiResult<String>>
+
+    fun unBookmarkFeed(id: Long): Flow<ApiResult<String>>
 }

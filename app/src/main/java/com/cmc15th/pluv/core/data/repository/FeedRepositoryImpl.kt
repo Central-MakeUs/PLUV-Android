@@ -39,8 +39,16 @@ class FeedRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun saveFeed() {
-        TODO("Not yet implemented")
-    }
+    override fun bookmarkFeed(id: Long): Flow<ApiResult<String>> = flow {
+        emit(
+            feedService.bookmarkFeed(id).map { response -> response.data }
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override fun unBookmarkFeed(id: Long): Flow<ApiResult<String>> = flow {
+        emit(
+            feedService.unBookmarkFeed(id).map { response -> response.data }
+        )
+    }.flowOn(Dispatchers.IO)
 
 }
