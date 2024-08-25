@@ -18,11 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCheckBox
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.SelectAllContent
 import com.cmc15th.pluv.core.designsystem.theme.Title5
+import com.cmc15th.pluv.core.designsystem.theme.Title6
 
 @Composable
 fun MusicItem(
@@ -64,6 +67,42 @@ fun MusicItem(
                 modifier = Modifier.size(16.dp)
             )
         }
+    }
+}
+
+@Composable
+fun MusicItemWithIndexed(
+    index: Int,
+    imageUrl: String,
+    musicName: String,
+    artistName: String,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(start = 20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "${index + 1}",
+            style = Title6,
+            color = Gray800,
+        )
+        MusicItem(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            isChecked = false,
+            musicName = musicName,
+            artistName = artistName,
+            thumbNailContent = {
+                PlaylistCard(
+                    imageUrl = imageUrl,
+                    modifier = Modifier.size(50.dp)
+                )
+            }
+        )
     }
 }
 
