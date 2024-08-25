@@ -140,7 +140,21 @@ class FeedViewModel @Inject constructor(
     }
 
     private fun unBookmarkFeed(feedId: Long) {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            feedRepository.unBookmarkFeed(feedId).collect { result ->
+                result.onSuccess {
+                    _uiState.update {
+                        it.copy(feedInfo = it.feedInfo.copy(isBookMarked = false))
+                    }
+                }
+                result.onFailure { code, msg ->
+                    _uiState.update {
+                        it.copy(feedInfo = it.feedInfo.copy(isBookMarked = true))
+                    }
+                    sendEffect(FeedUiEffect.OnFailure("플레이리스트 저장에 실패했어요"))
+                }
+            }
+        }
     }
 
     companion object {
