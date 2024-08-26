@@ -97,7 +97,7 @@ val MigrateAppName = TextStyle(
 
 val SelectedAppName = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.SemiBold,
     fontSize = 14.sp,
     color = Color(0xFF5C5C5C)
 )

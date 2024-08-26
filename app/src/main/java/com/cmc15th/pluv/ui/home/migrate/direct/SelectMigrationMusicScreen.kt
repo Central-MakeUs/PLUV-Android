@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -32,7 +34,6 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
-import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
@@ -122,13 +123,36 @@ fun SelectMigrationMusicScreen(
 
     val dialogIcon: @Composable () -> Unit = when {
         uiState.isLoading -> {
-            { Icon(painterResource(id = R.drawable.findicon), contentDescription = null, modifier = Modifier.fillMaxSize(), tint = Color.Unspecified) }
+            {
+                Icon(
+                    painterResource(id = R.drawable.findicon),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    tint = Color.Unspecified
+                )
+            }
         }
+
         dialogVisible -> {
-            { Icon(painterResource(id = R.drawable.warningicon), contentDescription = null,modifier = Modifier.fillMaxSize(), tint = Color.Unspecified) }
+            {
+                Icon(
+                    painterResource(id = R.drawable.warningicon),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    tint = Color.Unspecified
+                )
+            }
         }
+
         else -> {
-            { Icon(imageVector = Icons.Default.Check, contentDescription = null, modifier = Modifier.fillMaxSize(), tint = Color.Unspecified) }
+            {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    tint = Color.Unspecified
+                )
+            }
         }
     }
 
@@ -258,19 +282,20 @@ fun PlaylistInfo(
     ) {
         PlaylistCard(
             imageUrl = imageUrl,
-            modifier = Modifier.size(86.dp)
+            modifier = Modifier.size(86.dp),
+            shape = RoundedCornerShape(8.dp)
         )
         Spacer(modifier = Modifier.size(16.dp))
         Column {
-            Text(text = appName, style = Content2)
-
-            Spacer(modifier = Modifier.size(8.dp))
-
-            Row {
+            Row(
+                verticalAlignment = Alignment.Top
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.menu_04),
                     contentDescription = "playlist Name Icon",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                        .size(20.dp)
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
@@ -280,7 +305,11 @@ fun PlaylistInfo(
 
             Spacer(modifier = Modifier.size(20.dp))
 
-            Text(text = "총 ${totalSongCount}곡", style = SelectedAppName)
+            Row {
+                Text(text = appName, style = SelectedAppName)
+                Spacer(modifier = Modifier.size(6.dp))
+                Text(text = "총 ${totalSongCount}곡", style = SelectedAppName)
+            }
         }
     }
 }
