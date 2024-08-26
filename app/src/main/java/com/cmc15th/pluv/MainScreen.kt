@@ -33,7 +33,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Title6
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val SnackBarDuration = 1000L
+private const val SnackBarDuration = 1500L
 
 @Composable
 fun MainScreen(
