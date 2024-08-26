@@ -10,8 +10,12 @@ import androidx.navigation.navigation
 import com.cmc15th.pluv.ui.common.WebViewScreen
 import com.cmc15th.pluv.ui.feed.FeedInfoScreen
 import com.cmc15th.pluv.ui.feed.FeedScreen
+import com.cmc15th.pluv.ui.history.AllHistoryScreen
+import com.cmc15th.pluv.ui.history.HistoryDetailScreen
+import com.cmc15th.pluv.ui.history.viewmodel.HistoryViewModel
 import com.cmc15th.pluv.ui.home.HomeScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.MigratedResultScreen
+import com.cmc15th.pluv.ui.home.migrate.common.screen.MigrationProcessScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.SelectSimilarMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.ShowNotFoundMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
@@ -34,7 +38,48 @@ fun PLUVNavHost(
     NavHost(
         navController = pluvNavController.navController,
         startDestination = DestinationScreens.Login.route
+//        startDestination = DestinationScreens.History.route
     ) {
+
+        navigation(
+            route = DestinationScreens.History.route,
+            startDestination = DestinationScreens.AllHistory.route
+        ) {
+            composable(route = DestinationScreens.AllHistory.route) { navBackStackEntry ->
+                AllHistoryScreen(
+                    viewModel = pluvNavController.sharedViewModel<HistoryViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.History.route
+                    ),
+                    onBackClicked = {
+                        pluvNavController.popBackStack()
+                    },
+                    navigateToHistoryDetail = {
+                        pluvNavController.navigate(DestinationScreens.HistoryDetail.route)
+                    }
+                )
+            }
+
+            composable(route = DestinationScreens.HistoryDetail.route) { navBackStackEntry ->
+                HistoryDetailScreen(
+                    viewModel = pluvNavController.sharedViewModel<HistoryViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                        route = DestinationScreens.History.route
+                    ),
+                    onBackClicked = {
+                        pluvNavController.popBackStack()
+                    }
+                )
+            }
+        }
+
+        composable(route = DestinationScreens.MigrationProcess.route) {
+            MigrationProcessScreen()
+        }
+
+        composable(route = DestinationScreens.HistoryDetail.route) {
+            HistoryDetailScreen()
+        }
 
         composable(route = DestinationScreens.Login.route) { navBackStackEntry ->
             LoginScreen(
@@ -52,6 +97,9 @@ fun PLUVNavHost(
                 },
                 navigateToScreenShotMigration = {
                     pluvNavController.navigate(DestinationScreens.UploadPlaylistScreenShot.route)
+                },
+                navigateToHistory = {
+                    pluvNavController.navigate(DestinationScreens.History.route)
                 }
             )
         }
@@ -83,14 +131,23 @@ fun PLUVNavHost(
             }
         }
 
-        navigation(route = DestinationScreens.Mypage.route, startDestination = BottomTab.MY_PAGE.route) {
+        navigation(
+            route = DestinationScreens.Mypage.route,
+            startDestination = BottomTab.MY_PAGE.route
+        ) {
             composable(route = BottomTab.MY_PAGE.route) {
                 MypageScreen(
                     navigateToUserInfo = {
                         pluvNavController.navigate(DestinationScreens.UserInfo.route)
                     },
                     navigateToWebView = { title, url ->
-                        pluvNavController.navigate("webView?title=${Uri.encode(title)}&url=${Uri.encode(url)}")
+                        pluvNavController.navigate(
+                            "webView?title=${Uri.encode(title)}&url=${
+                                Uri.encode(
+                                    url
+                                )
+                            }"
+                        )
                     },
                     navigateToHome = {
                         pluvNavController.navigateToLogin()
@@ -160,7 +217,10 @@ fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
@@ -178,7 +238,10 @@ fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
@@ -199,7 +262,10 @@ fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
@@ -220,7 +286,10 @@ fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     },
                     navigateToDisplayMigrationPath = {
                         pluvNavController.popBackStack()
@@ -240,7 +309,10 @@ fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     },
                     navigateToSelectPlaylist = {
                         pluvNavController.popBackStack()
@@ -272,7 +344,10 @@ fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     },
                     onShowSnackBar = showSnackBar,
 
@@ -295,7 +370,10 @@ fun PLUVNavHost(
                     ),
                     onShowSnackBar = showSnackBar,
                     onCloseClick = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     }
                 )
             }
@@ -308,11 +386,15 @@ fun PLUVNavHost(
                     ),
                     showSnackBar = showSnackBar,
                     navigateToHome = {
-                        pluvNavController.navigate(BottomTab.HOME.route, NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build())
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
                     }
                 )
             }
         }
+
         navigation(
             route = DestinationScreens.ScreenShotMigrationRoot.route,
             startDestination = DestinationScreens.UploadPlaylistScreenShot.route

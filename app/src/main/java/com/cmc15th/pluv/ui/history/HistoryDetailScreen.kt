@@ -4,12 +4,14 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -27,20 +29,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.theme.Gray400
 import com.cmc15th.pluv.core.designsystem.theme.PrimaryDefault
 import com.cmc15th.pluv.core.designsystem.theme.Title5
+import com.cmc15th.pluv.core.ui.component.MusicItemWithIndexed
 import com.cmc15th.pluv.core.ui.component.PlaylistInfo
+import com.cmc15th.pluv.ui.history.viewmodel.HistoryViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HistoryInfoScreen() {
+fun HistoryDetailScreen(
+    viewModel: HistoryViewModel = hiltViewModel(),
+    onBackClicked: () -> Unit = {},
+) {
     val tabNames = listOf("옮긴 곡", "안 옮긴 곡")
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val historyDetail = uiState.selectedHistory
+
     var selectedTabIndex by remember {
         mutableIntStateOf(0)
     }
+
+    val musicItems =
+        if (selectedTabIndex == 0) uiState.transferSuccessMusics
+        else uiState.transferFailMusics
 
     Scaffold(
         topBar = {
@@ -53,13 +69,15 @@ fun HistoryInfoScreen() {
                     painter = painterResource(id = R.drawable.leftarrow),
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { }, contentDescription = null
+                        .clickable { onBackClicked() }, contentDescription = null
                 )
             }
         }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(paddingValues)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
             item {
                 AsyncImage(
@@ -67,7 +85,7 @@ fun HistoryInfoScreen() {
                         .fillMaxWidth()
                         .height(390.dp),
                     contentScale = ContentScale.Crop,
-                    model = "https://picsum.photos/400/300",
+                    model = historyDetail.imageUrl,
                     contentDescription = "feed image"
                 )
             }
@@ -77,10 +95,11 @@ fun HistoryInfoScreen() {
                         .fillMaxWidth()
                         .background(Color.White)
                         .padding(24.dp),
-                    playlistName = "",
-                    totalMusicCount = 4,
-                    lastUpdateDate = "", userName = "dwqe"
+                    playlistName = historyDetail.title,
+                    totalMusicCount = historyDetail.totalSongCount,
+                    lastUpdateDate = "2024.02.02",
                 )
+
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
                     indicator = { tabPositions ->
@@ -106,10 +125,17 @@ fun HistoryInfoScreen() {
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(10.dp))
             }
-            items(100) {
-                Text(text = "Item $it")
+            itemsIndexed(musicItems) { index, music ->
+                MusicItemWithIndexed(
+                    index = index,
+                    imageUrl = music.imageUrl,
+                    musicName = music.title,
+                    artistName = music.artistNames
+                )
             }
         }
     }
 }
+

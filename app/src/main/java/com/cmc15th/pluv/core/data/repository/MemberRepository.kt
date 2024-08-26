@@ -13,7 +13,7 @@ interface MemberRepository {
 
     fun getHistoryDetail(historyId: Int): Flow<ApiResult<HistoryDetail>>
 
-    fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<FeedMusic>>
+    fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<FeedMusic>>>
 
-    fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<FeedMusic>>
+    fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<FeedMusic>>>
 }

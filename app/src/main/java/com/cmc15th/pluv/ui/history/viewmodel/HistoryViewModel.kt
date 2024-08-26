@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.history.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmc15th.pluv.core.data.repository.MemberRepository
@@ -47,8 +48,14 @@ class HistoryViewModel @Inject constructor(
 
     private fun handleEvent(event: HistoryUiEvent) {
         when (event) {
+            is HistoryUiEvent.OnLoadHistories -> {
+                getHistories()
+            }
+
             is HistoryUiEvent.OnHistoryClicked -> {
                 getHistoryDetail(event.historyId)
+                getTransferSuccessMusics(event.historyId)
+                getTransferFailMusics(event.historyId)
             }
         }
     }
@@ -59,12 +66,49 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
+    private fun getHistories() {
+        viewModelScope.launch {
+            memberRepository.getHistories().collect { result ->
+                result.onSuccess { histories ->
+                    Log.d(TAG, "getHistories: $histories")
+                    _uiState.update {
+                        it.copy(histories = histories)
+                    }
+                }
+
+                result.onFailure { _, msg ->
+                    Log.d(TAG, "getHistories: $msg")
+                    sendEffect(HistoryUiEffect.OnFailure(msg))
+                }
+            }
+        }
+    }
+
     private fun getHistoryDetail(historyId: Int) {
         viewModelScope.launch {
             memberRepository.getHistoryDetail(historyId).collect { result ->
                 result.onSuccess { history ->
                     _uiState.update {
+                        Log.d(TAG, "getHistoryDetail:  $history")
                         it.copy(selectedHistory = history)
+                    }
+                }
+
+                result.onFailure { _, msg ->
+                    Log.d(TAG, "getHistoryDetail: $msg")
+                    sendEffect(HistoryUiEffect.OnFailure(msg))
+                }
+            }
+        }
+    }
+
+    private fun getTransferSuccessMusics(historyId: Int) {
+        viewModelScope.launch {
+            memberRepository.getTransferSucceedHistoryMusics(historyId).collect { result ->
+                result.onSuccess { musics ->
+                    _uiState.update {
+                        Log.d(TAG, "getTransferSuccessMusics: $musics")
+                        it.copy(transferSuccessMusics = musics)
                     }
                 }
 
@@ -73,5 +117,26 @@ class HistoryViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun getTransferFailMusics(historyId: Int) {
+        viewModelScope.launch {
+            memberRepository.getTransferFailedHistoryMusics(historyId).collect { result ->
+                result.onSuccess { musics ->
+                    _uiState.update {
+                        Log.d(TAG, "getTransferFailMusics: $musics ")
+                        it.copy(transferFailMusics = musics)
+                    }
+                }
+
+                result.onFailure { _, msg ->
+                    sendEffect(HistoryUiEffect.OnFailure(msg))
+                }
+            }
+        }
+    }
+    
+    companion object {
+        private const val TAG = "HistoryViewModel"
     }
 }
