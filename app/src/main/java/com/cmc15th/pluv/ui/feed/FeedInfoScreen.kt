@@ -57,6 +57,7 @@ fun FeedInfoScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
+                is FeedUiEffect.OnSaveSuccess -> showSnackBar(effect.message)
                 is FeedUiEffect.OnFailure -> showSnackBar(effect.message)
             }
         }

@@ -134,6 +134,7 @@ class FeedViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(feedInfo = it.feedInfo.copy(isBookMarked = true))
                     }
+                    sendEffect(FeedUiEffect.OnSaveSuccess("플레이리스트를 저장했어요"))
                 }
                 result.onFailure { code, msg ->
                     _uiState.update {

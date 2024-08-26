@@ -39,6 +39,7 @@ fun SavedFeedScreen(
                 is FeedUiEffect.OnFailure -> {
                     showSnackBar(effect.message)
                 }
+                else -> {}
             }
         }
     }
