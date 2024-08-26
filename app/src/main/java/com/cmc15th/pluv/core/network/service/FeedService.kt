@@ -5,7 +5,6 @@ import com.cmc15th.pluv.core.network.response.CommonResponse
 import com.cmc15th.pluv.core.network.response.FeedInfoResponse
 import com.cmc15th.pluv.core.network.response.FeedMusicResponse
 import com.cmc15th.pluv.core.network.response.FeedResponse
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -27,6 +26,6 @@ interface FeedService {
     @POST("feed/{id}/save")
     suspend fun bookmarkFeed(@Path("id") id: Long): ApiResult<CommonResponse<String>>
 
-    @DELETE("feed/{id}/save")
+    @POST("feed/{id}/cancel")
     suspend fun unBookmarkFeed(@Path("id") id: Long): ApiResult<CommonResponse<String>>
 }

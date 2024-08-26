@@ -153,12 +153,13 @@ class FeedViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(feedInfo = it.feedInfo.copy(isBookMarked = false))
                     }
+                    sendEffect(FeedUiEffect.OnSaveSuccess("저장된 플레이리스트를 삭제했어요"))
                 }
                 result.onFailure { code, msg ->
                     _uiState.update {
                         it.copy(feedInfo = it.feedInfo.copy(isBookMarked = true))
                     }
-                    sendEffect(FeedUiEffect.OnFailure("플레이리스트 저장에 실패했어요"))
+                    sendEffect(FeedUiEffect.OnFailure("플레이리스트 삭제에 실패했어요"))
                 }
             }
         }
