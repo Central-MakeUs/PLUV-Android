@@ -6,7 +6,8 @@ data class FeedResponse(
     val thumbNailUrl: String,
     val artistNames: String,
     val creatorName: String,
-    val transferredAt: String
+    val transferredAt: String,
+    val totalSongCount: Int
 )
 
 data class FeedInfoResponse(

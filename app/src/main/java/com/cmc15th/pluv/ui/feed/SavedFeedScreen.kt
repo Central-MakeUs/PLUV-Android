@@ -64,8 +64,7 @@ fun SavedFeedScreen(
                         .padding(horizontal = 24.dp, vertical = 10.dp),
                     thumbNailUrl = feed.thumbNailUrl,
                     playlistName = feed.title,
-                    //FIXME
-                    totalMusicCount = 10,
+                    totalMusicCount = feed.totalSongCount,
                     lastUpdateDate = feed.transferredAt
                 )
             }
