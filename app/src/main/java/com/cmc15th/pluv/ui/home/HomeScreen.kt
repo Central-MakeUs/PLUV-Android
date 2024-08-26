@@ -162,6 +162,7 @@ fun HistoryArea(
                 "https://picsum.photos/120/120?random=1",
             ),
             description = "최근 옮긴 항목",
+            cardSize = 140.dp,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White),
@@ -174,6 +175,7 @@ fun HistoryArea(
 fun PlayListRow(
     playListItems: List<String>,
     description: String,
+    cardSize: Dp = 100.dp,
     modifier: Modifier = Modifier,
     onExpandClick: () -> Unit = {}
 ) {
@@ -189,13 +191,13 @@ fun PlayListRow(
         ) {
             Text(text = description, style = Title4, modifier = Modifier.padding(vertical = 24.dp))
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable { onExpandClick() }
             ) {
                 Text(
                     text = "전체보기",
                     style = Content2,
                     color = Gray600,
-                    modifier = Modifier.clickable { onExpandClick() }
                 )
                 Icon(
                     painterResource(id = R.drawable.rightarrow),
@@ -215,7 +217,7 @@ fun PlayListRow(
                 PlaylistCard(
                     imageUrl = playList,
                     modifier = Modifier
-                        .size(140.dp),
+                        .size(cardSize),
                     shape = RoundedCornerShape(8.dp)
                 )
             }
