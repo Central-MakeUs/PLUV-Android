@@ -51,7 +51,8 @@ import com.cmc15th.pluv.core.designsystem.theme.Title4
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navigateToDirectMigration: () -> Unit = {},
-    navigateToScreenShotMigration: () -> Unit = {}
+    navigateToScreenShotMigration: () -> Unit = {},
+    navigateToHistory: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -103,11 +104,11 @@ fun HomeScreen(
             Spacer(modifier = Modifier.size(50.dp))
         }
 
-        PlayListRowArea(
+        HistoryArea(
             title = R.string.migrated_play_list,
             playlistItems = playlistItems,
             modifier = Modifier.fillMaxWidth(),
-            onAddClick = {}
+            onExpandClick = { navigateToHistory() }
         )
         Spacer(modifier = Modifier.size(12.dp))
         PlayListRow(
@@ -132,11 +133,11 @@ fun HomeScreen(
 }
 
 @Composable
-fun PlayListRowArea(
+fun HistoryArea(
     @StringRes title: Int,
     playlistItems: List<String>,
     modifier: Modifier = Modifier,
-    onAddClick: () -> Unit
+    onExpandClick: () -> Unit
 ) {
     // Content inside the rounded container
     Column(
@@ -163,7 +164,8 @@ fun PlayListRowArea(
             description = "최근 옮긴 항목",
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(Color.White),
+            onExpandClick = onExpandClick
         )
     }
 }
@@ -172,7 +174,8 @@ fun PlayListRowArea(
 fun PlayListRow(
     playListItems: List<String>,
     description: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onExpandClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -188,7 +191,12 @@ fun PlayListRow(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "전체보기", style = Content2, color = Gray600)
+                Text(
+                    text = "전체보기",
+                    style = Content2,
+                    color = Gray600,
+                    modifier = Modifier.clickable { onExpandClick() }
+                )
                 Icon(
                     painterResource(id = R.drawable.rightarrow),
                     contentDescription = null,

@@ -35,15 +35,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
-import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
-import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray200
-import com.cmc15th.pluv.core.designsystem.theme.Gray600
-import com.cmc15th.pluv.core.designsystem.theme.Gray800
-import com.cmc15th.pluv.core.designsystem.theme.Title2
 import com.cmc15th.pluv.core.designsystem.theme.Title5
-import com.cmc15th.pluv.core.designsystem.theme.Title6
-import com.cmc15th.pluv.core.ui.component.MusicItem
+import com.cmc15th.pluv.core.ui.component.MusicItemWithIndexed
+import com.cmc15th.pluv.core.ui.component.PlaylistInfo
 import com.cmc15th.pluv.ui.feed.viewmodel.FeedUiEffect
 import com.cmc15th.pluv.ui.feed.viewmodel.FeedUiEvent
 import com.cmc15th.pluv.ui.feed.viewmodel.FeedViewModel
@@ -117,7 +112,7 @@ fun FeedInfoScreen(
                     Divider(modifier = Modifier.fillMaxWidth(), color = Gray200, thickness = 1.dp)
                 }
                 itemsIndexed(uiState.feedMusics) { index, music ->
-                    FeedMusicItem(
+                    MusicItemWithIndexed(
                         index = index,
                         imageUrl = music.imageUrl,
                         musicName = music.title,
@@ -180,99 +175,7 @@ fun FeedInfoScreen(
 }
 
 @Composable
-fun PlaylistInfo(
-    modifier: Modifier = Modifier,
-    playlistName: String,
-    totalMusicCount: Int,
-    lastUpdateDate: String,
-    userName: String,
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Icon(
-                painter = painterResource(id = R.drawable.menu_04),
-                modifier = Modifier.size(20.dp),
-                contentDescription = null
-            )
-
-            Spacer(modifier = Modifier.size(8.dp))
-
-            Text(
-                text = playlistName,
-                style = Title2,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Row {
-            Text(text = "총 ${totalMusicCount}곡", style = Content2, color = Gray600)
-            Spacer(modifier = Modifier.size(6.dp))
-            Text(text = lastUpdateDate, style = Content2, color = Gray600)
-        }
-
-        Spacer(modifier = Modifier.size(10.dp))
-
-        Text(text = "공유한 사람: $userName", style = Title5, color = Gray800)
-    }
-}
-
-@Composable
-fun FeedMusicItem(
-    index: Int,
-    imageUrl: String,
-    musicName: String,
-    artistName: String,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(start = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "${index + 1}",
-            style = Title6,
-            color = Gray800,
-        )
-        MusicItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            isChecked = false,
-            musicName = musicName,
-            artistName = artistName,
-            thumbNailContent = {
-                PlaylistCard(
-                    imageUrl = imageUrl,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
-        )
-    }
-}
-
-@Composable
 @Preview
 fun FeedInfoScreenPreview() {
     FeedInfoScreen()
-}
-
-@Composable
-@Preview
-fun FeedMusicItemPreview() {
-    FeedMusicItem(
-        index = 1,
-        imageUrl = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-        musicName = "musicName",
-        artistName = "artistName"
-    )
 }
