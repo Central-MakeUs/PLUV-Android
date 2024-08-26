@@ -70,12 +70,14 @@ class PLUVNavController(
 
     @Composable
     inline fun <reified T : ViewModel> sharedViewModel(
-        navBackStackEntry: NavBackStackEntry,
-        route: String
+        navBackStackEntry: NavBackStackEntry
     ): T {
-        val parentEntry = remember(navBackStackEntry) {
-            navController.getBackStackEntry(route)
+        val navGraphRoute = navBackStackEntry.destination.parent?.route ?: return hiltViewModel()
+
+        val parentEntry = remember(navBackStackEntry) { // this는 NavBackStackEntry를 의미한다.
+            navController.getBackStackEntry(navGraphRoute)
         }
+
         return hiltViewModel(parentEntry)
     }
 }
