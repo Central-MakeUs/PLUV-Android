@@ -35,9 +35,11 @@ class FeedRepositoryImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
-    override fun getSavedFeed() {
-        TODO("Not yet implemented")
-    }
+    override fun getSavedFeeds(): Flow<ApiResult<List<Feed>>> = flow {
+        emit(
+            feedService.getSavedFeeds().map { response -> response.data.map { it.toFeed() } }
+        )
+    }.flowOn(Dispatchers.IO)
 
     override fun bookmarkFeed(id: Long): Flow<ApiResult<String>> = flow {
         emit(

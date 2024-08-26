@@ -14,7 +14,7 @@ interface FeedRepository {
 
     fun getFeedMusics(id: Long): Flow<ApiResult<List<FeedMusic>>>
 
-    fun getSavedFeed()
+    fun getSavedFeeds(): Flow<ApiResult<List<Feed>>>
 
     fun bookmarkFeed(id: Long): Flow<ApiResult<String>>
 

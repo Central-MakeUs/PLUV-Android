@@ -21,6 +21,9 @@ interface FeedService {
     @GET("feed/{id}/music")
     suspend fun getFeedMusics(@Path("id") id: Long): ApiResult<CommonResponse<List<FeedMusicResponse>>>
 
+    @GET("feed/save")
+    suspend fun getSavedFeeds(): ApiResult<CommonResponse<List<FeedResponse>>>
+
     @POST("feed/{id}/save")
     suspend fun bookmarkFeed(@Path("id") id: Long): ApiResult<CommonResponse<String>>
 

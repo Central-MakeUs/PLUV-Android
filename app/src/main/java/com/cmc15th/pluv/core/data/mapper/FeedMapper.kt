@@ -11,7 +11,8 @@ fun FeedResponse.toFeed() = com.cmc15th.pluv.core.model.Feed(
     title = title,
     thumbNailUrl = thumbNailUrl,
     artistNames = artistNames,
-    creatorName = creatorName
+    creatorName = creatorName,
+    transferredAt = transferredAt
 )
 
 fun FeedInfoResponse.toFeedInfo() = FeedInfo(
