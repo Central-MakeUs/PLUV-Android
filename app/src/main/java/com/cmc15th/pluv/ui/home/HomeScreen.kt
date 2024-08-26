@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
@@ -52,7 +53,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     navigateToDirectMigration: () -> Unit = {},
     navigateToScreenShotMigration: () -> Unit = {},
-    navigateToHistory: () -> Unit = {}
+    navigateToHistory: () -> Unit = {},
+    navigateToSavedFeed: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -110,7 +112,9 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
             onExpandClick = { navigateToHistory() }
         )
+
         Spacer(modifier = Modifier.size(12.dp))
+
         PlayListRow(
             playListItems = listOf(
                 "https://picsum.photos/120/120?random=1",
@@ -118,7 +122,8 @@ fun HomeScreen(
                 "https://picsum.photos/120/120?random=1",
             ),
             description = "저장한 플레이리스트",
-            modifier = Modifier.fillMaxWidth().background(Color.White)
+            modifier = Modifier.fillMaxWidth().background(Color.White),
+            onExpandClick = { navigateToSavedFeed() }
         )
 
 //        Spacer(modifier = Modifier.size(45.dp))
