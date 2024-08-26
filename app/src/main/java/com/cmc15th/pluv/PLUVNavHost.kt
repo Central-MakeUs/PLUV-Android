@@ -73,6 +73,38 @@ fun PLUVNavHost(
             }
         }
 
+        navigation(
+            route = DestinationScreens.SavedFeedRoot.route,
+            startDestination = DestinationScreens.SavedFeed.route
+        ) {
+            composable(route = DestinationScreens.SavedFeed.route) { navBackStackEntry ->
+                SavedFeedScreen(
+                    viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                    ),
+                    showSnackBar = showSnackBar,
+                    onBackClicked = {
+                        pluvNavController.popBackStack()
+                    },
+                    navigateToFeedDetail = {
+                        pluvNavController.navigate(DestinationScreens.SavedFeedDetail.route)
+                    }
+                )
+            }
+
+            composable(route = DestinationScreens.SavedFeedDetail.route) { navBackStackEntry ->
+                FeedInfoScreen(
+                    viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                    ),
+                    onBackClick = {
+                        pluvNavController.popBackStack()
+                    },
+                    showSnackBar = showSnackBar
+                )
+            }
+        }
+
         composable(route = DestinationScreens.MigrationProcess.route) {
             MigrationProcessScreen()
         }
