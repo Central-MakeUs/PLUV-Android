@@ -67,6 +67,9 @@ class FeedViewModel @Inject constructor(
                     false -> bookmarkFeed(event.feedId)
                 }
             }
+            is FeedUiEvent.OnLoadSavedFeeds -> {
+                getSavedFeeds()
+            }
         }
     }
 
@@ -155,6 +158,21 @@ class FeedViewModel @Inject constructor(
                         it.copy(feedInfo = it.feedInfo.copy(isBookMarked = true))
                     }
                     sendEffect(FeedUiEffect.OnFailure("플레이리스트 저장에 실패했어요"))
+                }
+            }
+        }
+    }
+
+    private fun getSavedFeeds() {
+        viewModelScope.launch {
+            feedRepository.getSavedFeeds().collect { result ->
+                result.onSuccess { savedFeeds ->
+                    _uiState.update {
+                        it.copy(allFeeds = savedFeeds)
+                    }
+                }
+                result.onFailure { _, msg ->
+                    sendEffect(FeedUiEffect.OnFailure(msg))
                 }
             }
         }
