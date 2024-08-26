@@ -140,10 +140,10 @@ fun PLUVNavHost(
         }
 
         navigation(
-            route = DestinationScreens.Feed.route,
-            startDestination = BottomTab.FEED.route
+            route = BottomTab.FEED.route,
+            startDestination = DestinationScreens.Feed.route
         ) {
-            composable(route = BottomTab.FEED.route) { navBackStackEntry ->
+            composable(route = DestinationScreens.Feed.route) { navBackStackEntry ->
                 FeedScreen(
                     viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
                         navBackStackEntry = navBackStackEntry,

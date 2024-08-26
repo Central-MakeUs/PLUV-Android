@@ -39,7 +39,8 @@ class PLUVNavController(
 
     @Composable
     fun isVisibleBottomBar(): Boolean {
-        return currentDestination?.route in BottomTab.entries.map { it.route }
+        //Fixme
+        return currentDestination?.route in BottomTab.entries.map { it.route } || currentDestination?.route == DestinationScreens.Feed.route
     }
 
     fun navigate(route: String, navOptions: NavOptions? = null) {
