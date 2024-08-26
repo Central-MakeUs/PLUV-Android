@@ -5,7 +5,9 @@ data class Feed(
     val title: String = "",
     val thumbNailUrl: String = "",
     val artistNames: String = "",
-    val creatorName: String = ""
+    val creatorName: String = "",
+    val transferredAt: String = "",
+    val totalSongCount: Int = 0,
 )
 
 data class FeedInfo(

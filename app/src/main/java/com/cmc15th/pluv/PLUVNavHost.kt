@@ -10,6 +10,8 @@ import androidx.navigation.navigation
 import com.cmc15th.pluv.ui.common.WebViewScreen
 import com.cmc15th.pluv.ui.feed.FeedInfoScreen
 import com.cmc15th.pluv.ui.feed.FeedScreen
+import com.cmc15th.pluv.ui.feed.SavedFeedScreen
+import com.cmc15th.pluv.ui.feed.viewmodel.FeedViewModel
 import com.cmc15th.pluv.ui.history.AllHistoryScreen
 import com.cmc15th.pluv.ui.history.HistoryDetailScreen
 import com.cmc15th.pluv.ui.history.viewmodel.HistoryViewModel
@@ -49,7 +51,6 @@ fun PLUVNavHost(
                 AllHistoryScreen(
                     viewModel = pluvNavController.sharedViewModel<HistoryViewModel>(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.History.route
                     ),
                     onBackClicked = {
                         pluvNavController.popBackStack()
@@ -64,11 +65,42 @@ fun PLUVNavHost(
                 HistoryDetailScreen(
                     viewModel = pluvNavController.sharedViewModel<HistoryViewModel>(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.History.route
                     ),
                     onBackClicked = {
                         pluvNavController.popBackStack()
                     }
+                )
+            }
+        }
+
+        navigation(
+            route = DestinationScreens.SavedFeedRoot.route,
+            startDestination = DestinationScreens.SavedFeed.route
+        ) {
+            composable(route = DestinationScreens.SavedFeed.route) { navBackStackEntry ->
+                SavedFeedScreen(
+                    viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                    ),
+                    showSnackBar = showSnackBar,
+                    onBackClicked = {
+                        pluvNavController.popBackStack()
+                    },
+                    navigateToFeedDetail = {
+                        pluvNavController.navigate(DestinationScreens.SavedFeedDetail.route)
+                    }
+                )
+            }
+
+            composable(route = DestinationScreens.SavedFeedDetail.route) { navBackStackEntry ->
+                FeedInfoScreen(
+                    viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                    ),
+                    onBackClick = {
+                        pluvNavController.popBackStack()
+                    },
+                    showSnackBar = showSnackBar
                 )
             }
         }
@@ -100,17 +132,23 @@ fun PLUVNavHost(
                 },
                 navigateToHistory = {
                     pluvNavController.navigate(DestinationScreens.History.route)
+                },
+                navigateToSavedFeed = {
+                    pluvNavController.navigate(DestinationScreens.SavedFeedRoot.route)
                 }
             )
         }
 
         navigation(
-            route = DestinationScreens.Feed.route,
-            startDestination = BottomTab.FEED.route
+            route = BottomTab.FEED.route,
+            startDestination = DestinationScreens.Feed.route
         ) {
-            composable(route = BottomTab.FEED.route) { navBackStackEntry ->
+            composable(route = DestinationScreens.Feed.route) { navBackStackEntry ->
                 FeedScreen(
-                    viewModel = hiltViewModel(navBackStackEntry),
+                    viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                    ),
+                    showSnackBar = showSnackBar,
                     navigateToFeedInfo = {
                         pluvNavController.navigate(DestinationScreens.FeedInfo.route)
                     }
@@ -119,9 +157,8 @@ fun PLUVNavHost(
 
             composable(route = DestinationScreens.FeedInfo.route) { navBackStackEntry ->
                 FeedInfoScreen(
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
                         navBackStackEntry,
-                        BottomTab.FEED.route
                     ),
                     onBackClick = {
                         pluvNavController.popBackStack()
@@ -224,7 +261,6 @@ fun PLUVNavHost(
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     ),
                     navigateToSelectDestinationApp = {
                         pluvNavController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route)
@@ -245,7 +281,6 @@ fun PLUVNavHost(
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     ),
                     navigateToSelectSource = {
                         pluvNavController.popBackStack()
@@ -269,7 +304,6 @@ fun PLUVNavHost(
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     ),
                     navigateToSelectDestinationApp = {
                         pluvNavController.popBackStack()
@@ -299,7 +333,6 @@ fun PLUVNavHost(
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     )
                 )
             }
@@ -331,7 +364,6 @@ fun PLUVNavHost(
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     )
                 )
             }
@@ -339,7 +371,6 @@ fun PLUVNavHost(
                 SelectSimilarMusicScreen(
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     ),
                     currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
                     totalStep = totalSteps,
@@ -366,7 +397,6 @@ fun PLUVNavHost(
                 ShowNotFoundMusicScreen(
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     ),
                     onShowSnackBar = showSnackBar,
                     onCloseClick = {
@@ -382,7 +412,6 @@ fun PLUVNavHost(
                 MigratedResultScreen(
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
-                        route = DestinationScreens.DirectMigrationRoot.route
                     ),
                     showSnackBar = showSnackBar,
                     navigateToHome = {

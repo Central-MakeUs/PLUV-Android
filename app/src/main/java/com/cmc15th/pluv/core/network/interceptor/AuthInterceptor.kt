@@ -14,7 +14,7 @@ class AuthInterceptor @Inject constructor(
         val request = chain.request()
         //FIXME runBlocking 대체
         val accessToken = runBlocking {
-           authRepository.getAccessToken().first()
+            authRepository.getAccessToken().first()
         }
         if (accessToken.isBlank()) return chain.proceed(request)
 
