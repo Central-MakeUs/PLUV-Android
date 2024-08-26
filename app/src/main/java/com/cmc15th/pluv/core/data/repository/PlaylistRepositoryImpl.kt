@@ -1,11 +1,13 @@
 package com.cmc15th.pluv.core.data.repository
 
 import android.util.Log
+import com.cmc15th.pluv.core.data.mapper.toMigrationProcess
 import com.cmc15th.pluv.core.data.mapper.toPlaylist
 import com.cmc15th.pluv.core.data.mapper.toSourceMusic
 import com.cmc15th.pluv.core.data.mapper.toValidateMusic
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.DestinationMusic
+import com.cmc15th.pluv.core.model.MigrationProcess
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.ValidateMusic
@@ -164,4 +166,8 @@ class PlaylistRepositoryImpl @Inject constructor(
             ).map { result -> result.data }
         )
     }
+
+    override fun getMigrationProcess(): Flow<ApiResult<MigrationProcess>> = flow {
+        emit(migrationService.getMigrationProgress().map { it.data.toMigrationProcess() })
+    }.flowOn(Dispatchers.IO)
 }

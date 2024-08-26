@@ -479,6 +479,24 @@ class DirectMigrationViewModel @Inject constructor(
         return notTransferMusics
     }
 
+    private fun getMigrationProcess() {
+        viewModelScope.launch {
+            playlistRepository.getMigrationProcess().collect { result ->
+                result.onSuccess { data ->
+                    _uiState.update {
+                        it.copy(
+                            migrationProcess = data
+                        )
+                    }
+                }
+
+                result.onFailure { code, error ->
+                    Log.d(TAG, "getMigrationProcess: $code, $error")
+                }
+            }
+        }
+    }
+
 
     companion object {
         private const val TAG = "DirectMigrationViewModel"
