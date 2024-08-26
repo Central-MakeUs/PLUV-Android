@@ -31,7 +31,6 @@ class FeedViewModel @Inject constructor(
 
     init {
         subscribeEvents()
-        getAllFeeds()
     }
 
     fun setEvent(event: FeedUiEvent) {
@@ -50,6 +49,9 @@ class FeedViewModel @Inject constructor(
 
     private fun handleEvent(event: FeedUiEvent) {
         when (event) {
+            is FeedUiEvent.OnLoadAllFeeds -> {
+                getAllFeeds()
+            }
             is FeedUiEvent.SelectFeed -> {
                 getFeedById(event.feedId)
                 getFeedMusics(event.feedId)
@@ -85,6 +87,7 @@ class FeedViewModel @Inject constructor(
                 }
 
                 result.onFailure { code, msg ->
+                    sendEffect(FeedUiEffect.OnFailure(msg))
                     Log.d(TAG, "getAllFeeds: $code $msg")
                 }
             }

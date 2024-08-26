@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title3
 import com.cmc15th.pluv.core.designsystem.theme.Title4
+import com.cmc15th.pluv.ui.feed.viewmodel.FeedUiEffect
 import com.cmc15th.pluv.ui.feed.viewmodel.FeedUiEvent
 import com.cmc15th.pluv.ui.feed.viewmodel.FeedViewModel
 
@@ -40,10 +42,21 @@ import com.cmc15th.pluv.ui.feed.viewmodel.FeedViewModel
 fun FeedScreen(
     modifier: Modifier = Modifier,
     viewModel: FeedViewModel = hiltViewModel(),
+    showSnackBar: (String) -> Unit = {},
     navigateToFeedInfo: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(FeedUiEvent.OnLoadAllFeeds)
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is FeedUiEffect.OnFailure -> {
+                     showSnackBar(effect.message)
+                }
+            }
+        }
+    }
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
