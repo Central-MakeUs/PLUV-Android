@@ -26,7 +26,7 @@ fun PlaylistInfo(
     playlistName: String,
     totalMusicCount: Int,
     lastUpdateDate: String,
-    userName: String,
+    userName: String = "",
 ) {
     Column(
         modifier = modifier
@@ -59,8 +59,10 @@ fun PlaylistInfo(
             Text(text = lastUpdateDate, style = Content2, color = Gray600)
         }
 
-        Spacer(modifier = Modifier.size(10.dp))
+        if (userName.isNotEmpty()) {
+            Spacer(modifier = Modifier.size(10.dp))
 
-        Text(text = "공유한 사람: $userName", style = Title5, color = Gray800)
+            Text(text = "공유한 사람: $userName", style = Title5, color = Gray800)
+        }
     }
 }
