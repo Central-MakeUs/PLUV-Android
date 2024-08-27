@@ -48,11 +48,16 @@ fun MusicItem(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             thumbNailContent()
             Spacer(modifier = Modifier.size(16.dp))
 
-            Column {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
                     text = musicName, style = Title5, overflow = TextOverflow.Ellipsis,
                     maxLines = 1
@@ -159,7 +164,9 @@ fun AllSelectedText(
 @Composable
 fun MusicItemPreview() {
     MusicItem(
-        musicName = "Dynamite",
+        isChecked = true,
+        modifier = Modifier.fillMaxWidth(),
+        musicName = "fffffffffffffffffffffffffffffffffffeeeeeeeeeeeeeeeeeeeeee",
         artistName = "BTS",
         onCheckedChange = {}
     )
