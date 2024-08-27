@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -66,7 +67,7 @@ fun TopBarWithProgress(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp),
+                .padding(start = 24.dp, end = 14.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -76,10 +77,11 @@ fun TopBarWithProgress(
                     onCloseClick()
                 },
                 modifier = Modifier
-                    .padding(horizontal = 14.dp, vertical = 7.dp)
-                    .size(32.dp)
+                    .size(46.dp)
+                    .padding(8.dp)
             ) {
                 Icon(
+                    modifier = Modifier.fillMaxSize(),
                     imageVector = Icons.Default.Close,
                     contentDescription = "Close",
                 )
