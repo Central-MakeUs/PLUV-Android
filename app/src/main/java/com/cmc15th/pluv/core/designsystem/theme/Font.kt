@@ -60,37 +60,37 @@ val Title6 = TextStyle(
 
 val Content0 = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Medium,
     fontSize = 18.sp
 )
 
 val Content1 = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Medium,
     fontSize = 16.sp
 )
 
 val Content2 = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Medium,
     fontSize = 14.sp
 )
 
 val Content3 = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Medium,
     fontSize = 12.sp
 )
 
 val Content4 = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Medium,
     fontSize = 10.sp
 )
 
 val MigrateAppName = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Medium,
     fontSize = 14.sp,
     color = Color.Blue
 )
