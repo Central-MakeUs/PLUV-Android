@@ -79,7 +79,10 @@ fun MypageScreen(
             item {
                 UserInteractionSection(
                     description = "서비스 이용 약관",
-                    onClick = {}
+                    onClick = {
+                        navigateToWebView("서비스 이용 약관", "https://pluv.kro.kr/policy")
+
+                    }
                 )
                 Divider(
                     color = Gray200,
