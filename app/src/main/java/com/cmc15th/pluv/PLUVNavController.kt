@@ -75,7 +75,7 @@ class PLUVNavController(
     ): T {
         val navGraphRoute = navBackStackEntry.destination.parent?.route ?: return hiltViewModel()
 
-        val parentEntry = remember(navBackStackEntry) { // this는 NavBackStackEntry를 의미한다.
+        val parentEntry = remember(navBackStackEntry) {
             navController.getBackStackEntry(navGraphRoute)
         }
 

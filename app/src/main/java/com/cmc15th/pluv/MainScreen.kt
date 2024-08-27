@@ -62,8 +62,8 @@ fun MainScreen(
                 isVisible = pluvNavController.isVisibleBottomBar(),
                 bottomTabs = pluvNavController.bottomTabs,
                 currentTab = pluvNavController.currentBottomTab?.route.orEmpty(),
-                onSelected = { route ->
-                    pluvNavController.navigate(route)
+                onSelected = { tab ->
+                    pluvNavController.navigateToBottomTab(tab)
                 }
             )
         },
@@ -99,7 +99,7 @@ fun PLUVBottomBar(
     isVisible: Boolean,
     bottomTabs: List<BottomTab>,
     currentTab: String,
-    onSelected: (String) -> Unit
+    onSelected: (BottomTab) -> Unit
 ) {
     if (isVisible) {
         Row(
@@ -111,10 +111,9 @@ fun PLUVBottomBar(
                     icon = tab.unselectedIconId,
                     selectedIcon = tab.selectedIconId,
                     label = tab.iconTextId,
-                    route = tab.route,
                     isSelected = tab.route == currentTab,
                     onSelected = {
-                        onSelected(tab.route)
+                        onSelected(tab)
                     }
                 )
             }
@@ -127,9 +126,8 @@ fun BottomBarItem(
     icon: Int,
     selectedIcon: Int,
     label: Int,
-    route: String,
     isSelected: Boolean,
-    onSelected: (String) -> Unit
+    onSelected: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -137,7 +135,7 @@ fun BottomBarItem(
             .height(90.dp)
             .selectable(
                 selected = isSelected,
-                onClick = { onSelected(route) }
+                onClick = { onSelected() }
             ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
