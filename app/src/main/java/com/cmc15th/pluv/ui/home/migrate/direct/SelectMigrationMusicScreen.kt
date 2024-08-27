@@ -34,7 +34,9 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
-import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
+import com.cmc15th.pluv.core.designsystem.theme.Content0
+import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.core.ui.component.MusicsHeader
@@ -294,21 +296,21 @@ fun PlaylistInfo(
                     painter = painterResource(id = R.drawable.menu_04),
                     contentDescription = "playlist Name Icon",
                     modifier = Modifier
-                        .padding(top = 5.dp)
+                        .padding(top = 2.dp)
                         .size(20.dp)
                 )
 
                 Spacer(modifier = Modifier.size(4.dp))
 
-                Text(text = playlistName, style = Title1)
+                Text(text = playlistName, style = Content0)
             }
 
             Spacer(modifier = Modifier.size(20.dp))
 
             Row {
-                Text(text = appName, style = SelectedAppName)
+                Text(text = appName, style = Content2, color = Gray600)
                 Spacer(modifier = Modifier.size(6.dp))
-                Text(text = "총 ${totalSongCount}곡", style = SelectedAppName)
+                Text(text = "총 ${totalSongCount}곡", style = Content2, color = Gray600)
             }
         }
     }

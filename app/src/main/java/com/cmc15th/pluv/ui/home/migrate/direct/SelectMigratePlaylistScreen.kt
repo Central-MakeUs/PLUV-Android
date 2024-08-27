@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -33,10 +34,10 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
+import com.cmc15th.pluv.core.designsystem.theme.Content0
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Title1
-import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
 
@@ -114,13 +115,16 @@ fun SelectMigratePlaylistScreen(
                 color = Gray600,
                 textAlign = TextAlign.Start,
             )
+
+            Spacer(modifier = Modifier.size(24.dp))
+
             if (uiState.allPlaylists.isEmpty()) {
                 EmptyPlaylistIcon()
             } else {
                 PlaylistColumn(
                     playlists = uiState.allPlaylists,
                     selectedPlaylist = uiState.selectedPlaylist,
-                    modifier = Modifier.padding(15.dp),
+                    modifier = Modifier.fillMaxSize().padding(15.dp),
                     onPlaylistSelect = {
                         viewModel.setEvent(DirectMigrationUiEvent.SelectPlaylist(it))
                     }
@@ -153,14 +157,16 @@ fun PlaylistColumn(
                     modifier = Modifier
                         .size(140.dp)
                         .border(
-                            if (playlist.id == selectedPlaylist.id) 2.dp else 0.dp,
-                            colorResource(id = R.color.destination_app_title_color)
+                            if (playlist.id == selectedPlaylist.id) 2.4.dp else 0.dp,
+                            colorResource(id = R.color.destination_app_title_color),
+                            shape = RoundedCornerShape(8.dp)
                         )
                         .clickable { onPlaylistSelect(playlist) },
                     imageUrl = playlist.thumbNailUrl,
+                    shape = RoundedCornerShape(8.dp)
                 )
                 Spacer(modifier = Modifier.size(10.dp))
-                Text(text = playlist.name, style = Title4)
+                Text(text = playlist.name, style = Content0)
             }
         }
     }

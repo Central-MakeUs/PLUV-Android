@@ -12,7 +12,7 @@ fun PlaylistCheckBox(
     modifier: Modifier = Modifier,
 ) {
     Icon(
-        painter = painterResource(id = R.drawable.checkbutton),
+        painter = painterResource(id = R.drawable.check_button),
         contentDescription = null,
         modifier = modifier,
         tint = Color.Unspecified

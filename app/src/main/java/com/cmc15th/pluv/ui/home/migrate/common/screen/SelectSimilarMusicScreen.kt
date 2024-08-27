@@ -42,6 +42,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Content3
 import com.cmc15th.pluv.core.designsystem.theme.Content4
 import com.cmc15th.pluv.core.designsystem.theme.Gray200
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
+import com.cmc15th.pluv.core.designsystem.theme.PrimaryDefault
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.core.ui.component.MusicItem
@@ -107,7 +108,7 @@ fun SelectSimilarMusicScreen(
             ) {
                 Text(text = "가장 유사한 항목을 옮길까요?", style = Title1)
                 Spacer(modifier = Modifier.size(8.dp))
-                Text(text = "일부 정보만 일치하는 음악이에요.", style = Content1, color = Color(0xFF8E8E8E))
+                Text(text = "원곡과 일부 정보만 일치하는 음악이에요.", style = Content1, color = Gray600)
 
                 Spacer(modifier = Modifier.size(28.dp))
 //                MusicsHeader(
@@ -307,7 +308,7 @@ fun SimilarMusicPlaylistCard(
             modifier = Modifier
                 .width(4.dp)
                 .height(36.dp)
-                .background(Color(0xFFCB84FF))
+                .background(PrimaryDefault)
                 .align(Alignment.CenterVertically)
         )
         Spacer(modifier = Modifier.size(8.dp))

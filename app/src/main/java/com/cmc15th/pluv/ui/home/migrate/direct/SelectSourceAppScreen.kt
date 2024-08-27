@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
+import com.cmc15th.pluv.core.designsystem.theme.SemiTitle1
 import com.cmc15th.pluv.core.designsystem.theme.Title1
-import com.cmc15th.pluv.core.designsystem.theme.Title3
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.getAppIconRes
 import com.cmc15th.pluv.ui.home.getAppNameRes
@@ -135,7 +135,7 @@ fun SelectAppItem(
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = stringResource(id = appName),
-            style = Title3
+            style = SemiTitle1,
         )
     }
 }

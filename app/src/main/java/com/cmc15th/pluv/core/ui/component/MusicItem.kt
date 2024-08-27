@@ -22,9 +22,10 @@ import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCheckBox
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Gray500
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.SelectAllContent
-import com.cmc15th.pluv.core.designsystem.theme.Title5
+import com.cmc15th.pluv.core.designsystem.theme.SubContent2
 import com.cmc15th.pluv.core.designsystem.theme.Title6
 
 @Composable
@@ -59,11 +60,11 @@ fun MusicItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = musicName, style = Title5, overflow = TextOverflow.Ellipsis,
+                    text = musicName, style = Content1, overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
                 Spacer(modifier = Modifier.size(6.dp))
-                Text(text = artistName, style = Content1)
+                Text(text = artistName, style = SubContent2, color = Gray500)
             }
         }
 

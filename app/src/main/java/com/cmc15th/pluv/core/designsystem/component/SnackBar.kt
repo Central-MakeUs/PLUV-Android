@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cmc15th.pluv.R
-import com.cmc15th.pluv.core.designsystem.theme.Content1
+import com.cmc15th.pluv.core.designsystem.theme.SubContent1
 
 @Composable
 fun PLUVSnackBar(
@@ -41,7 +41,7 @@ fun PLUVSnackBar(
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = content,
-                style = Content1,
+                style = SubContent1,
                 color = Color.White
             )
         }
