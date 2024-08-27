@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,7 +33,8 @@ import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
-import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Content1
+import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.model.Playlist
@@ -100,24 +106,26 @@ fun SelectMigratePlaylistScreen(
                 .padding(24.dp)
         ) {
 
-            Text(text = "옮길 플레이리스트를 선택 해주세요", style = Title1)
-            Spacer(modifier = Modifier.size(28.dp))
+            Text(text = "어떤 플레이리스트를 옮길까요?", style = Title1)
+            Spacer(modifier = Modifier.size(8.dp))
             Text(
-                text = "최대 1개",
-                style = Content2,
+                text = "최대 1개 선택",
+                style = Content1,
+                color = Gray600,
                 textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp)
             )
-            PlaylistColumn(
-                playlists = uiState.allPlaylists,
-                selectedPlaylist = uiState.selectedPlaylist,
-                modifier = Modifier.padding(15.dp),
-                onPlaylistSelect = {
-                    viewModel.setEvent(DirectMigrationUiEvent.SelectPlaylist(it))
-                }
-            )
+            if (uiState.allPlaylists.isEmpty()) {
+                EmptyPlaylistIcon()
+            } else {
+                PlaylistColumn(
+                    playlists = uiState.allPlaylists,
+                    selectedPlaylist = uiState.selectedPlaylist,
+                    modifier = Modifier.padding(15.dp),
+                    onPlaylistSelect = {
+                        viewModel.setEvent(DirectMigrationUiEvent.SelectPlaylist(it))
+                    }
+                )
+            }
         }
     }
 }
@@ -159,8 +167,23 @@ fun PlaylistColumn(
 }
 
 @Composable
-fun SelectPlaylistText() {
-    Text(text = "플레이리스트 선택", style = Title4)
+fun EmptyPlaylistIcon(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            painterResource(id = R.drawable.empty_icon),
+            contentDescription = "empty icon",
+            tint = Color.Unspecified,
+            modifier = Modifier.size(130.dp)
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(text = "플레이리스트가 없어요", style = Content1, color = Gray600)
+    }
 }
 
 @Preview
