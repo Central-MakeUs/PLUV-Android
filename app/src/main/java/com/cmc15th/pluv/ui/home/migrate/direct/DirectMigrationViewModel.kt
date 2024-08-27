@@ -156,6 +156,12 @@ class DirectMigrationViewModel @Inject constructor(
             is DirectMigrationUiEvent.ExecuteMigration -> {
                 migratePlaylist()
             }
+
+            is DirectMigrationUiEvent.ShowExitMigrationDialog -> {
+                _uiState.update {
+                    it.copy(exitDialogState = it.exitDialogState.not())
+                }
+            }
         }
     }
 

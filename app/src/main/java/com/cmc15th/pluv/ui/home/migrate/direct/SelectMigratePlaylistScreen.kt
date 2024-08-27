@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.ExitDialog
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
@@ -68,6 +69,18 @@ fun SelectMigratePlaylistScreen(
         }
     }
 
+    if (uiState.exitDialogState) {
+        ExitDialog(
+            onDismissRequest = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+            },
+            onConfirmClicked = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+                onCloseClick()
+            }
+        )
+    }
+
     if (uiState.isLoading) {
         LoadingDialog(
             icon = { /*TODO*/ },
@@ -84,7 +97,7 @@ fun SelectMigratePlaylistScreen(
                 sourceApp = uiState.selectedSourceApp.name,
                 destinationApp = uiState.selectedDestinationApp.name,
                 onCloseClick = {
-                    onCloseClick()
+                    viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
                 }
             )
         },

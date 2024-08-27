@@ -17,12 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cmc15th.pluv.core.designsystem.component.ExitDialog
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 
 @Composable
@@ -38,6 +40,18 @@ fun ShowNotFoundMusicScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    if (uiState.exitDialogState) {
+        ExitDialog(
+            onDismissRequest = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+            },
+            onConfirmClicked = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+                onCloseClick()
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopBarWithProgress(
@@ -46,7 +60,7 @@ fun ShowNotFoundMusicScreen(
                 sourceApp = uiState.selectedSourceApp.name,
                 destinationApp = uiState.selectedDestinationApp.name,
                 onCloseClick = {
-                    onCloseClick()
+                    viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
                 }
             )
         },

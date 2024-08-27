@@ -10,6 +10,7 @@ import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 
 data class DirectMigrationUiState(
     val isLoading: Boolean = false,
+    val exitDialogState: Boolean = false,
     val sourceApps: List<PlayListApp> = getAllPlaylistApps(),
     val destinationApps: List<PlayListApp> = emptyList(),
     val selectedSourceApp: PlayListApp = PlayListApp.EMPTY,

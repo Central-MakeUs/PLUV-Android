@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.ExitDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
@@ -44,13 +45,25 @@ fun SelectDestinationAppScreen(
 
     val state = viewModel.uiState.collectAsState()
 
+    if (state.value.exitDialogState) {
+        ExitDialog(
+            onDismissRequest = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+            },
+            onConfirmClicked = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+                onCloseClick()
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
             TopBarWithProgress(
                 totalStep = totalStep,
                 currentStep = currentStep,
                 onCloseClick = {
-                    onCloseClick()
+                    viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
                 }
             )
         },

@@ -16,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +23,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.ExitDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.SemiTitle1
 import com.cmc15th.pluv.core.designsystem.theme.Title1
@@ -42,7 +43,19 @@ fun SelectSourceAppScreen(
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectDestinationApp: () -> Unit
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+    if (uiState.value.exitDialogState) {
+        ExitDialog(
+            onDismissRequest = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+            },
+            onConfirmClicked = {
+                viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
+                onCloseClick()
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -50,7 +63,7 @@ fun SelectSourceAppScreen(
                 totalStep = totalStep,
                 currentStep = currentStep,
                 onCloseClick = {
-                    onCloseClick()
+                    viewModel.setEvent(DirectMigrationUiEvent.ShowExitMigrationDialog)
                 }
             )
         },
