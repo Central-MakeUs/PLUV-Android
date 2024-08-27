@@ -71,8 +71,16 @@ fun FeedScreen(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            item(span = { GridItemSpan(2) }) {
+                Text(
+                    text = "최신 플레이리스트",
+                    style = Title3,
+                    color = Gray800,
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+            }
             items(
                 items = uiState.allFeeds,
                 key = { feed -> feed.id }
@@ -86,7 +94,8 @@ fun FeedScreen(
                     onClick = {
                         viewModel.setEvent(FeedUiEvent.SelectFeed(feed.id))
                         navigateToFeedInfo()
-                    }
+                    },
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
         }
