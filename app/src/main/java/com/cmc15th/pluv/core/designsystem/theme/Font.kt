@@ -25,37 +25,51 @@ val robotoFamily = FontFamily(
 val Title1 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
+    lineHeight = 34.sp,
     fontSize = 24.sp
 )
 
 val Title2 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
+    lineHeight = 34.sp,
     fontSize = 22.sp
 )
 
 val Title3 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
+    lineHeight = 34.sp,
     fontSize = 20.sp
 )
 
 val Title4 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
+    lineHeight = 34.sp,
     fontSize = 18.sp
 )
 
 val Title5 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
+    lineHeight = 34.sp,
     fontSize = 16.sp
 )
 
 val Title6 = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.SemiBold,
+    lineHeight = 34.sp,
     fontSize = 14.sp
+)
+
+val SemiTitle1 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Medium,
+    lineHeight = 34.sp,
+    fontSize = 20.sp,
+    color = Gray800
 )
 
 val Content0 = TextStyle(
@@ -88,6 +102,18 @@ val Content4 = TextStyle(
     fontSize = 10.sp
 )
 
+val SubContent1 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 16.sp
+)
+
+val SubContent2 = TextStyle(
+    fontFamily = pretendardFamily,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp
+)
+
 val MigrateAppName = TextStyle(
     fontFamily = pretendardFamily,
     fontWeight = FontWeight.Medium,
@@ -97,7 +123,7 @@ val MigrateAppName = TextStyle(
 
 val SelectedAppName = TextStyle(
     fontFamily = pretendardFamily,
-    fontWeight = FontWeight.SemiBold,
+    fontWeight = FontWeight.Medium,
     fontSize = 14.sp,
     color = Color(0xFF5C5C5C)
 )
