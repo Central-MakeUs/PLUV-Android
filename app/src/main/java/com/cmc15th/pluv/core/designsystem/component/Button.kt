@@ -17,7 +17,7 @@ fun PLUVButton(
     enabled: Boolean = true,
     containerColor: Color,
     contentColor: Color,
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    contentPadding: PaddingValues = PaddingValues(vertical = 19.dp),
     elevation: ButtonElevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 0.dp),
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit
