@@ -68,6 +68,7 @@ fun getProperty(propertyKey: String): String {
 
 dependencies {
 
+    implementation(libs.androidx.compose.material)
     implementation(files("libs/spotify-auth-release-2.1.0.aar"))
     // collapse-toolbar
     implementation(libs.androidx.datastore.preferences)

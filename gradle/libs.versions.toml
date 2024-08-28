@@ -19,8 +19,10 @@ jetbrainsKotlinJvm = "1.9.0"
 googleAuth = "21.0.0"
 dataStore = "1.1.1"
 collapseTollbar = "2.3.5"
+material = "1.6.8"
 
 [libraries]
+androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "material" }
 onebone-toolbar-collapse = { group = "me.onebone", name = "toolbar-compose", version.ref = "collapseTollbar" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
 google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googleAuth" }
