@@ -5,6 +5,7 @@ import com.cmc15th.pluv.core.network.request.MigratePlaylistRequest
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.response.CommonResponse
+import com.cmc15th.pluv.core.network.response.HistoryDetailResponse
 import com.cmc15th.pluv.core.network.response.MigrationProcessResponse
 import com.cmc15th.pluv.core.network.response.ReadPlaylistResponse
 import com.cmc15th.pluv.core.network.response.ReadSourceMusicResponse
@@ -60,4 +61,7 @@ interface MigrationService {
 
     @GET("progress")
     suspend fun getMigrationProgress(): ApiResult<CommonResponse<MigrationProcessResponse>>
+
+    @GET("history/recent")
+    suspend fun getMigrationResult(): ApiResult<CommonResponse<HistoryDetailResponse>>
 }

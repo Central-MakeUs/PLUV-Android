@@ -2,6 +2,7 @@ package com.cmc15th.pluv.core.data.repository
 
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.DestinationMusic
+import com.cmc15th.pluv.core.model.HistoryDetail
 import com.cmc15th.pluv.core.model.MigrationProcess
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
@@ -53,4 +54,6 @@ interface PlaylistRepository {
     ): Flow<ApiResult<String>>
 
     fun getMigrationProcess(): Flow<ApiResult<MigrationProcess>>
+
+    fun getMigrationResult(): Flow<ApiResult<HistoryDetail>>
 }
