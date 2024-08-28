@@ -14,11 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -33,11 +28,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc15th.pluv.R
-import com.cmc15th.pluv.core.designsystem.theme.Gray400
-import com.cmc15th.pluv.core.designsystem.theme.PrimaryDefault
-import com.cmc15th.pluv.core.designsystem.theme.Title5
 import com.cmc15th.pluv.core.ui.component.MusicItemWithIndexed
 import com.cmc15th.pluv.core.ui.component.PlaylistInfo
+import com.cmc15th.pluv.core.ui.component.TransferredMusicTabRow
 import com.cmc15th.pluv.ui.history.viewmodel.HistoryViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -100,31 +93,11 @@ fun HistoryDetailScreen(
                     lastUpdateDate = "2024.02.02",
                 )
 
-                TabRow(
+                TransferredMusicTabRow(
+                    modifier = Modifier.fillMaxWidth(),
                     selectedTabIndex = selectedTabIndex,
-                    indicator = { tabPositions ->
-                        TabRowDefaults.Indicator(
-                            modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                            color = PrimaryDefault
-                        )
-                    }
-                ) {
-                    tabNames.forEachIndexed { index, name ->
-                        Tab(
-                            selected = selectedTabIndex == index,
-                            onClick = {
-                                selectedTabIndex = index
-                            }
-                        ) {
-                            Text(
-                                text = name,
-                                style = Title5,
-                                color = if (selectedTabIndex == index) PrimaryDefault else Gray400,
-                                modifier = Modifier.padding(vertical = 11.5.dp)
-                            )
-                        }
-                    }
-                }
+                    onTabSelected = { index -> selectedTabIndex = index }
+                )
                 Spacer(modifier = Modifier.height(10.dp))
             }
             itemsIndexed(musicItems) { index, music ->
