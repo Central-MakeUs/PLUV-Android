@@ -10,6 +10,7 @@
     <string name="show_more">더보기</string>
     <string name="saved_play_list">저장한 플레이리스트</string>
     <string name="select_source_app">어디에서\n\플레이리스트를 불러올까요?</string>
+    <string name="select_destination_app">어디로\n\플레이리스트를 옮길까요?</string>
     <string name="ask_migrate_playlist">플레이리스트를 옮길까요?</string>
     <string name="spotify">스포티파이</string>
     <string name="apple_music">애플뮤직</string>
@@ -23,4 +24,6 @@
     <string name="migration_direct_description">음원 스트리밍 서비스 연동</string>
     <string name="migration_screenshot_description">이미지로 간편하게</string>
     <string name="pluv">플럽</string>
+    <string name="history">최근 옮긴 항목</string>
+    <string name="saved_feed">저장한 플레이리스트</string>
 </resources>

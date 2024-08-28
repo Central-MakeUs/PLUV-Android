@@ -27,9 +27,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.ExitDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
+import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.SemiTitle1
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.domain.model.PlayListAppType
 import com.cmc15th.pluv.ui.home.getAppIconRes
 import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
@@ -83,15 +85,11 @@ fun SelectSourceAppScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(24.dp)
         ) {
-            Text(
-                text = stringResource(id = R.string.select_source_app),
-                style = Title1
-            )
-            Spacer(modifier = Modifier.size(31.dp))
             SelectAppColumn(
-                playListApps = uiState.value.sourceApps,
+                descriptionRes = R.string.select_source_app,
+                serviceApps = uiState.value.sourceApps.filter { it.playListAppType == PlayListAppType.SERVICE },
+                pluvApps = uiState.value.sourceApps.filterNot { it.playListAppType == PlayListAppType.SERVICE  },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
@@ -103,29 +101,62 @@ fun SelectSourceAppScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
     }
-
 }
 
 @Composable
 fun SelectAppColumn(
-    playListApps: List<PlayListApp>,
+    descriptionRes: Int,
+    serviceApps: List<PlayListApp>,
+    pluvApps: List<PlayListApp>,
     modifier: Modifier = Modifier,
     onClick: (PlayListApp) -> Unit = {}
 ) {
     LazyColumn(
         modifier = modifier
     ) {
-        items(playListApps) { appItem ->
+        item {
+            Text(
+                text = stringResource(id = descriptionRes),
+                style = Title1,
+                modifier = Modifier.padding(24.dp)
+            )
+        }
+        items(serviceApps.filter { it.playListAppType == PlayListAppType.SERVICE }) { appItem ->
             SelectAppItem(
                 appLogo = appItem.getAppIconRes(),
                 appName = appItem.getAppNameRes(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    .padding(vertical = 16.dp, horizontal = 24.dp)
+                    .clickable { onClick(appItem) }
+            )
+        }
+        item {
+            Column {
+                Spacer(modifier = Modifier.size(30.dp))
+                Text(
+                    text = "플럽에서 불러오기",
+                    style = Content1,
+                    modifier = Modifier.padding(start = 24.dp, bottom = 10.dp)
+                )
+            }
+        }
+        items(pluvApps) { appItem ->
+            SelectAppItem(
+                appLogo = appItem.getAppIconRes(),
+                appName = appItem.getAppNameRes(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp, horizontal = 24.dp)
                     .clickable { onClick(appItem) }
             )
         }
     }
+}
+
+@Composable
+fun SelectFeedHistoryColumn() {
+
 }
 
 @Composable

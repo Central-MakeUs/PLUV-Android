@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +31,8 @@ import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.domain.model.PlayListAppType
+import com.cmc15th.pluv.ui.home.getAppIconRes
 import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.ui.home.getSelectedIconRes
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
@@ -104,13 +109,34 @@ fun SelectDestinationAppScreen(
                 SourceToDestinationDots()
             }
             Spacer(modifier = Modifier.size(13.dp))
-            SelectAppColumn(
-                playListApps = state.value.destinationApps,
-                onClick = {
-                    viewModel.setEvent(DirectMigrationUiEvent.SelectDestinationApp(it))
-                    navigateToDisplayMigrationPath()
+            LazyColumn {
+                items(state.value.destinationApps.filter { it.playListAppType == PlayListAppType.SERVICE }) { appItem ->
+                    SelectAppItem(
+                        appLogo = appItem.getAppIconRes(),
+                        appName = appItem.getAppNameRes(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp)
+                            .clickable {
+                                viewModel.setEvent(
+                                    DirectMigrationUiEvent.SelectDestinationApp(
+                                        appItem
+                                    )
+                                )
+                                navigateToDisplayMigrationPath()
+                            }
+                    )
                 }
-            )
+            }
+//            SelectAppColumn(
+//                descriptionRes = R.string.select_destination_app,
+//                serviceApps = state.value.destinationApps.filter { it.playListAppType == PlayListAppType.SERVICE },
+//                pluvApps = state.value.destinationApps.filterNot { it.playListAppType == PlayListAppType.SERVICE },
+//                onClick = {
+//                    viewModel.setEvent(DirectMigrationUiEvent.SelectDestinationApp(it))
+//                    navigateToDisplayMigrationPath()
+//                }
+//            )
         }
     }
 }

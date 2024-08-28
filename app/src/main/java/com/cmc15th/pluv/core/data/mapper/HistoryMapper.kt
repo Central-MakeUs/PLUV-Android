@@ -2,6 +2,7 @@ package com.cmc15th.pluv.core.data.mapper
 
 import com.cmc15th.pluv.core.model.History
 import com.cmc15th.pluv.core.model.HistoryDetail
+import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.network.response.HistoryDetailResponse
 import com.cmc15th.pluv.core.network.response.HistoryResponse
 
@@ -21,4 +22,11 @@ fun HistoryDetailResponse.toHistoryDetail(): HistoryDetail = HistoryDetail(
     imageUrl = imageUrl,
     source = source,
     destination = destination
+)
+
+fun History.toPlaylist() = Playlist(
+    id = id.toString(),
+    thumbNailUrl = imageUrl,
+    songCount = transferredSongCount,
+    name = title
 )

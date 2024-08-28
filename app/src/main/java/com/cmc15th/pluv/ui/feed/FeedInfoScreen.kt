@@ -115,9 +115,9 @@ fun FeedInfoScreen(
                 itemsIndexed(uiState.feedMusics) { index, music ->
                     MusicItemWithIndexed(
                         index = index,
-                        imageUrl = music.imageUrl,
+                        imageUrl = music.thumbNailUrl,
                         musicName = music.title,
-                        artistName = music.artistNames
+                        artistName = music.artistName
                     )
                 }
             }

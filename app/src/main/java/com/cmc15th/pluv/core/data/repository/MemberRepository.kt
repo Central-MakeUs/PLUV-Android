@@ -1,9 +1,9 @@
 package com.cmc15th.pluv.core.data.repository
 
 import com.cmc15th.pluv.core.model.ApiResult
-import com.cmc15th.pluv.core.model.FeedMusic
 import com.cmc15th.pluv.core.model.History
 import com.cmc15th.pluv.core.model.HistoryDetail
+import com.cmc15th.pluv.core.model.SourceMusic
 import kotlinx.coroutines.flow.Flow
 
 interface MemberRepository {
@@ -13,7 +13,7 @@ interface MemberRepository {
 
     fun getHistoryDetail(historyId: Int): Flow<ApiResult<HistoryDetail>>
 
-    fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<FeedMusic>>>
+    fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>>
 
-    fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<FeedMusic>>>
+    fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>>
 }

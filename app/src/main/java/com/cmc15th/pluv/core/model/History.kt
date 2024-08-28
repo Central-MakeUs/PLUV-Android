@@ -1,6 +1,5 @@
 package com.cmc15th.pluv.core.model
 
-
 data class History(
     val id: Int = -1,
     val transferredSongCount: Int = 0,

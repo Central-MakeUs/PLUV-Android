@@ -3,7 +3,10 @@ package com.cmc15th.pluv.ui.home.migrate.direct
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc15th.pluv.core.data.mapper.toPlaylist
+import com.cmc15th.pluv.core.data.repository.FeedRepository
 import com.cmc15th.pluv.core.data.repository.LoginRepository
+import com.cmc15th.pluv.core.data.repository.MemberRepository
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.DestinationMusic
@@ -29,7 +32,9 @@ import javax.inject.Inject
 @HiltViewModel
 class DirectMigrationViewModel @Inject constructor(
     private val playlistRepository: PlaylistRepository,
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val feedRepository: FeedRepository,
+    private val memberRepository: MemberRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DirectMigrationUiState> =
@@ -73,6 +78,14 @@ class DirectMigrationViewModel @Inject constructor(
 
             is DirectMigrationUiEvent.SelectDestinationApp -> {
                 setSelectedDestinationApp(event.selectedApp)
+            }
+
+            is DirectMigrationUiEvent.FetchSavedFeed -> {
+                fetchSavedFeed()
+            }
+
+            is DirectMigrationUiEvent.FetchHistory -> {
+                fetchHistories()
             }
 
             is DirectMigrationUiEvent.SpotifyLogin -> {
@@ -209,9 +222,7 @@ class DirectMigrationViewModel @Inject constructor(
             return
         }
 
-        _uiState.update {
-            it.copy(isLoading = true)
-        }
+        setLoadingState(true)
 
         try {
             val account = task.getResult(ApiException::class.java)
@@ -219,9 +230,7 @@ class DirectMigrationViewModel @Inject constructor(
             getGoogleAccessToken(account.serverAuthCode ?: "")
 
         } catch (e: ApiException) {
-            _uiState.update {
-                it.copy(isLoading = false)
-            }
+            setLoadingState(false)
             sendEffect(DirectMigrationUiEffect.OnFailure)
         }
     }
@@ -241,11 +250,48 @@ class DirectMigrationViewModel @Inject constructor(
                 }
 
                 result.onFailure { code, error ->
-                    _uiState.update {
-                        it.copy(isLoading = false)
-                    }
+                    setLoadingState(false)
                     sendEffect(DirectMigrationUiEffect.OnFailure)
                     Log.d(TAG, "getGoogleAccessToken: $code, $error")
+                }
+            }
+        }
+    }
+
+    private fun fetchSavedFeed() {
+        viewModelScope.launch {
+            setLoadingState(true)
+            feedRepository.getSavedFeeds().collect { result ->
+                result.onSuccess { data ->
+                    _uiState.update {
+                        it.copy(allPlaylists = data.map { feed -> feed.toPlaylist() })
+                    }
+                    sendEffect(DirectMigrationUiEffect.OnFetchPlaylistSuccess)
+                    setLoadingState(false)
+                }
+                result.onFailure { code, error ->
+                    Log.d(TAG, "fetchSavedFeed: $code, $error")
+                    setLoadingState(false)
+                }
+            }
+        }
+    }
+
+    private fun fetchHistories() {
+        viewModelScope.launch {
+            setLoadingState(true)
+            memberRepository.getHistories().collect { result ->
+                result.onSuccess { data ->
+                    _uiState.update {
+                        it.copy(allPlaylists = data.map { history -> history.toPlaylist() })
+                    }
+                    sendEffect(DirectMigrationUiEffect.OnFetchPlaylistSuccess)
+                    setLoadingState(false)
+                }
+
+                result.onFailure { code, error ->
+                    setLoadingState(false)
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
                 }
             }
         }
@@ -313,6 +359,14 @@ class DirectMigrationViewModel @Inject constructor(
                         accessToken = playlistAccessToken.value,
                         playlistId = _uiState.value.selectedPlaylist.id
                     )
+                }
+
+                PlayListApp.History -> {
+                    memberRepository.getTransferSucceedHistoryMusics(_uiState.value.selectedPlaylist.id.toInt())
+                }
+
+                PlayListApp.Feed -> {
+                    feedRepository.getFeedMusics(_uiState.value.selectedPlaylist.id.toLong())
                 }
 
                 else -> {
@@ -500,6 +554,12 @@ class DirectMigrationViewModel @Inject constructor(
                     Log.d(TAG, "getMigrationProcess: $code, $error")
                 }
             }
+        }
+    }
+
+    private fun setLoadingState(isLoading: Boolean) {
+        _uiState.update {
+            it.copy(isLoading = isLoading)
         }
     }
 

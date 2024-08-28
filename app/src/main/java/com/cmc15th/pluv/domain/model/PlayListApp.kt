@@ -1,11 +1,12 @@
 package com.cmc15th.pluv.domain.model
 
-enum class PlayListApp(val appName: String, val sourceName: String) {
-    EMPTY("", ""),
-    Spotify("스포티파이", "spotify"),
+enum class PlayListApp(val appName: String, val sourceName: String, val playListAppType: PlayListAppType) {
+    EMPTY("", "", PlayListAppType.SERVICE),
+    Spotify("스포티파이", "spotify", PlayListAppType.SERVICE),
 //    APPLE_MUSIC("애플뮤직"),
-    YoutubeMusic("유튜브뮤직", "youtube"),
-    PLUV("플럽", "pluv");
+    YoutubeMusic("유튜브뮤직", "youtube", PlayListAppType.SERVICE),
+    History("최근 옮긴 항목", "history", PlayListAppType.HISTORY),
+    Feed("저장한 플레이리스트", "feed", PlayListAppType.FEED);
 //    MELON("멜론");
 
     companion object {
@@ -17,4 +18,10 @@ enum class PlayListApp(val appName: String, val sourceName: String) {
             it != PlayListApp.EMPTY
         }
     }
+}
+
+enum class PlayListAppType {
+    SERVICE,
+    HISTORY,
+    FEED
 }

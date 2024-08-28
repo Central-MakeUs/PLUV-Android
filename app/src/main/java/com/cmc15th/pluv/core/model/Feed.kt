@@ -19,9 +19,3 @@ data class FeedInfo(
     val isBookMarked: Boolean = false,
     val createdAt: String = ""
 )
-
-data class FeedMusic(
-    val title: String = "",
-    val imageUrl: String = "",
-    val artistNames: String = ""
-)
