@@ -78,7 +78,7 @@ fun TopBarWithProgress(
                 },
                 modifier = Modifier
                     .size(46.dp)
-                    .padding(8.dp)
+                    .padding(10.dp)
             ) {
                 Icon(
                     modifier = Modifier.fillMaxSize(),
