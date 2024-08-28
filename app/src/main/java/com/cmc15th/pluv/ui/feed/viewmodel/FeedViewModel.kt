@@ -81,15 +81,18 @@ class FeedViewModel @Inject constructor(
 
     private fun getAllFeeds() {
         viewModelScope.launch {
+            setLoading(true)
             feedRepository.getAllFeed().collect { result ->
                 result.onSuccess { feed ->
                     Log.d(TAG, "getAllFeeds: success $feed")
                     _uiState.update {
                         it.copy(allFeeds = feed)
                     }
+                    setLoading(false)
                 }
 
                 result.onFailure { code, msg ->
+                    setLoading(false)
                     sendEffect(FeedUiEffect.OnFailure(msg))
                     Log.d(TAG, "getAllFeeds: $code $msg")
                 }
@@ -177,6 +180,12 @@ class FeedViewModel @Inject constructor(
                     sendEffect(FeedUiEffect.OnFailure(msg))
                 }
             }
+        }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        _uiState.update {
+            it.copy(isLoading = isLoading)
         }
     }
 

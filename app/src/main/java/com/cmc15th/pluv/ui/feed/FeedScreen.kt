@@ -6,14 +6,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +44,7 @@ import com.cmc15th.pluv.ui.feed.viewmodel.FeedUiEffect
 import com.cmc15th.pluv.ui.feed.viewmodel.FeedUiEvent
 import com.cmc15th.pluv.ui.feed.viewmodel.FeedViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FeedScreen(
     modifier: Modifier = Modifier,
@@ -46,27 +53,35 @@ fun FeedScreen(
     navigateToFeedInfo: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = uiState.isLoading,
+        onRefresh = { viewModel.setEvent(FeedUiEvent.OnLoadAllFeeds) }
+    )
 
     LaunchedEffect(Unit) {
         viewModel.setEvent(FeedUiEvent.OnLoadAllFeeds)
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 is FeedUiEffect.OnFailure -> {
-                     showSnackBar(effect.message)
+                    showSnackBar(effect.message)
                 }
+
                 else -> {}
             }
         }
     }
-    Column(
-        modifier = modifier
+
+    Box(
+        modifier
+            .fillMaxSize()
             .padding(horizontal = 16.dp)
+            .pullRefresh(pullRefreshState)
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(text = "최신 플레이리스트", style = Title3, color = Gray800)
-
-        Spacer(modifier = Modifier.height(16.dp))
+        PullRefreshIndicator(
+            refreshing = uiState.isLoading, state = pullRefreshState,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+        )
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
