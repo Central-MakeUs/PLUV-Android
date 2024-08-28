@@ -236,7 +236,7 @@ fun SelectMigrationMusicScreen(
                     imageUrl = uiState.selectedPlaylist.thumbNailUrl,
                     appName = uiState.selectedSourceApp.appName,
                     playlistName = uiState.selectedPlaylist.name,
-                    totalSongCount = 10
+                    totalSongCount = uiState.selectedPlaylist.songCount
                 )
 
                 Spacer(modifier = Modifier.size(70.dp))
