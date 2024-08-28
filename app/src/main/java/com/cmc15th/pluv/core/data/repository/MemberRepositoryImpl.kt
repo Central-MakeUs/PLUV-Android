@@ -1,12 +1,12 @@
 package com.cmc15th.pluv.core.data.repository
 
-import com.cmc15th.pluv.core.data.mapper.toFeedMusic
 import com.cmc15th.pluv.core.data.mapper.toHistory
 import com.cmc15th.pluv.core.data.mapper.toHistoryDetail
+import com.cmc15th.pluv.core.data.mapper.toSourceMusic
 import com.cmc15th.pluv.core.model.ApiResult
-import com.cmc15th.pluv.core.model.FeedMusic
 import com.cmc15th.pluv.core.model.History
 import com.cmc15th.pluv.core.model.HistoryDetail
+import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.network.service.MemberService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -36,17 +36,17 @@ class MemberRepositoryImpl @Inject constructor(
         })
     }.flowOn(Dispatchers.IO)
 
-    override fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<FeedMusic>>> =
+    override fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>> =
         flow {
             emit(memberService.getTransferSucceedHistoryMusics(historyId).map { result ->
-                result.data.map { it.toFeedMusic() }
+                result.data.map { it.toSourceMusic() }
             })
         }.flowOn(Dispatchers.IO)
 
-    override fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<FeedMusic>>> =
+    override fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>> =
         flow {
             emit(memberService.getTransferFailedHistoryMusics(historyId).map { result ->
-                result.data.map { it.toFeedMusic() }
+                result.data.map { it.toSourceMusic() }
             })
         }.flowOn(Dispatchers.IO)
 

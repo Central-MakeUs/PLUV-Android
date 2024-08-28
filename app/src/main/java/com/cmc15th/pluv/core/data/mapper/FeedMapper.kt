@@ -1,7 +1,8 @@
 package com.cmc15th.pluv.core.data.mapper
 
+import com.cmc15th.pluv.core.model.Feed
 import com.cmc15th.pluv.core.model.FeedInfo
-import com.cmc15th.pluv.core.model.FeedMusic
+import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.network.response.FeedInfoResponse
 import com.cmc15th.pluv.core.network.response.FeedMusicResponse
 import com.cmc15th.pluv.core.network.response.FeedResponse
@@ -26,8 +27,9 @@ fun FeedInfoResponse.toFeedInfo() = FeedInfo(
     createdAt = createdAt
 )
 
-fun FeedMusicResponse.toFeedMusic() = FeedMusic(
-    title = title,
-    imageUrl = imageUrl,
-    artistNames = artistNames
+fun Feed.toPlaylist() = Playlist(
+    id = id.toString(),
+    thumbNailUrl = thumbNailUrl,
+    songCount = totalSongCount,
+    name = title
 )
