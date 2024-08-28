@@ -464,7 +464,11 @@ class DirectMigrationViewModel @Inject constructor(
 
     private fun migratePlaylist() {
         viewModelScope.launch {
-
+            //FIXME 추후  수정예정
+            var sourceName = _uiState.value.selectedSourceApp.sourceName
+            if (sourceName == "feed" || sourceName == "history") {
+                sourceName = _uiState.value.selectedDestinationApp.sourceName
+            }
             val migrateTargetMusicIds =
                 destinationMusicsIds.value + _uiState.value.selectedSimilarMusicsId
 
@@ -478,7 +482,7 @@ class DirectMigrationViewModel @Inject constructor(
                         accessToken = playlistAccessToken.value,
                         musicIds = migrateTargetMusicIds,
                         thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
-                        source = _uiState.value.selectedSourceApp.sourceName,
+                        source = sourceName,
                         transferFailMusics = notTransferMusics
                     )
                 }
@@ -489,7 +493,7 @@ class DirectMigrationViewModel @Inject constructor(
                         accessToken = playlistAccessToken.value,
                         musicIds = migrateTargetMusicIds,
                         thumbnailUrl = _uiState.value.selectedPlaylist.thumbNailUrl,
-                        source = _uiState.value.selectedSourceApp.sourceName,
+                        source = sourceName,
                         transferFailMusics = notTransferMusics
                     )
                 }
@@ -500,12 +504,12 @@ class DirectMigrationViewModel @Inject constructor(
                 }
             }.collect { result ->
 
-                result.onSuccess { data ->
-                    Log.d(TAG, "migratePlaylist: $data")
+                result.onSuccess { _ ->
+                    getMigrationProcess()
                 }
 
                 result.onFailure { code, error ->
-                    Log.d(TAG, "migratePlaylist: $code, $error")
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
                 }
             }
         }
@@ -544,9 +548,15 @@ class DirectMigrationViewModel @Inject constructor(
             playlistRepository.getMigrationProcess().collect { result ->
                 result.onSuccess { data ->
                     _uiState.update {
+                        Log.d(TAG, "getMigrationProcess: $data")
                         it.copy(
                             migrationProcess = data
                         )
+                    }
+                    if (data.willTransferMusicCount != data.transferredMusicCount) {
+                        getMigrationProcess()
+                    } else {
+                        sendEffect(DirectMigrationUiEffect.OnMigrationSuccess)
                     }
                 }
 

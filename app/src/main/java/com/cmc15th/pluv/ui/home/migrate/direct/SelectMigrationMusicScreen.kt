@@ -60,7 +60,7 @@ fun SelectMigrationMusicScreen(
     navigateToSelectPlaylist: () -> Unit,
     navigateToSelectSimilarMusic: () -> Unit = {},
     navigateToShowNotFoundMusic: () -> Unit = {},
-    navigateToExecuteMigrationScreen: () -> Unit
+    navigateToMigrationProcess: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -120,6 +120,7 @@ fun SelectMigrationMusicScreen(
                         dialogVisible = true
                         delay(DialogDuration)
                         dialogVisible = false
+                        navigateToMigrationProcess()
                     }
                 }
 
@@ -345,6 +346,5 @@ fun MusicThumbNail(
 fun SelectMigrationMusicScreenPreview() {
     SelectMigrationMusicScreen(
         navigateToSelectPlaylist = {},
-        navigateToExecuteMigrationScreen = {}
     )
 }

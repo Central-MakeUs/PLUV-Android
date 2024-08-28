@@ -3,6 +3,7 @@ package com.cmc15th.pluv
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -103,10 +104,6 @@ fun PLUVNavHost(
                     showSnackBar = showSnackBar
                 )
             }
-        }
-
-        composable(route = DestinationScreens.MigrationProcess.route) {
-            MigrationProcessScreen()
         }
 
         composable(route = DestinationScreens.HistoryDetail.route) {
@@ -358,9 +355,8 @@ fun PLUVNavHost(
                         pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic.route)
                     },
                     onShowSnackBar = showSnackBar,
-
-                    navigateToExecuteMigrationScreen = {
-                        //TODO 마이그레이션 실행
+                    navigateToMigrationProcess = {
+                        pluvNavController.navigate(DestinationScreens.MigrationProcess.route)
                     },
                     viewModel = pluvNavController.sharedViewModel(
                         navBackStackEntry = navBackStackEntry,
@@ -388,9 +384,9 @@ fun PLUVNavHost(
                     navigateToShowNotFoundMusic = {
                         pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic.route)
                     },
-                    navigateToShowMigrationResult = {
-                        pluvNavController.navigate(DestinationScreens.MigratedResult.route)
-                    }
+                    navigateToMigrationProcess = {
+                        pluvNavController.navigate(DestinationScreens.MigrationProcess.route)
+                    },
                 )
             }
             composable(route = DestinationScreens.ShowNotFoundMusic.route) { navBackStackEntry ->
@@ -403,6 +399,34 @@ fun PLUVNavHost(
                         pluvNavController.navigate(
                             BottomTab.HOME.route,
                             NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
+                    },
+                    navigateToMigrationProcess = {
+                        pluvNavController.navigate(DestinationScreens.MigrationProcess.route)
+                    },
+                )
+            }
+
+            composable(route = DestinationScreens.MigrationProcess.route) { navBackStackEntry ->
+                MigrationProcessScreen(
+                    viewModel = pluvNavController.sharedViewModel(
+                        navBackStackEntry = navBackStackEntry,
+                    ),
+                    showSnackBar = showSnackBar,
+                    navigateToHome = {
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
+                    },
+                    navigateToMigrationResult = {
+                        val navOptions = NavOptions.Builder().setPopUpTo(
+                            pluvNavController.navController.graph.findStartDestination().id,
+                            false
+                        ).build()
+                        pluvNavController.navigate(
+                            DestinationScreens.MigratedResult.route,
+                            navOptions
                         )
                     }
                 )

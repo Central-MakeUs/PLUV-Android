@@ -36,7 +36,7 @@ fun ShowNotFoundMusicScreen(
     onShowSnackBar: (String) -> Unit = {},
     onCloseClick: () -> Unit = {},
     navigateToPrevious: () -> Unit = {},
-    executeMigration: () -> Unit = {}
+    navigateToMigrationProcess: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -73,7 +73,7 @@ fun ShowNotFoundMusicScreen(
                 isNextButtonEnabled = false,
                 onPreviousClick = { },
                 onMigrateClick = {
-
+                    navigateToMigrationProcess()
                 }
             )
         }

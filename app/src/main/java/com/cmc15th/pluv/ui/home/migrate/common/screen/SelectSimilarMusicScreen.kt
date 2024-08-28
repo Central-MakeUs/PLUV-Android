@@ -61,7 +61,7 @@ fun SelectSimilarMusicScreen(
     onCloseClick: () -> Unit = {},
     navigateToSelectMigrationMusic: () -> Unit = {},
     navigateToShowNotFoundMusic: () -> Unit = {},
-    navigateToShowMigrationResult: () -> Unit = {}
+    navigateToMigrationProcess: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -103,7 +103,7 @@ fun SelectSimilarMusicScreen(
                     if (uiState.notFoundMusics.isNotEmpty()) {
                         navigateToShowNotFoundMusic()
                     } else {
-                        viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+                        navigateToMigrationProcess()
                     }
                 }
             )

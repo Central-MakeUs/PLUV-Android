@@ -21,6 +21,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +47,8 @@ import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
 import com.cmc15th.pluv.core.designsystem.theme.Violet200
 import com.cmc15th.pluv.ui.home.getAppIconRes
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEffect
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 
 private const val Progress_Width = 8
@@ -53,10 +56,29 @@ private const val Progress_Width = 8
 @Composable
 fun MigrationProcessScreen(
     viewModel: DirectMigrationViewModel = hiltViewModel(),
+    showSnackBar: (String) -> Unit = {},
+    navigateToHome: () -> Unit = {},
     onStopMigrationClicked: () -> Unit = {},
     navigateToMigrationResult: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
+
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                DirectMigrationUiEffect.OnMigrationSuccess -> {
+                    navigateToMigrationResult()
+                }
+                DirectMigrationUiEffect.OnFailure -> {
+                    showSnackBar("작업 중 오류가 발생했습니다.")
+                    navigateToHome()
+                }
+                else -> {}
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -97,8 +119,8 @@ fun MigrationProcessScreen(
                 modifier = Modifier.align(Alignment.Center),
                 playlistImageUrl = uiState.selectedPlaylist.thumbNailUrl,
                 destinationAppImageRes = uiState.selectedDestinationApp.getAppIconRes(),
-                currentMigrationCount = 4,
-                totalMigrationCount = 10
+                currentMigrationCount = uiState.migrationProcess.transferredMusicCount,
+                totalMigrationCount = uiState.migrationProcess.willTransferMusicCount
             )
 
             MigratePlaylistInfo(
