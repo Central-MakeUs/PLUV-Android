@@ -9,7 +9,8 @@ fun PlayListApp.getAppIconRes(): Int {
         PlayListApp.Spotify -> R.drawable.spotify
 //        PlayListApp.APPLE_MUSIC -> R.drawable.applemusic
         PlayListApp.YoutubeMusic -> R.drawable.youtubemusic
-        PlayListApp.PLUV -> R.drawable.pluv_app_logo
+        PlayListApp.History -> R.drawable.direct_icon
+        PlayListApp.Feed -> R.drawable.feed_icon
     }
 }
 
@@ -19,7 +20,8 @@ fun PlayListApp.getSelectedIconRes(): Int {
         PlayListApp.Spotify -> R.drawable.spotify_selected
 //        PlayListApp.APPLE_MUSIC -> R.drawable.applemusic_selected
         PlayListApp.YoutubeMusic -> R.drawable.youtubemusic_selected
-        PlayListApp.PLUV -> R.drawable.youtubemusic_selected
+        PlayListApp.History -> R.drawable.direct_icon
+        PlayListApp.Feed -> R.drawable.feed_icon
     }
 }
 
@@ -29,6 +31,7 @@ fun PlayListApp.getAppNameRes(): Int {
         PlayListApp.Spotify -> R.string.spotify
 //        PlayListApp.APPLE_MUSIC -> R.string.apple_music
         PlayListApp.YoutubeMusic -> R.string.youtube_music
-        PlayListApp.PLUV -> R.string.pluv
+        PlayListApp.History -> R.string.history
+        PlayListApp.Feed -> R.string.saved_feed
     }
 }

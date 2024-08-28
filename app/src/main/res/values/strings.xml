@@ -23,4 +23,6 @@
     <string name="migration_direct_description">음원 스트리밍 서비스 연동</string>
     <string name="migration_screenshot_description">이미지로 간편하게</string>
     <string name="pluv">플럽</string>
+    <string name="history">최근 옮긴 항목</string>
+    <string name="saved_feed">저장한 플레이리스트</string>
 </resources>
