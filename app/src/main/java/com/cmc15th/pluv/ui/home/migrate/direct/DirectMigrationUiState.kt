@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
 import com.cmc15th.pluv.core.model.DestinationMusic
+import com.cmc15th.pluv.core.model.HistoryDetail
 import com.cmc15th.pluv.core.model.MigrationProcess
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
@@ -23,5 +24,8 @@ data class DirectMigrationUiState(
     val selectedSimilarMusicsId: List<String> = emptyList(), // Index, Music Ids
     val notFoundMusics: List<DestinationMusic> = emptyList(),
     val notTransferMusics: List<DestinationMusic> = emptyList(),
-    val migrationProcess: MigrationProcess = MigrationProcess()
+    val migrationProcess: MigrationProcess = MigrationProcess(),
+    val migrationResult: HistoryDetail = HistoryDetail(),
+    val migratedMusics: List<SourceMusic> = emptyList(),
+    val notMigratedMusics: List<SourceMusic> = emptyList(),
 )

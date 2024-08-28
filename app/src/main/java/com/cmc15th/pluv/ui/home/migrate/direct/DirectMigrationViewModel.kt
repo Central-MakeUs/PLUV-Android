@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -168,6 +169,10 @@ class DirectMigrationViewModel @Inject constructor(
 
             is DirectMigrationUiEvent.ExecuteMigration -> {
                 migratePlaylist()
+            }
+
+            is DirectMigrationUiEvent.OnMigrationSucceed -> {
+                getMigrationResult()
             }
 
             is DirectMigrationUiEvent.ShowExitMigrationDialog -> {
@@ -544,6 +549,8 @@ class DirectMigrationViewModel @Inject constructor(
     }
 
     private fun getMigrationProcess() {
+        Log.d(TAG, "getMigrationProcess: launched")
+
         viewModelScope.launch {
             playlistRepository.getMigrationProcess().collect { result ->
                 result.onSuccess { data ->
@@ -553,15 +560,63 @@ class DirectMigrationViewModel @Inject constructor(
                             migrationProcess = data
                         )
                     }
-                    if (data.willTransferMusicCount != data.transferredMusicCount) {
-                        getMigrationProcess()
-                    } else {
+                    if (data.willTransferMusicCount == data.transferredMusicCount) {
                         sendEffect(DirectMigrationUiEffect.OnMigrationSuccess)
+                        Log.d(TAG, "getMigrationProcess: complete migration")
+                    }
+                    if (data.willTransferMusicCount != data.transferredMusicCount) {
+                        Log.d(TAG, "getMigrationProcess: not complete migration, retrying...")
+                        launch { delay(500L) }
+                        getMigrationProcess()
                     }
                 }
 
                 result.onFailure { code, error ->
                     Log.d(TAG, "getMigrationProcess: $code, $error")
+                }
+            }
+        }
+    }
+
+    private fun getMigrationResult() {
+        viewModelScope.launch {
+            playlistRepository.getMigrationResult().collect { result ->
+                result.onSuccess { data ->
+                    _uiState.update {
+                        it.copy(
+                            migrationResult = data
+                        )
+                    }
+                    getMigratedMusic(data.id)
+                    getNotMigratedMusic(data.id)
+                }
+
+                result.onFailure { code, error ->
+                    Log.d(TAG, "getMigrationResult: $code, $error")
+                }
+            }
+        }
+    }
+
+    private fun getMigratedMusic(historyId: Int) {
+        viewModelScope.launch {
+            memberRepository.getTransferSucceedHistoryMusics(historyId).collect { result ->
+                result.onSuccess { musics ->
+                    _uiState.update {
+                        it.copy(migratedMusics = musics)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getNotMigratedMusic(historyId: Int) {
+        viewModelScope.launch {
+            memberRepository.getTransferFailedHistoryMusics(historyId).collect { result ->
+                result.onSuccess { musics ->
+                    _uiState.update {
+                        it.copy(notMigratedMusics = musics)
+                    }
                 }
             }
         }

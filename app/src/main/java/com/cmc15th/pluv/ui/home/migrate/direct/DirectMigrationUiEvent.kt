@@ -22,5 +22,6 @@ sealed class DirectMigrationUiEvent {
     class SelectAllSourceMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
     class SelectSimilarMusic(val index: Int, val selectedMusicId: String) : DirectMigrationUiEvent()
     data object ExecuteMigration : DirectMigrationUiEvent()
+    data object OnMigrationSucceed : DirectMigrationUiEvent()
     data object ShowExitMigrationDialog : DirectMigrationUiEvent()
 }

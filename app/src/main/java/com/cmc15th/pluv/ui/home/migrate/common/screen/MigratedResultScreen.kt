@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.common.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -7,11 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -27,7 +31,9 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,19 +47,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
+import com.cmc15th.pluv.core.designsystem.component.TopAppBar
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray100
+import com.cmc15th.pluv.core.designsystem.theme.Gray200
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
+import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.Title3
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
-import com.cmc15th.pluv.core.designsystem.theme.Title6
+import com.cmc15th.pluv.core.ui.component.MusicItemWithIndexed
+import com.cmc15th.pluv.core.ui.component.TransferredMusicTabRow
 import com.cmc15th.pluv.ui.home.migrate.common.component.SourceToDestinationText
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MigratedResultScreen(
     modifier: Modifier = Modifier,
@@ -62,6 +73,11 @@ fun MigratedResultScreen(
     navigateToHome: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var selectedTabIndex by remember {
+        mutableIntStateOf(0)
+    }
+
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -78,9 +94,7 @@ fun MigratedResultScreen(
         ModifyPlaylistBottomSheet(
             sheetState = sheetState,
             playlistName = inputPlaylistNameState,
-            //FIXME
-//            imageUrl = uiState.selectedPlaylist.thumbNailUrl,
-            imageUrl = "https://picsum.photos/250/250",
+            imageUrl = uiState.selectedPlaylist.thumbNailUrl,
             onPlaylistNameChanged = {
                 if (it.length <= 10) {
                     inputPlaylistNameState = it
@@ -92,44 +106,79 @@ fun MigratedResultScreen(
         )
     }
 
+    LaunchedEffect(Unit) {
+        showSnackBar("플레이리스트를 옮겼어요")
+        viewModel.setEvent(DirectMigrationUiEvent.OnMigrationSucceed)
+    }
+
+    val musicItems =
+        if (selectedTabIndex == 0) uiState.migratedMusics
+        else uiState.notMigratedMusics
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        MigratedResultTopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(horizontal = 12.dp, vertical = 14.dp)
-        )
-        MigratedPlaylistCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            //FIXME
-            imageUrl = "https://picsum.photos/250/250",
-            playlistName = "플레이리스트 이름",
-            sourceAppName = "소스 앱",
-            destinationAppName = "대상 앱",
-        )
+        Column(
+            modifier = Modifier.fillMaxSize().weight(1f)
+        ) {
+            TopAppBar(
+                description = "옮긴 플레이리스트",
+                onBackClick = navigateToHome
+            )
 
-        PLUVButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 20.dp)
-                .border(1.dp, Gray300, RoundedCornerShape(8.dp)),
-            containerColor = Color.White,
-            contentColor = Color.Black,
-            content = {
-                Text(
-                    text = "정보 수정하기",
-                    style = Title5
-                )
-            },
-            onClick = {
-                isSheetVisible = true
-            },
-        )
+            LazyColumn {
+                item {
+                    Column {
+                        MigratedPlaylistCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp),
+                            imageUrl = uiState.migrationResult.imageUrl,
+                            playlistName = uiState.migrationResult.title,
+                            sourceAppName = uiState.migrationResult.source,
+                            destinationAppName = uiState.migrationResult.destination,
+                            transferredMusicCount = uiState.migrationResult.transferredSongCount,
+                            totalMusicCount = uiState.migrationResult.totalSongCount
+                        )
+                        PLUVButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 105.dp, vertical = 20.dp)
+                                .border(1.dp, Gray300, RoundedCornerShape(8.dp)),
+                            containerColor = Gray200,
+                            contentColor = Gray800,
+                            content = {
+                                Text(
+                                    text = "정보 수정하기",
+                                    style = Content1
+                                )
+                            },
+                            onClick = {
+                                isSheetVisible = true
+                            },
+                        )
+                    }
+                }
+                stickyHeader {
+                    TransferredMusicTabRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        selectedTabIndex = selectedTabIndex,
+                        onTabSelected = { index ->
+                            selectedTabIndex = index
+                        },
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                itemsIndexed(musicItems) { index, music ->
+                    MusicItemWithIndexed(
+                        index = index,
+                        musicName = music.title,
+                        artistName = music.artistName,
+                        imageUrl = music.thumbNailUrl,
+                    )
+                }
+            }
+        }
 
         PLUVButton(
             modifier = Modifier
@@ -141,7 +190,7 @@ fun MigratedResultScreen(
             content = {
                 Text(
                     text = "확인",
-                    style = Title5
+                    style = Content1
                 )
             },
             onClick = {
@@ -186,6 +235,8 @@ fun MigratedPlaylistCard(
     playlistName: String,
     sourceAppName: String,
     destinationAppName: String,
+    transferredMusicCount: Int,
+    totalMusicCount: Int
 ) {
     Card(
         modifier = modifier,
@@ -226,6 +277,7 @@ fun MigratedPlaylistCard(
                     modifier = Modifier
                         .background(Color(0xFFEFF7FE), shape = RoundedCornerShape(4.dp))
                         .padding(horizontal = 6.dp, vertical = 8.dp),
+                    //FIXME
                     sourceApp = sourceAppName,
                     destinationApp = destinationAppName
                 )
@@ -233,8 +285,8 @@ fun MigratedPlaylistCard(
                 Spacer(modifier = Modifier.size(8.dp))
 
                 Text(
-                    text = "7/10곡 완료",
-                    style = Title6,
+                    text = "$transferredMusicCount/${totalMusicCount}곡 완료",
+                    style = Content2,
                     color = Color(0xFF9E22FF),
                     modifier = Modifier
                         .background(Color(0xFFFBF5FF), shape = RoundedCornerShape(4.dp))
@@ -385,6 +437,8 @@ fun MigratedPlaylistCardPreview() {
         playlistName = "플레이리스트 이름",
         sourceAppName = "소스 앱",
         destinationAppName = "대상 앱",
+        transferredMusicCount = 10,
+        totalMusicCount = 20
     )
 }
 
