@@ -139,6 +139,13 @@ fun DisplayMigrationPathScreen(
                             googleLoginResultLauncher.launch(1)
                         }
 
+                        PlayListApp.Feed -> {
+                            viewModel.setEvent(DirectMigrationUiEvent.FetchSavedFeed)
+                        }
+
+                        PlayListApp.History -> {
+                            viewModel.setEvent(DirectMigrationUiEvent.FetchHistory)
+                        }
                         else -> {}
                     }
                 }

@@ -10,7 +10,8 @@ import com.spotify.sdk.android.auth.AuthorizationResponse
 sealed class DirectMigrationUiEvent {
     class SelectSourceApp(val selectedApp: PlayListApp) : DirectMigrationUiEvent()
     class SelectDestinationApp(val selectedApp: PlayListApp) : DirectMigrationUiEvent()
-    data object ExecuteMigration : DirectMigrationUiEvent()
+    data object FetchSavedFeed : DirectMigrationUiEvent()
+    data object FetchHistory : DirectMigrationUiEvent()
     data class GoogleLogin(val task: Task<GoogleSignInAccount>?): DirectMigrationUiEvent()
     data class SpotifyLogin(val task: AuthorizationResponse) : DirectMigrationUiEvent()
     data object OnSourceLoginSuccess : DirectMigrationUiEvent()
@@ -20,5 +21,6 @@ sealed class DirectMigrationUiEvent {
     class SelectSourceMusic(val selectedMusic: SourceMusic) : DirectMigrationUiEvent()
     class SelectAllSourceMusic(val selectAllFlag: Boolean) : DirectMigrationUiEvent()
     class SelectSimilarMusic(val index: Int, val selectedMusicId: String) : DirectMigrationUiEvent()
+    data object ExecuteMigration : DirectMigrationUiEvent()
     data object ShowExitMigrationDialog : DirectMigrationUiEvent()
 }
