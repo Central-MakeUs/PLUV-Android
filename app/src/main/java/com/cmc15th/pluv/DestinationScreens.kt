@@ -1,6 +1,8 @@
 package com.cmc15th.pluv
 
 sealed class DestinationScreens(val route: String) {
+    data object Splash : DestinationScreens(route = "Splash")
+    data object Onboarding : DestinationScreens(route = "Onboarding")
     data object Mypage : DestinationScreens(route = "Mypage")
     data object Login : DestinationScreens(route = "Login")
     data object DirectMigrationRoot : DestinationScreens(route = "DirectMigrationRoot")

@@ -31,6 +31,8 @@ import com.cmc15th.pluv.ui.login.LoginScreen
 import com.cmc15th.pluv.ui.mypage.MypageScreen
 import com.cmc15th.pluv.ui.mypage.UnregisterScreen
 import com.cmc15th.pluv.ui.mypage.UserInfoScreen
+import com.cmc15th.pluv.ui.onboarding.OnboardingScreen
+import com.cmc15th.pluv.ui.splash.SplashScreen
 
 @Composable
 fun PLUVNavHost(
@@ -40,9 +42,34 @@ fun PLUVNavHost(
 
     NavHost(
         navController = pluvNavController.navController,
-        startDestination = DestinationScreens.Login.route
+        startDestination = DestinationScreens.Splash.route
 //        startDestination = DestinationScreens.History.route
     ) {
+
+        composable(route = DestinationScreens.Splash.route) { navBackStackEntry ->
+            val navOptions = NavOptions.Builder().setPopUpTo(
+                pluvNavController.navController.graph.findStartDestination().id,
+                inclusive = true
+            ).build()
+
+            SplashScreen(
+                viewModel = hiltViewModel(navBackStackEntry),
+                navigateToOnboarding = {
+                    pluvNavController.navigate(DestinationScreens.Onboarding.route, navOptions)
+                },
+                navigateToHome = {
+                    pluvNavController.navigate(BottomTab.HOME.route, navOptions)
+                }
+            )
+        }
+
+        composable(route = DestinationScreens.Onboarding.route) { navBackStackEntry ->
+            OnboardingScreen(
+                navigateToLogin = {
+                    pluvNavController.navigateToLogin()
+                }
+            )
+        }
 
         navigation(
             route = DestinationScreens.History.route,
