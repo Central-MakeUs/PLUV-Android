@@ -31,6 +31,7 @@ import com.cmc15th.pluv.ui.login.LoginScreen
 import com.cmc15th.pluv.ui.mypage.MypageScreen
 import com.cmc15th.pluv.ui.mypage.UnregisterScreen
 import com.cmc15th.pluv.ui.mypage.UserInfoScreen
+import com.cmc15th.pluv.ui.mypage.viewmodel.MypageViewModel
 import com.cmc15th.pluv.ui.onboarding.OnboardingScreen
 import com.cmc15th.pluv.ui.splash.SplashScreen
 
@@ -164,10 +165,10 @@ fun PLUVNavHost(
         }
 
         navigation(
-            route = BottomTab.FEED.route,
-            startDestination = DestinationScreens.Feed.route
+            route = DestinationScreens.Feed.route,
+            startDestination = BottomTab.FEED.route
         ) {
-            composable(route = DestinationScreens.Feed.route) { navBackStackEntry ->
+            composable(route = BottomTab.FEED.route) { navBackStackEntry ->
                 FeedScreen(
                     viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
                         navBackStackEntry = navBackStackEntry,
@@ -196,8 +197,11 @@ fun PLUVNavHost(
             route = DestinationScreens.Mypage.route,
             startDestination = BottomTab.MY_PAGE.route
         ) {
-            composable(route = BottomTab.MY_PAGE.route) {
+            composable(route = BottomTab.MY_PAGE.route) { navBackStackEntry ->
                 MypageScreen(
+                    viewModel = pluvNavController.sharedViewModel<MypageViewModel>(
+                        navBackStackEntry = navBackStackEntry,
+                    ),
                     navigateToUserInfo = {
                         pluvNavController.navigate(DestinationScreens.UserInfo.route)
                     },
@@ -216,9 +220,9 @@ fun PLUVNavHost(
                 )
             }
 
-            composable(route = DestinationScreens.UserInfo.route) {
+            composable(route = DestinationScreens.UserInfo.route) { navBackStackEntry ->
                 UserInfoScreen(
-                    viewModel = hiltViewModel(),
+                    viewModel = pluvNavController.sharedViewModel<MypageViewModel>(navBackStackEntry = navBackStackEntry),
                     onBackClick = {
                         pluvNavController.popBackStack()
                     },
@@ -226,9 +230,9 @@ fun PLUVNavHost(
                 )
             }
 
-            composable(route = DestinationScreens.Unregister.route) {
+            composable(route = DestinationScreens.Unregister.route) { navBackStackEntry ->
                 UnregisterScreen(
-                    viewModel = hiltViewModel(),
+                    viewModel = pluvNavController.sharedViewModel<MypageViewModel>(navBackStackEntry = navBackStackEntry),
                     showSnackBar = showSnackBar,
                     onBackClicked = {
                         pluvNavController.popBackStack()
@@ -249,19 +253,6 @@ fun PLUVNavHost(
                 url = url,
                 onBackClick = {
                     pluvNavController.popBackStack()
-                }
-            )
-        }
-
-        composable(route = DestinationScreens.UserInfo.route) {
-            UserInfoScreen(
-                viewModel = hiltViewModel(),
-                onBackClick = {
-                    pluvNavController.popBackStack()
-                },
-                showSnackBar = showSnackBar,
-                navigateToUnregister = {
-                    pluvNavController.navigate(DestinationScreens.Unregister.route)
                 }
             )
         }
