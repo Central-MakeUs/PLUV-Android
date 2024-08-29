@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
+import com.cmc15th.pluv.core.designsystem.theme.Content0
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.GoogleLogin
-import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
 import com.cmc15th.pluv.ui.common.contract.GoogleApiContract
 import com.cmc15th.pluv.ui.common.contract.SpotifyAuthContract
@@ -81,25 +81,17 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = 107.dp),
+                .padding(top = 136.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {
             Icon(
                 modifier = Modifier
-                    .width(102.dp)
-                    .height(38.dp),
+                    .width(109.dp)
+                    .height(39.dp),
                 painter = painterResource(id = R.drawable.pluvlogo),
-                contentDescription = "Pluv Logo"
-            )
-
-            Spacer(modifier = Modifier.size(27.dp))
-
-            Text(
-                text = stringResource(id = R.string.login_welcome),
-                style = Title4,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                contentDescription = "Pluv Logo",
+                tint = Color.Unspecified
             )
         }
 
@@ -107,9 +99,16 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(start = 24.dp, end = 24.dp, bottom = 119.dp),
+                .padding(start = 24.dp, end = 24.dp, bottom = 103.dp),
         ) {
             Column {
+                Text(
+                    text = stringResource(id = R.string.login_welcome),
+                    style = Content0,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(36.dp))
                 LoginButtons(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -179,7 +178,10 @@ fun GoogleLoginButton(
                 Icon(
                     painter = painterResource(id = R.drawable.googlelogin),
                     contentDescription = "Google Login",
-                    modifier = Modifier.padding(start = 24.dp).size(18.dp).align(Alignment.CenterStart),
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .size(18.dp)
+                        .align(Alignment.CenterStart),
                     tint = Color.Unspecified
                 )
                 Text(
@@ -210,7 +212,10 @@ fun SpotifyLoginButton(
                 Icon(
                     painter = painterResource(id = R.drawable.spotifylogin),
                     contentDescription = "Spotify Login",
-                    modifier = Modifier.padding(start = 24.dp).size(18.dp).align(Alignment.CenterStart),
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .size(18.dp)
+                        .align(Alignment.CenterStart),
                     tint = Color.Unspecified
                 )
                 Text(text = stringResource(id = R.string.spotify_login), style = Content2, modifier = Modifier.align(Alignment.Center))
