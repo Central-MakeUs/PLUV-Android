@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title4
+import com.cmc15th.pluv.ui.mypage.viewmodel.MypageUiEffect
 import com.cmc15th.pluv.ui.mypage.viewmodel.MypageUiEvent
 import com.cmc15th.pluv.ui.mypage.viewmodel.MypageViewModel
 
@@ -41,6 +43,20 @@ fun UserInfoScreen(
     navigateToUnregister: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is MypageUiEffect.OnSuccess -> {
+                    showSnackBar(effect.message)
+                }
+                is MypageUiEffect.OnFailure -> {
+                    showSnackBar(effect.message)
+                }
+                else -> {}
+            }
+        }
+    }
 
     Column {
         TopAppBar(description = "회원 정보", onBackClick = { onBackClick() })

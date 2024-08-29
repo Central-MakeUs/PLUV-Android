@@ -16,28 +16,36 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.theme.Content0
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Gray200
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title2
 import com.cmc15th.pluv.core.designsystem.theme.Title3
-import com.cmc15th.pluv.core.designsystem.theme.Title4
+import com.cmc15th.pluv.ui.mypage.viewmodel.MypageViewModel
 
 @Composable
 fun MypageScreen(
+    viewModel: MypageViewModel = hiltViewModel(),
     navigateToUserInfo: () -> Unit = {},
     navigateToWebView: (String, String) -> Unit,
     navigateToHome: () -> Unit = {}
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier.background(Gray200)
     ) {
@@ -49,6 +57,7 @@ fun MypageScreen(
         )
 
         ProfileInfo(
+            nickName = uiState.nickName,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -118,6 +127,7 @@ fun MypageScreen(
 @Composable
 fun ProfileInfo(
     modifier: Modifier = Modifier,
+    nickName: String,
     onUserInfoClick: () -> Unit = {}
 ) {
     Card(
@@ -138,17 +148,27 @@ fun ProfileInfo(
             Spacer(modifier = Modifier.size(16.dp))
             Column {
                 Text(
-                    text = "음악듣는 원숭이",
+                    text = nickName,
                     style = Title2,
                     color = Gray800,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "회원 정보 >",
-                    style = Content1,
-                    color = Gray600,
+                Row(
                     modifier = Modifier.clickable { onUserInfoClick() }
-                )
+                ) {
+                    Text(
+                        text = "회원 정보",
+                        style = Content1,
+                        color = Gray600,
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.rightarrow),
+                        contentDescription = "arrow right",
+                        tint = Gray600,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+
             }
         }
     }
@@ -161,7 +181,7 @@ fun UserInteractionSection(
 ) {
     Text(
         text = description,
-        style = Title4,
+        style = Content0,
         color = Gray800,
         modifier = Modifier
             .fillMaxWidth()

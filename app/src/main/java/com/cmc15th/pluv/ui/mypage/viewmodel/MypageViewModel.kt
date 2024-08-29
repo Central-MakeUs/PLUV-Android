@@ -27,10 +27,9 @@ class MypageViewModel @Inject constructor(
     private val _uiEffect: Channel<MypageUiEffect> = Channel()
     val uiEffect: Flow<MypageUiEffect> = _uiEffect.receiveAsFlow()
 
-
-
     init {
         subscribeEvents()
+        getNickName()
     }
 
     fun setEvent(event: MypageUiEvent) {
@@ -83,7 +82,26 @@ class MypageViewModel @Inject constructor(
 
     private fun onChangeNickname(nickname: String) {
         _uiState.update {
+            if (nickname.length > 10) {
+                return@update it
+            }
             it.copy(modifiedNickName = nickname)
+        }
+    }
+
+    private fun getNickName() {
+        viewModelScope.launch {
+            memberRepository.getNickName().collect { result ->
+                result.onSuccess { nickName ->
+                    _uiState.update {
+                        it.copy(nickName = nickName)
+                    }
+                }
+
+                result.onFailure { _, msg ->
+                    sendEffect(MypageUiEffect.OnFailure(msg))
+                }
+            }
         }
     }
 

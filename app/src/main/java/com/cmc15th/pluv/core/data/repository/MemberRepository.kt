@@ -9,6 +9,10 @@ import kotlinx.coroutines.flow.Flow
 interface MemberRepository {
     fun unRegisterMember(): Flow<ApiResult<String>>
 
+    fun getNickName(): Flow<ApiResult<String>>
+
+    fun changeNickName(nickName: String): Flow<ApiResult<String>>
+
     fun getHistories(): Flow<ApiResult<List<History>>>
 
     fun getHistoryDetail(historyId: Int): Flow<ApiResult<HistoryDetail>>

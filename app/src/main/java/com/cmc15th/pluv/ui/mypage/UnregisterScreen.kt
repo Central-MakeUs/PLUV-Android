@@ -2,7 +2,6 @@ package com.cmc15th.pluv.ui.mypage
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,6 +49,7 @@ fun UnregisterScreen(
                     showSnackBar("회원 탈퇴가 완료되었습니다.")
                     navigateToLogin()
                 }
+                else -> {}
             }
         }
     }
@@ -59,8 +59,8 @@ fun UnregisterScreen(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .weight(1f)
+                .fillMaxWidth()
         ) {
             TopAppBar(description = "회원 탈퇴하기", onBackClick = onBackClicked)
 
@@ -100,7 +100,6 @@ fun UnregisterScreen(
             onClick = { viewModel.setEvent(MypageUiEvent.OnUnRegisterMemberClicked) },
             enabled = uiState.isUnregisterChecked,
             containerColor = Color.Black, contentColor = Color.White,
-            contentPadding = PaddingValues(horizontal = 15.dp),
             modifier = Modifier.fillMaxWidth().padding(24.dp)) {
             Text(text = "회원 탈퇴하기", style = Content0)
         }
