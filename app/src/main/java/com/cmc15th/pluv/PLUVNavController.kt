@@ -40,7 +40,7 @@ class PLUVNavController(
     @Composable
     fun isVisibleBottomBar(): Boolean {
         //Fixme
-        return currentDestination?.route in BottomTab.entries.map { it.route } || currentDestination?.route == DestinationScreens.Feed.route
+        return currentDestination?.route in BottomTab.entries.map { it.route }
     }
 
     fun navigate(route: String, navOptions: NavOptions? = null) {
@@ -52,22 +52,6 @@ class PLUVNavController(
             popUpTo(navController.graph.findStartDestination().id) {
                 inclusive = true
             }
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToHome() {
-        navController.navigate(BottomTab.HOME.route) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                inclusive = true
-            }
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToOnboarding() {
-        navController.navigate(DestinationScreens.Onboarding.route) {
-            popUpTo(navController.graph.findStartDestination().id)
             launchSingleTop = true
         }
     }
@@ -84,7 +68,11 @@ class PLUVNavController(
             launchSingleTop = true
             restoreState = true
         }
-        navigate(tab.route, navOptions)
+        when (tab) {
+            BottomTab.HOME -> navController.navigate(BottomTab.HOME.route, navOptions)
+            BottomTab.FEED -> navController.navigate(DestinationScreens.Feed.route, navOptions)
+            BottomTab.MY_PAGE -> navController.navigate(DestinationScreens.Mypage.route, navOptions)
+        }
     }
 
     @Composable
