@@ -6,7 +6,8 @@ enum class PlayListApp(val appName: String, val sourceName: String, val playList
 //    APPLE_MUSIC("애플뮤직"),
     YoutubeMusic("유튜브뮤직", "youtube", PlayListAppType.SERVICE),
     History("최근 옮긴 항목", "history", PlayListAppType.HISTORY),
-    Feed("저장한 플레이리스트", "feed", PlayListAppType.FEED);
+    Feed("저장한 플레이리스트", "feed", PlayListAppType.FEED),
+    ScreenShot("스크린샷", "screenshot", PlayListAppType.SCREEN_SHOT);
 //    MELON("멜론");
 
     companion object {
@@ -23,5 +24,6 @@ enum class PlayListApp(val appName: String, val sourceName: String, val playList
 enum class PlayListAppType {
     SERVICE,
     HISTORY,
-    FEED
+    FEED,
+    SCREEN_SHOT
 }

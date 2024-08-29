@@ -89,7 +89,7 @@ fun SelectSourceAppScreen(
             SelectAppColumn(
                 descriptionRes = R.string.select_source_app,
                 serviceApps = uiState.value.sourceApps.filter { it.playListAppType == PlayListAppType.SERVICE },
-                pluvApps = uiState.value.sourceApps.filterNot { it.playListAppType == PlayListAppType.SERVICE  },
+                pluvApps = uiState.value.sourceApps.filterNot { it.playListAppType == PlayListAppType.SERVICE || it.playListAppType == PlayListAppType.SCREEN_SHOT },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
