@@ -49,6 +49,24 @@ class PLUVNavController(
 
     fun navigateToLogin() {
         navController.navigate(DestinationScreens.Login.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToHome() {
+        navController.navigate(BottomTab.HOME.route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToOnboarding() {
+        navController.navigate(DestinationScreens.Onboarding.route) {
             popUpTo(navController.graph.findStartDestination().id)
             launchSingleTop = true
         }
