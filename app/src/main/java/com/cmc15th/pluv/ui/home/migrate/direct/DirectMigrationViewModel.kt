@@ -73,6 +73,14 @@ class DirectMigrationViewModel @Inject constructor(
     private fun handleEvent(event: DirectMigrationUiEvent) {
 
         when (event) {
+            is DirectMigrationUiEvent.OnAddScreenShot -> {
+                val currentUris = _uiState.value.screenshotUris.toMutableList()
+                currentUris.addAll(event.uris)
+                _uiState.update {
+                    it.copy(screenshotUris = currentUris)
+                }
+            }
+
             is DirectMigrationUiEvent.SelectSourceApp -> {
                 setSelectedSourceApp(event.selectedApp)
             }
@@ -180,6 +188,7 @@ class DirectMigrationViewModel @Inject constructor(
                     it.copy(exitDialogState = it.exitDialogState.not())
                 }
             }
+
         }
     }
 

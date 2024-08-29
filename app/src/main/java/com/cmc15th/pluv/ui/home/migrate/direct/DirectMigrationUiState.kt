@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
+import android.net.Uri
 import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.core.model.HistoryDetail
 import com.cmc15th.pluv.core.model.MigrationProcess
@@ -12,6 +13,7 @@ import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 data class DirectMigrationUiState(
     val isLoading: Boolean = false,
     val exitDialogState: Boolean = false,
+    val screenshotUris: List<Uri> = emptyList(),
     val sourceApps: List<PlayListApp> = getAllPlaylistApps(),
     val destinationApps: List<PlayListApp> = emptyList(),
     val selectedSourceApp: PlayListApp = PlayListApp.EMPTY,

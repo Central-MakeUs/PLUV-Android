@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
+import android.net.Uri
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.domain.model.PlayListApp
@@ -24,4 +25,5 @@ sealed class DirectMigrationUiEvent {
     data object ExecuteMigration : DirectMigrationUiEvent()
     data object OnMigrationSucceed : DirectMigrationUiEvent()
     data object ShowExitMigrationDialog : DirectMigrationUiEvent()
+    data class OnAddScreenShot(val uris: List<Uri>) : DirectMigrationUiEvent()
 }

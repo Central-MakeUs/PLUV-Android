@@ -1,18 +1,26 @@
 package com.cmc15th.pluv.ui.home.migrate.screenshot
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -25,30 +33,49 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Gray100
 import com.cmc15th.pluv.core.designsystem.theme.Title1
-import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton
+import com.cmc15th.pluv.core.designsystem.theme.pretendardFamily
+import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 
 @Composable
 fun UploadPlaylistScreenShotScreen(
+    viewModel: DirectMigrationViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
     currentStep: Int = 0,
     totalStep: Int = 0,
     onCloseClick: () -> Unit = {},
+    navigateToSelectDestinationApp: () -> Unit = {}
 ) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     var showUploadHelpTextState by remember {
         mutableStateOf(true)
     }
+
+    val pickMedias =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
+            viewModel.setEvent(DirectMigrationUiEvent.OnAddScreenShot(uris))
+        }
 
     Scaffold(
         topBar = {
@@ -61,15 +88,21 @@ fun UploadPlaylistScreenShotScreen(
             )
         },
         bottomBar = {
-            PreviousOrMigrateButton(
+            PLUVButton(
+                onClick = {
+                    viewModel.setEvent(DirectMigrationUiEvent.SelectSourceApp(PlayListApp.ScreenShot))
+                    navigateToSelectDestinationApp()
+                },
+                containerColor = Color.Black,
+                contentColor = Color.White,
+                enabled = uiState.screenshotUris.isNotEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
-                    .size(58.dp),
-                isNextButtonEnabled = true,
-                onPreviousClick = { },
-                onMigrateClick = { }
-            )
+                    .padding(bottom = 32.dp, start = 24.dp, end = 24.dp, top = 10.dp)
+                    .background(Color.White)
+            ) {
+                Text("업로드 완료", style = Content1)
+            }
         }
     ) { paddingValues ->
         Column(
@@ -94,7 +127,11 @@ fun UploadPlaylistScreenShotScreen(
             ScreenShotUploadArea(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = Color(0XFFF7F7F7)),
+                    .background(color = Gray100),
+                images = uiState.screenshotUris,
+                onSelectImagesClick = {
+                    pickMedias.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                },
                 isHelpTextShow = showUploadHelpTextState,
                 onHelpTextCloseClick = { showUploadHelpTextState = false },
                 onHelpButtonClick = {
@@ -208,7 +245,6 @@ fun ScreenShotUploadButton(
 fun ScreenShotUploadHelpText(
     modifier: Modifier = Modifier,
 ) {
-
     Row(
         modifier = modifier,
     ) {
@@ -231,16 +267,6 @@ fun ScreenShotUploadHelpText(
             )
         }
     }
-}
-
-@Composable
-fun ShowHelpButton(
-    onClick: () -> Unit = {}
-) {
-    Text(
-        text = "도움말", style = Content1, fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.drawBehind {  }
-    )
 }
 
 @Preview
