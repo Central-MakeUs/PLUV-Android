@@ -7,6 +7,7 @@ import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.History
 import com.cmc15th.pluv.core.model.HistoryDetail
 import com.cmc15th.pluv.core.model.SourceMusic
+import com.cmc15th.pluv.core.network.request.ChangeNickNameRequest
 import com.cmc15th.pluv.core.network.service.MemberService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +21,18 @@ class MemberRepositoryImpl @Inject constructor(
 
     override fun unRegisterMember(): Flow<ApiResult<String>> = flow {
         emit(memberService.unRegisterMember().map {
+            it.data
+        })
+    }.flowOn(Dispatchers.IO)
+
+    override fun getNickName(): Flow<ApiResult<String>> = flow {
+        emit(memberService.getNickName().map {
+            it.data
+        })
+    }.flowOn(Dispatchers.IO)
+
+    override fun changeNickName(nickName: String): Flow<ApiResult<String>> = flow {
+        emit(memberService.changeNickName(ChangeNickNameRequest(nickName)).map {
             it.data
         })
     }.flowOn(Dispatchers.IO)

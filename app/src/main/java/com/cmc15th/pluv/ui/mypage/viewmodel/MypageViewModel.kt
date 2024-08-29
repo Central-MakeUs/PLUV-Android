@@ -27,10 +27,9 @@ class MypageViewModel @Inject constructor(
     private val _uiEffect: Channel<MypageUiEffect> = Channel()
     val uiEffect: Flow<MypageUiEffect> = _uiEffect.receiveAsFlow()
 
-
-
     init {
         subscribeEvents()
+        getNickName()
     }
 
     fun setEvent(event: MypageUiEvent) {
@@ -83,11 +82,49 @@ class MypageViewModel @Inject constructor(
 
     private fun onChangeNickname(nickname: String) {
         _uiState.update {
+            if (nickname.length > 10) {
+                return@update it
+            }
             it.copy(modifiedNickName = nickname)
         }
     }
 
+    private fun getNickName() {
+        viewModelScope.launch {
+            memberRepository.getNickName().collect { result ->
+                result.onSuccess { nickName ->
+                    _uiState.update {
+                        it.copy(nickName = nickName)
+                    }
+                }
+
+                result.onFailure { _, msg ->
+                    sendEffect(MypageUiEffect.OnFailure(msg))
+                }
+            }
+        }
+    }
+
     private fun changeNickname() {
+        viewModelScope.launch {
+            val originalNickName = _uiState.value.nickName
+            _uiState.update {
+                it.copy(nickName = _uiState.value.modifiedNickName)
+            }
+            memberRepository.changeNickName(_uiState.value.modifiedNickName).collect { result ->
+                result.onSuccess {
+                    sendEffect(MypageUiEffect.OnSuccess("닉네임이 변경됐어요!"))
+                }
+
+                result.onFailure { code, msg ->
+                    // 수정된 닉네임을 원래 닉네임으로 Rollback
+                    _uiState.update {
+                        it.copy(nickName = originalNickName)
+                    }
+                    sendEffect(MypageUiEffect.OnFailure(msg))
+                }
+            }
+        }
         _uiState.update {
             it.copy(nickName = _uiState.value.modifiedNickName)
         }
