@@ -19,10 +19,10 @@ interface MemberService {
     @GET("history/{id}")
     suspend fun getHistoryDetail(@Path("id") historyId: Int): ApiResult<CommonResponse<HistoryDetailResponse>>
 
-    @GET("history/{id}/music/fail")
+    @GET("history/{id}/music/success")
     suspend fun getTransferSucceedHistoryMusics(@Path("id") historyId: Int): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
-    @GET("history/{id}/music/success")
+    @GET("history/{id}/music/fail")
     suspend fun getTransferFailedHistoryMusics(@Path("id") historyId: Int): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
     @GET("history/recent")
