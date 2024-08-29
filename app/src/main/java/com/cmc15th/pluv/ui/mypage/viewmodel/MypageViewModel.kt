@@ -88,6 +88,25 @@ class MypageViewModel @Inject constructor(
     }
 
     private fun changeNickname() {
+        viewModelScope.launch {
+            val originalNickName = _uiState.value.nickName
+            _uiState.update {
+                it.copy(nickName = _uiState.value.modifiedNickName)
+            }
+            memberRepository.changeNickName(_uiState.value.modifiedNickName).collect { result ->
+                result.onSuccess {
+                    sendEffect(MypageUiEffect.OnSuccess("닉네임이 변경됐어요!"))
+                }
+
+                result.onFailure { code, msg ->
+                    // 수정된 닉네임을 원래 닉네임으로 Rollback
+                    _uiState.update {
+                        it.copy(nickName = originalNickName)
+                    }
+                    sendEffect(MypageUiEffect.OnFailure(msg))
+                }
+            }
+        }
         _uiState.update {
             it.copy(nickName = _uiState.value.modifiedNickName)
         }

@@ -55,11 +55,11 @@ fun UserInfoScreen(
                         return@NickNameArea
                     }
                     viewModel.setEvent(MypageUiEvent.OnChangeNicknameClicked)
-                    //FIXME 서버 구현 후 UiEffect에 따라 성공/실패 메세지로 변경
-                    showSnackBar("닉네임이 변경됐어요!.")
                 },
                 onNickNameChange = {
-                    viewModel.setEvent(MypageUiEvent.OnNickNameChanged(it))
+                    if (it.length <= 10) {
+                        viewModel.setEvent(MypageUiEvent.OnNickNameChanged(it))
+                    }
                 },
                 modifiedNickName = uiState.modifiedNickName,
             )
