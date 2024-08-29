@@ -31,6 +31,7 @@ import com.cmc15th.pluv.ui.login.LoginScreen
 import com.cmc15th.pluv.ui.mypage.MypageScreen
 import com.cmc15th.pluv.ui.mypage.UnregisterScreen
 import com.cmc15th.pluv.ui.mypage.UserInfoScreen
+import com.cmc15th.pluv.ui.onboarding.OnboardingScreen
 
 @Composable
 fun PLUVNavHost(
@@ -43,6 +44,14 @@ fun PLUVNavHost(
         startDestination = DestinationScreens.Login.route
 //        startDestination = DestinationScreens.History.route
     ) {
+
+        composable(route = DestinationScreens.Onboarding.route) { navBackStackEntry ->
+            OnboardingScreen(
+                navigateToLogin = {
+                    pluvNavController.navigateToLogin()
+                }
+            )
+        }
 
         navigation(
             route = DestinationScreens.History.route,
