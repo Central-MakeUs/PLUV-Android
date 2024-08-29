@@ -67,7 +67,8 @@ fun getProperty(propertyKey: String): String {
 }
 
 dependencies {
-
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
     implementation(libs.androidx.compose.material)
     implementation(files("libs/spotify-auth-release-2.1.0.aar"))
     // collapse-toolbar
