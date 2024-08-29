@@ -121,7 +121,9 @@ fun PLUVNavHost(
                 )
             }
 
-            composable(route = DestinationScreens.SavedFeedDetail.route) { navBackStackEntry ->
+            composable(
+                route = DestinationScreens.SavedFeedDetail.route,
+            ) { navBackStackEntry ->
                 FeedInfoScreen(
                     viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
                         navBackStackEntry = navBackStackEntry,

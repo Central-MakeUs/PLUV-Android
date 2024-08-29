@@ -24,6 +24,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +35,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.theme.Content1
@@ -47,10 +50,12 @@ import com.cmc15th.pluv.core.designsystem.theme.HomeWhite
 import com.cmc15th.pluv.core.designsystem.theme.PrimaryDefault
 import com.cmc15th.pluv.core.designsystem.theme.Title2
 import com.cmc15th.pluv.core.designsystem.theme.Title4
+import com.cmc15th.pluv.ui.home.viewModel.HomeViewModel
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
     navigateToDirectMigration: () -> Unit = {},
     navigateToScreenShotMigration: () -> Unit = {},
     navigateToHistory: () -> Unit = {},
@@ -58,6 +63,9 @@ fun HomeScreen(
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val playlistItems = listOf(
         "https://picsum.photos/140",
         "https://picsum.photos/140",
@@ -108,7 +116,7 @@ fun HomeScreen(
 
         HistoryArea(
             title = R.string.migrated_play_list,
-            playlistItems = playlistItems,
+            playlistItems = uiState.historiesThumbnailUrl,
             modifier = Modifier.fillMaxWidth(),
             onExpandClick = { navigateToHistory() }
         )
@@ -116,13 +124,11 @@ fun HomeScreen(
         Spacer(modifier = Modifier.size(12.dp))
 
         PlayListRow(
-            playListItems = listOf(
-                "https://picsum.photos/120/120?random=1",
-                "https://picsum.photos/120/120?random=1",
-                "https://picsum.photos/120/120?random=1",
-            ),
+            playListItems = uiState.savedFeedsThumbnailUrl,
             description = "저장한 플레이리스트",
-            modifier = Modifier.fillMaxWidth().background(Color.White),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
             onExpandClick = { navigateToSavedFeed() }
         )
 
@@ -161,11 +167,7 @@ fun HistoryArea(
             tint = Gray400
         )
         PlayListRow(
-            playListItems = listOf(
-                "https://picsum.photos/120/120?random=1",
-                "https://picsum.photos/120/120?random=1",
-                "https://picsum.photos/120/120?random=1",
-            ),
+            playListItems = playlistItems,
             description = "최근 옮긴 항목",
             cardSize = 140.dp,
             modifier = Modifier
@@ -215,7 +217,7 @@ fun PlayListRow(
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp),
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(playListItems) { playList ->
