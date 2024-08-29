@@ -110,6 +110,8 @@ fun UploadPlaylistScreenShotScreen(
 fun ScreenShotUploadArea(
     modifier: Modifier = Modifier,
     isHelpTextShow: Boolean = true,
+    images: List<Uri> = emptyList(),
+    onSelectImagesClick: () -> Unit = {},
     onHelpTextCloseClick: () -> Unit = {},
     onHelpButtonClick: () -> Unit = {}
 ) {
@@ -121,34 +123,57 @@ fun ScreenShotUploadArea(
             modifier = Modifier
                 .size(21.dp)
         )
-        ScreenShotUploadButton(
+        LazyRow(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
-                .height(330.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-        )
+                .fillMaxWidth()
+                .height(330.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+            contentPadding = PaddingValues(horizontal = 24.dp)
+        ) {
+            item {
+                ScreenShotUploadButton(
+                    modifier = Modifier
+                        .width(206.dp)
+                        .fillMaxHeight()
+                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                        .clickable { onSelectImagesClick() }
+                )
+            }
+            items(images) { uri ->
+                Box(
+                    modifier = Modifier
+                        .width(206.dp)
+                        .fillMaxHeight()
+                        .background(color = Color.White, shape = RoundedCornerShape(8.dp))
+                ) {
+                    AsyncImage(
+                        model = uri,
+                        contentDescription = "uploaded image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+            }
+        }
+
         Spacer(
             modifier = Modifier
-                .size(39.dp)
+                .size(76.dp)
         )
         if (isHelpTextShow) {
             ScreenShotUploadHelpText(
                 modifier = Modifier
-                    .wrapContentWidth()
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
                     .background(
                         color = colorResource(
                             id = R.color.blue_light
                         )
                     ),
-                onCloseClick = { onHelpTextCloseClick() }
             )
         }
 
         Spacer(modifier = Modifier.size(16.dp))
-
-        ShowHelpButton(
-            onClick = { onHelpButtonClick() }
-        )
     }
 }
 
@@ -170,41 +195,39 @@ fun ScreenShotUploadButton(
             Icon(
                 painter = painterResource(id = R.drawable.uploadbutton),
                 contentDescription = "upload screenshot",
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(14.dp),
+                tint = Color.Unspecified
             )
         }
         Spacer(modifier = Modifier.size(12.dp))
-        Text(text = "추가하기", style = Content2)
+        Text(text = "이미지 업로드", style = Content2)
     }
 }
 
 @Composable
 fun ScreenShotUploadHelpText(
     modifier: Modifier = Modifier,
-    onCloseClick: () -> Unit = {}
 ) {
 
     Row(
         modifier = modifier,
     ) {
         Row(
-            modifier = Modifier.padding(10.dp),
+            modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "스크린샷 업로드 방법을 확인해보세요",
-                style = Content2,
-                color = colorResource(id = R.color.blue)
+                text = "Tip!",
+                fontFamily = pretendardFamily,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 13.sp,
+                color = Color(0xFF2E81FF),
             )
-            Spacer(modifier = Modifier.size(8.dp))
-            Icon(
-                modifier = Modifier
-                    .size(9.dp)
-                    .clickable { onCloseClick() },
-                painter = painterResource(id = R.drawable.dialogclose),
-                contentDescription = null,
-                tint = colorResource(id = R.color.blue)
+            Spacer(modifier = Modifier.size(12.dp))
+            Text(
+                text = "플레이리스트의 음악의 앨범 커버, 곡명, 가수명이 포함되도록 해주세요!",
+                style = Content2,
+                lineHeight = 20.sp
             )
         }
     }
