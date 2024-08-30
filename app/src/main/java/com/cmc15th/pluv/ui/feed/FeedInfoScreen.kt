@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -156,19 +155,19 @@ fun FeedInfoScreen(
                             }
                         }
                     )
-                    Spacer(modifier = Modifier.size(10.dp))
-                    PLUVButton(
-                        modifier = Modifier
-                            .weight(0.66f)
-                            .height(58.dp),
-                        onClick = { /*TODO*/ },
-                        containerColor = Color.Black,
-                        contentPadding = PaddingValues(vertical = 19.dp),
-                        contentColor = Color.White,
-                        content = {
-                            Text("플레이리스트 옮기기", style = Title5)
-                        }
-                    )
+//                    Spacer(modifier = Modifier.size(10.dp))
+//                    PLUVButton(
+//                        modifier = Modifier
+//                            .weight(0.66f)
+//                            .height(58.dp),
+//                        onClick = { /*TODO*/ },
+//                        containerColor = Color.Black,
+//                        contentPadding = PaddingValues(vertical = 19.dp),
+//                        contentColor = Color.White,
+//                        content = {
+//                            Text("플레이리스트 옮기기", style = Title5)
+//                        }
+//                    )
                 }
             }
         }

@@ -27,4 +27,5 @@ sealed class DirectMigrationUiEvent {
     data object ShowExitMigrationDialog : DirectMigrationUiEvent()
     data class OnAddScreenShot(val uris: List<Uri>) : DirectMigrationUiEvent()
     data object FetchScreenShot : DirectMigrationUiEvent()
+    data object FetchProcess: DirectMigrationUiEvent()
 }

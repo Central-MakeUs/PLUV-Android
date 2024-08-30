@@ -109,9 +109,7 @@ fun SelectMigrationMusicScreen(
 
                         if (uiState.similarMusics.isNotEmpty()) {
                             navigateToSelectSimilarMusic()
-                        }
-
-                        if (uiState.similarMusics.isEmpty() && uiState.notFoundMusics.isNotEmpty()) {
+                        } else if (uiState.notFoundMusics.isNotEmpty()) {
                             navigateToShowNotFoundMusic()
                         }
 
@@ -129,9 +127,8 @@ fun SelectMigrationMusicScreen(
                 }
 
                 is DirectMigrationUiEffect.OnFailure -> {
-                    //TODO 에러 표시
+                    onShowSnackBar("로그인에 실패했어요. 다시 시도해 주세요.")
                 }
-
                 else -> {}
             }
         }

@@ -277,7 +277,7 @@ fun PLUVNavHost(
                             NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
                         )
                     },
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     navigateToSelectDestinationApp = {
@@ -316,7 +316,7 @@ fun PLUVNavHost(
                             NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
                         )
                     },
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     navigateToSelectSource = {
@@ -342,7 +342,7 @@ fun PLUVNavHost(
                             NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
                         )
                     },
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     navigateToSelectDestinationApp = {
@@ -371,7 +371,7 @@ fun PLUVNavHost(
                     navigateToSelectMigrationMusic = {
                         pluvNavController.navigate(DestinationScreens.SelectMigrationMusic.route)
                     },
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     )
                 )
@@ -399,16 +399,23 @@ fun PLUVNavHost(
                     },
                     onShowSnackBar = showSnackBar,
                     navigateToMigrationProcess = {
-                        pluvNavController.navigate(DestinationScreens.MigrationProcess.route)
+                        val navOptions = NavOptions.Builder().setPopUpTo(
+                            pluvNavController.navController.graph.findStartDestination().id,
+                            false
+                        ).build()
+                        pluvNavController.navigate(
+                            DestinationScreens.MigrationProcess.route,
+                            navOptions
+                        )
                     },
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     )
                 )
             }
             composable(route = DestinationScreens.SelectSimilarMusic.route) { navBackStackEntry ->
                 SelectSimilarMusicScreen(
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
@@ -428,13 +435,20 @@ fun PLUVNavHost(
                         pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic.route)
                     },
                     navigateToMigrationProcess = {
-                        pluvNavController.navigate(DestinationScreens.MigrationProcess.route)
+                        val navOptions = NavOptions.Builder().setPopUpTo(
+                            pluvNavController.navController.graph.findStartDestination().id,
+                            false
+                        ).build()
+                        pluvNavController.navigate(
+                            DestinationScreens.MigrationProcess.route,
+                            navOptions
+                        )
                     },
                 )
             }
             composable(route = DestinationScreens.ShowNotFoundMusic.route) { navBackStackEntry ->
                 ShowNotFoundMusicScreen(
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     onShowSnackBar = showSnackBar,
@@ -445,18 +459,37 @@ fun PLUVNavHost(
                         )
                     },
                     navigateToMigrationProcess = {
-                        pluvNavController.navigate(DestinationScreens.MigrationProcess.route)
+                        val navOptions = NavOptions.Builder().setPopUpTo(
+                            pluvNavController.navController.graph.findStartDestination().id,
+                            false
+                        ).build()
+                        pluvNavController.navigate(
+                            DestinationScreens.MigrationProcess.route,
+                            navOptions
+                        )
                     },
                 )
             }
 
             composable(route = DestinationScreens.MigrationProcess.route) { navBackStackEntry ->
                 MigrationProcessScreen(
-                    viewModel = pluvNavController.sharedViewModel(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     showSnackBar = showSnackBar,
                     navigateToHome = {
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
+                    },
+                    onCloseClicked = {
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
+                    },
+                    onStopMigrationClicked = {
                         pluvNavController.navigate(
                             BottomTab.HOME.route,
                             NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
@@ -513,7 +546,10 @@ fun PLUVNavHost(
 object DirectMigrationRoutes {
 
     private val selectSourceAndDestinationRoute = listOf(
-        listOf(DestinationScreens.DirectMigrationSelectSourceApp.route, DestinationScreens.UploadPlaylistScreenShot.route),
+        listOf(
+            DestinationScreens.DirectMigrationSelectSourceApp.route,
+            DestinationScreens.UploadPlaylistScreenShot.route
+        ),
         DestinationScreens.DirectMigrationSelectDestinationApp.route,
         DestinationScreens.ExecuteDirectMigration.route,
         DestinationScreens.SelectMigratePlaylist.route,

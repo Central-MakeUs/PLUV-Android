@@ -18,15 +18,15 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,8 +46,11 @@ class DirectMigrationViewModel @Inject constructor(
 
     private val _uiEvent: MutableSharedFlow<DirectMigrationUiEvent> = MutableSharedFlow()
 
-    private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
-    val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
+//    private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
+//    val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
+
+        private val _uiEffect: MutableSharedFlow<DirectMigrationUiEffect> = MutableSharedFlow()
+    val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.asSharedFlow()
 
     // 이전할 음악 목록들
     private val destinationMusicsIds: MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
@@ -196,6 +199,9 @@ class DirectMigrationViewModel @Inject constructor(
                 }
             }
 
+            DirectMigrationUiEvent.FetchProcess -> {
+                getMigrationProcess()
+            }
         }
     }
 
@@ -223,7 +229,7 @@ class DirectMigrationViewModel @Inject constructor(
 
     private fun sendEffect(effect: DirectMigrationUiEffect) {
         viewModelScope.launch {
-            _uiEffect.send(effect)
+            _uiEffect.emit(effect)
         }
     }
 
@@ -547,11 +553,13 @@ class DirectMigrationViewModel @Inject constructor(
                 }
             }.collect { result ->
 
-                result.onSuccess { _ ->
-                    getMigrationProcess()
+                result.onSuccess {
+                    Log.d(TAG, "migratePlaylist: success")
+                    sendEffect(DirectMigrationUiEffect.OnMigrationStart)
                 }
 
                 result.onFailure { code, error ->
+                    Log.d(TAG, "migratePlaylist:    $code, $error")
                     sendEffect(DirectMigrationUiEffect.OnFailure)
                 }
             }
@@ -590,28 +598,22 @@ class DirectMigrationViewModel @Inject constructor(
         Log.d(TAG, "getMigrationProcess: launched")
 
         viewModelScope.launch {
-            playlistRepository.getMigrationProcess().collect { result ->
-                result.onSuccess { data ->
-                    _uiState.update {
-                        Log.d(TAG, "getMigrationProcess: $data")
-                        it.copy(
-                            migrationProcess = data
-                        )
-                    }
-                    if (data.willTransferMusicCount == data.transferredMusicCount) {
-                        sendEffect(DirectMigrationUiEffect.OnMigrationSuccess)
-                        Log.d(TAG, "getMigrationProcess: complete migration")
-                    }
-                    if (data.willTransferMusicCount != data.transferredMusicCount) {
-                        Log.d(TAG, "getMigrationProcess: not complete migration, retrying...")
-                        launch { delay(500L) }
-                        getMigrationProcess()
-                    }
+            delay(500L)
+            val result = playlistRepository.getMigrationProcess().first()
+            result.onSuccess { data ->
+                Log.d(TAG, "getMigrationProcess: $data")
+                _uiState.update {
+                    it.copy(migrationProcess = data)
                 }
-
-                result.onFailure { code, error ->
-                    Log.d(TAG, "getMigrationProcess: $code, $error")
+                if (data.willTransferMusicCount != data.transferredMusicCount) {
+                    getMigrationProcess() // 마이그레이션이 완료되지 않았다면 함수를 다시 호출
+                    return@onSuccess
                 }
+                Log.d(TAG, "getMigrationProcess: 마이그레이션이 완료되었습니다.")
+                sendEffect(DirectMigrationUiEffect.OnMigrationSuccess)
+            }
+            result.onFailure { code, error ->
+                Log.d(TAG, "getMigrationProcess: $code, $error")
             }
         }
     }

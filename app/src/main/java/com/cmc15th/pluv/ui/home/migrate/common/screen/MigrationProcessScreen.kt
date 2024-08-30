@@ -1,8 +1,10 @@
 package com.cmc15th.pluv.ui.home.migrate.common.screen
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,16 +61,21 @@ fun MigrationProcessScreen(
     showSnackBar: (String) -> Unit = {},
     navigateToHome: () -> Unit = {},
     onStopMigrationClicked: () -> Unit = {},
+    onCloseClicked: () -> Unit = {},
     navigateToMigrationResult: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
-
         viewModel.uiEffect.collect { effect ->
             when (effect) {
+
+                DirectMigrationUiEffect.OnMigrationStart -> {
+                    Log.d("EXEXEX", "MigrationProcessScreen: ${uiState.selectedSourceMusics}")
+                    viewModel.setEvent(DirectMigrationUiEvent.FetchProcess)
+                }
                 DirectMigrationUiEffect.OnMigrationSuccess -> {
+                    Log.d("EXEXEXEXEXEX", "MigrationProcessScreen: sendeffct")
                     navigateToMigrationResult()
                 }
                 DirectMigrationUiEffect.OnFailure -> {
@@ -78,6 +85,10 @@ fun MigrationProcessScreen(
                 else -> {}
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(DirectMigrationUiEvent.ExecuteMigration)
     }
 
     Column(
@@ -111,6 +122,9 @@ fun MigrationProcessScreen(
                             .padding(horizontal = 24.dp)
                             .size(14.dp)
                             .align(Alignment.CenterEnd)
+                            .clickable {
+                                onCloseClicked()
+                            }
                     )
                 }
             }
@@ -144,7 +158,7 @@ fun MigrationProcessScreen(
                 .fillMaxWidth()
                 .background(Color.White)
                 .padding(top = 10.dp, bottom = 34.dp, start = 24.dp, end = 24.dp),
-            onClick = { /*TODO*/ },
+            onClick = { onStopMigrationClicked() },
             containerColor = Color.Black,
             contentColor = Color.White,
             contentPadding = PaddingValues(19.dp),
@@ -183,6 +197,7 @@ fun MigrationProcessCircleIndicator(
         CircularProgressIndicator(
             modifier = Modifier
                 .fillMaxSize(),
+            color = PrimaryDefault,
             trackColor = PrimaryBg,
             strokeWidth = Progress_Width.dp
         )
@@ -241,7 +256,8 @@ fun PlaylistToDestination(
                 .padding(top = 12.dp, bottom = 14.dp)
                 .size(97.dp)
         )
-        Row {
+        Row(
+        ) {
             Text(
                 text = "$currentMigrationCount ",
                 style = Title1,
@@ -327,5 +343,10 @@ fun CircleIndicator(
 @Preview
 @Composable
 fun MigrationProcessScreenPreview() {
-    MigrationProcessScreen()
+    MigrationProcessCircleIndicator(
+        playlistImageUrl = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+        destinationAppImageRes = R.drawable.ic_launcher_foreground,
+        currentMigrationCount = 10,
+        totalMigrationCount = 20
+    )
 }
