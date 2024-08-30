@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +32,9 @@ import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title4
+import com.cmc15th.pluv.core.model.SocialAccount
+import com.cmc15th.pluv.ui.login.GoogleLoginButton
+import com.cmc15th.pluv.ui.login.SpotifyLoginButton
 import com.cmc15th.pluv.ui.mypage.viewmodel.MypageUiEffect
 import com.cmc15th.pluv.ui.mypage.viewmodel.MypageUiEvent
 import com.cmc15th.pluv.ui.mypage.viewmodel.MypageViewModel
@@ -50,9 +54,11 @@ fun UserInfoScreen(
                 is MypageUiEffect.OnSuccess -> {
                     showSnackBar(effect.message)
                 }
+
                 is MypageUiEffect.OnFailure -> {
                     showSnackBar(effect.message)
                 }
+
                 else -> {}
             }
         }
@@ -80,6 +86,36 @@ fun UserInfoScreen(
                 modifiedNickName = uiState.modifiedNickName,
             )
         }
+
+        UserInfoRowArea(title = "연결된 소셜 계정") {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                uiState.integratedSocialSocialAccount.forEach {
+                    Text(
+                        text = it.name,
+                        style = Content0,
+                        color = Gray800,
+                        modifier = Modifier.padding(vertical = 11.dp)
+                    )
+                }
+            }
+        }
+
+        UserInfoRowArea(title = "소셜 계정 추가 연결하기") {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val notIntegratedSocialAccounts =
+                    uiState.integratedSocialSocialAccount.filter { SocialAccount.entries.none { entry -> entry.name == it.name } }
+                if (notIntegratedSocialAccounts.contains(SocialAccount.google)) {
+                    GoogleLoginButton()
+                }
+                if (notIntegratedSocialAccounts.contains(SocialAccount.spotify)) {
+                    SpotifyLoginButton()
+                }
+            }
+        }
         Text(
             text = "회원 탈퇴하기",
             style = Content0,
@@ -93,6 +129,7 @@ fun UserInfoScreen(
 @Composable
 fun UserInfoRowArea(
     title: String,
+    isVisibleDivider: Boolean = true,
     content: @Composable () -> Unit
 ) {
     Column(
@@ -103,6 +140,13 @@ fun UserInfoRowArea(
         Text(text = title, style = Content2, color = Gray600)
         Spacer(modifier = Modifier.height(10.dp))
         content()
+        if (isVisibleDivider) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                color = Gray300,
+                thickness = 1.dp
+            )
+        }
     }
 }
 
