@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.core.network.response
 
+import com.cmc15th.pluv.core.model.SocialAccount
 import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
@@ -8,4 +9,8 @@ data class LoginResponse(
 
 data class GoogleAccessTokenResponse(
     @SerializedName("accessToken") val accessToken: String
+)
+
+data class LoginTypeResponse(
+    @SerializedName("type") val type: SocialAccount
 )

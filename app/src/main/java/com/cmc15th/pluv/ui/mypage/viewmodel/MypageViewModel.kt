@@ -1,8 +1,11 @@
 package com.cmc15th.pluv.ui.mypage.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc15th.pluv.core.data.repository.LoginRepository
 import com.cmc15th.pluv.core.data.repository.MemberRepository
+import com.spotify.sdk.android.auth.AuthorizationResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MypageViewModel @Inject constructor(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val loginRepository: LoginRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<MypageUiState> = MutableStateFlow(MypageUiState())
     val uiState: StateFlow<MypageUiState> = _uiState.asStateFlow()
@@ -30,6 +34,7 @@ class MypageViewModel @Inject constructor(
     init {
         subscribeEvents()
         getNickName()
+        getIntegratedSocialLoginType()
     }
 
     fun setEvent(event: MypageUiEvent) {
@@ -51,19 +56,46 @@ class MypageViewModel @Inject constructor(
             is MypageUiEvent.OnModifyNicknameClicked -> {
                 setNicknameModifying()
             }
+
             is MypageUiEvent.OnNickNameChanged -> {
                 onChangeNickname(event.nickname)
             }
+
             is MypageUiEvent.OnChangeNicknameClicked -> {
                 setNicknameModifying()
                 changeNickname()
-                //TODO 닉네임 변경 API 호출
             }
+
             is MypageUiEvent.OnUnRegisterMemberClicked -> {
                 unRegisterMember()
             }
+
             is MypageUiEvent.OnUnregisterChecked -> {
                 _uiState.update { it.copy(isUnregisterChecked = it.isUnregisterChecked.not()) }
+            }
+
+            is MypageUiEvent.OnAddGoogleAccount -> {
+                Log.d(TAG, "handleEvent: ${event.task}")
+                val idToken = event.task?.result?.idToken
+                if (idToken.isNullOrBlank()) {
+                    sendEffect(MypageUiEffect.OnFailure("구글 계정을 추가하는데 실패했어요. 다시 시도해주세요."))
+                    return
+                }
+                addGoogleAccount(idToken)
+            }
+
+            is MypageUiEvent.OnAddSpotifyAccount -> {
+                val task =  event.task
+                when (task.type) {
+                    AuthorizationResponse.Type.TOKEN -> {
+                        val accessToken = task.accessToken
+                        addSpotifyAccount(accessToken)
+                    }
+
+                    else -> {
+                        sendEffect(MypageUiEffect.OnFailure("스포티파이 계정을 추가하는데 실패했어요. 다시 시도해주세요."))
+                    }
+                }
             }
         }
     }
@@ -105,6 +137,22 @@ class MypageViewModel @Inject constructor(
         }
     }
 
+    private fun getIntegratedSocialLoginType() {
+        viewModelScope.launch {
+            memberRepository.getIntegratedSocialLoginType().collect { result ->
+                result.onSuccess { loginTypeList ->
+                    _uiState.update {
+                        it.copy(integratedSocialSocialAccount = loginTypeList)
+                    }
+                }
+
+                result.onFailure { _, msg ->
+                    sendEffect(MypageUiEffect.OnFailure(msg))
+                }
+            }
+        }
+    }
+
     private fun changeNickname() {
         viewModelScope.launch {
             val originalNickName = _uiState.value.nickName
@@ -130,6 +178,34 @@ class MypageViewModel @Inject constructor(
         }
     }
 
+    private fun addGoogleAccount(idToken: String) {
+        viewModelScope.launch {
+            loginRepository.addGoogleAccount(idToken).collect { result ->
+                result.onSuccess {
+                    sendEffect(MypageUiEffect.OnSuccess("구글 계정이 추가됐어요!"))
+                }
+
+                result.onFailure { _, msg ->
+                    sendEffect(MypageUiEffect.OnFailure(msg))
+                }
+            }
+        }
+    }
+
+    private fun addSpotifyAccount(accessToken: String) {
+        viewModelScope.launch {
+            loginRepository.addSpotifyAccount(accessToken).collect { result ->
+                result.onSuccess {
+                    sendEffect(MypageUiEffect.OnSuccess("스포티파이 계정이 추가됐어요!"))
+                }
+
+                result.onFailure { _, msg ->
+                    sendEffect(MypageUiEffect.OnFailure(msg))
+                }
+            }
+        }
+    }
+
     private fun unRegisterMember() {
         viewModelScope.launch {
             memberRepository.unRegisterMember().collect { result ->
@@ -142,5 +218,9 @@ class MypageViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "MypageViewModel"
     }
 }

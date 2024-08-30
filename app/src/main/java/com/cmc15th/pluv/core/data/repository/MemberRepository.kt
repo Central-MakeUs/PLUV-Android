@@ -3,6 +3,7 @@ package com.cmc15th.pluv.core.data.repository
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.History
 import com.cmc15th.pluv.core.model.HistoryDetail
+import com.cmc15th.pluv.core.model.SocialAccount
 import com.cmc15th.pluv.core.model.SourceMusic
 import kotlinx.coroutines.flow.Flow
 
@@ -20,4 +21,7 @@ interface MemberRepository {
     fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>>
 
     fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>>
+
+    fun getIntegratedSocialLoginType(): Flow<ApiResult<List<SocialAccount>>>
+
 }

@@ -1,5 +1,6 @@
 package com.cmc15th.pluv.ui.mypage
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,11 +29,14 @@ import com.cmc15th.pluv.core.designsystem.component.PLUVTextField
 import com.cmc15th.pluv.core.designsystem.component.TopAppBar
 import com.cmc15th.pluv.core.designsystem.theme.Content0
 import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Gray200
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.model.SocialAccount
+import com.cmc15th.pluv.ui.common.contract.GoogleApiContract
+import com.cmc15th.pluv.ui.common.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.login.GoogleLoginButton
 import com.cmc15th.pluv.ui.login.SpotifyLoginButton
 import com.cmc15th.pluv.ui.mypage.viewmodel.MypageUiEffect
@@ -47,6 +51,18 @@ fun UserInfoScreen(
     navigateToUnregister: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val googleLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = GoogleApiContract()
+    ) { task ->
+        viewModel.setEvent(MypageUiEvent.OnAddGoogleAccount(task))
+    }
+
+    val spotifyLoginResultLauncher = rememberLauncherForActivityResult(
+        contract = SpotifyAuthContract()
+    ) { task ->
+        viewModel.setEvent(MypageUiEvent.OnAddSpotifyAccount(task))
+    }
 
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
@@ -93,7 +109,7 @@ fun UserInfoScreen(
             ) {
                 uiState.integratedSocialSocialAccount.forEach {
                     Text(
-                        text = it.name,
+                        text = it.serviceName,
                         style = Content0,
                         color = Gray800,
                         modifier = Modifier.padding(vertical = 11.dp)
@@ -106,14 +122,23 @@ fun UserInfoScreen(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                Spacer(modifier = Modifier.height(10.dp))
                 val notIntegratedSocialAccounts =
-                    uiState.integratedSocialSocialAccount.filter { SocialAccount.entries.none { entry -> entry.name == it.name } }
-                if (notIntegratedSocialAccounts.contains(SocialAccount.google)) {
-                    GoogleLoginButton()
                     SocialAccount.entries.filter { uiState.integratedSocialSocialAccount.contains(it) }
+                if (notIntegratedSocialAccounts.contains(SocialAccount.google).not()) {
+                    GoogleLoginButton(
+                        modifier = Modifier.border(
+                            1.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp)
+                        ),
+                        description = "Google 연결하기",
+                        onClick = { googleLoginResultLauncher.launch(1) }
+                    )
                 }
-                if (notIntegratedSocialAccounts.contains(SocialAccount.spotify)) {
-                    SpotifyLoginButton()
+                if (notIntegratedSocialAccounts.contains(SocialAccount.spotify).not()) {
+                    SpotifyLoginButton(
+                        description = "Spotify 연결하기",
+                        onClick = { spotifyLoginResultLauncher.launch(1) }
+                    )
                 }
             }
         }
@@ -122,7 +147,7 @@ fun UserInfoScreen(
             style = Content0,
             modifier = Modifier
                 .clickable { navigateToUnregister() }
-                .padding(horizontal = 24.dp)
+                .padding(vertical = 20.dp, horizontal = 24.dp)
         )
     }
 }
@@ -134,17 +159,21 @@ fun UserInfoRowArea(
     content: @Composable () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 20.dp)
+        Modifier.fillMaxWidth()
     ) {
-        Text(text = title, style = Content2, color = Gray600)
-        Spacer(modifier = Modifier.height(10.dp))
-        content()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 20.dp)
+        ) {
+            Text(text = title, style = Content2, color = Gray600)
+            Spacer(modifier = Modifier.height(10.dp))
+            content()
+        }
         if (isVisibleDivider) {
             Divider(
                 modifier = Modifier.fillMaxWidth(),
-                color = Gray300,
+                color = Gray200,
                 thickness = 1.dp
             )
         }
