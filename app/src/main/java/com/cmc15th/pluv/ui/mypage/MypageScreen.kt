@@ -140,7 +140,7 @@ fun ProfileInfo(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.playlistex),
+                painter = painterResource(id = R.drawable.default_profile),
                 contentDescription = "profile image",
                 modifier = Modifier
                     .size(74.dp)
