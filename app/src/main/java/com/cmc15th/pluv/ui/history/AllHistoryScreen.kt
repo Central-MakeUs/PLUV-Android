@@ -65,7 +65,7 @@ fun AllHistoryScreen(
                         tint = Color.Unspecified
                     )
                     Spacer(modifier = Modifier.height(20.dp))
-                    Text("최근 옮긴 항목이 없습니다.", style = Content1, color = Gray600)
+                    Text("최근 옮긴 항목이 없어요", style = Content1, color = Gray600)
                 }
             }
         } else {

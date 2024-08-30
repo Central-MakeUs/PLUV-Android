@@ -234,7 +234,7 @@ fun PlayListRow(
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        text = "${description}이 없어요",
+                        text = "플레이리스트가 없어요",
                         style = Content2,
                     )
                 }

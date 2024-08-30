@@ -76,7 +76,7 @@ fun SavedFeedScreen(
                         tint = Color.Unspecified
                     )
                     Spacer(modifier = Modifier.height(20.dp))
-                    Text("저장된 플레이리스트가 없습니다.", style = Content1, color = Gray600)
+                    Text("저장된 플레이리스트가 없어요", style = Content1, color = Gray600)
                 }
             }
         } else {
