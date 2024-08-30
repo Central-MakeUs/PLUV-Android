@@ -1,15 +1,11 @@
 package com.cmc15th.pluv.core.designsystem.theme
 
-import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -33,6 +29,28 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+//val LightWhiteColorScheme = lightColorScheme(
+//    primary = Color.White,
+//    onPrimary = Color.Black,
+//    secondary = Color.White,
+//    onSecondary = Color.Black,
+//    background = Color.White,
+//    onBackground = Color.Black,
+//    surface = Color.White,
+//    onSurface = Color.Black,
+//    )
+
+val LightWhiteColorScheme = lightColorScheme(
+    primary = Color.White,
+    onPrimary = Color(0xFF333333), // 약간 어두운 회색
+    secondary = Color(0xFFF5F5F5), // 매우 연한 회색
+    onSecondary = Color(0xFF333333),
+    background = Color.White,
+    onBackground = Color(0xFF333333),
+    surface = Color.White,
+    onSurface = Color(0xFF333333),
+)
+
 @Composable
 fun PLUVTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -49,15 +67,15 @@ fun PLUVTheme(
 //        darkTheme -> DarkColorScheme
 //        else -> LightColorScheme
 //    }
-    val colorScheme = lightColorScheme()
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
-    }
+    val colorScheme = LightWhiteColorScheme
+//    val view = LocalView.current
+//    if (!view.isInEditMode) {
+//        SideEffect {
+//            val window = (view.context as Activity).window
+//            window.statusBarColor = colorScheme.primary.toArgb()
+//            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+//        }
+//    }
 
     MaterialTheme(
         colorScheme = colorScheme,
