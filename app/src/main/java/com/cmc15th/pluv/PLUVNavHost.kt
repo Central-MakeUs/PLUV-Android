@@ -324,6 +324,9 @@ fun PLUVNavHost(
                     },
                     navigateToDisplayMigrationPath = {
                         pluvNavController.navigate(DestinationScreens.ExecuteDirectMigration.route)
+                    },
+                    navigateToSelectMigrationMusic = {
+                        pluvNavController.navigate(DestinationScreens.SelectMigrationMusic.route)
                     }
                 )
             }

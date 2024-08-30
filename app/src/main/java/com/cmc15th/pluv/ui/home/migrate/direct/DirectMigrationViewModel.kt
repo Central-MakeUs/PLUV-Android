@@ -205,6 +205,18 @@ class DirectMigrationViewModel @Inject constructor(
             val base64 = uris.map { uri ->
                 imageEncoder.encodeImageUriToBase64(uri)
             }
+            playlistRepository.fetchScreenshotPlaylist(base64).collect { result ->
+                result.onSuccess { musics ->
+                    _uiState.update {
+                        it.copy(
+                            allSourceMusics = musics
+                        )
+                    }
+                }
+                result.onFailure { i, s ->
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
+                }
+            }
             Log.d(TAG, "encodeUriToBase64: ${base64.size} ${base64[0].length}")
         }
     }
@@ -657,5 +669,6 @@ class DirectMigrationViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "DirectMigrationViewModel"
+        private const val READ_PLAYLIST_ERROR = "플레이리스트를 불러오는데 실패했습니다."
     }
 }
