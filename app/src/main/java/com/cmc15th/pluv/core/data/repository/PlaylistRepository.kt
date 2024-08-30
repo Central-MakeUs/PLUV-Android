@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface PlaylistRepository {
     fun fetchScreenshotPlaylist(
         base64EncodedImages: List<String>
-    ): Flow<ApiResult<List<Playlist>>>
+    ): Flow<ApiResult<List<SourceMusic>>>
 
     fun fetchSpotifyPlaylists(
         accessToken: String

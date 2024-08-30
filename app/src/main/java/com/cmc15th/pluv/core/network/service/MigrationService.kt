@@ -21,7 +21,7 @@ interface MigrationService {
     @POST("playlist/ocr/read")
     suspend fun fetchScreenshotPlaylists(
         @Body readScreenshotPlaylistRequest: ReadScreenshotPlaylistRequest
-    ): ApiResult<List<ReadPlaylistResponse>>
+    ): ApiResult<List<ReadSourceMusicResponse>>
 
     @POST("/playlist/spotify/read")
     suspend fun fetchSpotifyPlaylists(

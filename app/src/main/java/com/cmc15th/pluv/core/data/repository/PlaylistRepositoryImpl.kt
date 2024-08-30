@@ -29,14 +29,14 @@ import javax.inject.Inject
 class PlaylistRepositoryImpl @Inject constructor(
     private val migrationService: MigrationService
 ) : PlaylistRepository {
-    override fun fetchScreenshotPlaylist(base64EncodedImages: List<String>): Flow<ApiResult<List<Playlist>>> =
+    override fun fetchScreenshotPlaylist(base64EncodedImages: List<String>): Flow<ApiResult<List<SourceMusic>>> =
         flow {
             emit(
                 migrationService.fetchScreenshotPlaylists(
                     ReadScreenshotPlaylistRequest(base64EncodedImages)
                 ).map { result ->
                     result.map {
-                        it.toPlaylist()
+                        it.toSourceMusic()
                     }
                 }
             )
