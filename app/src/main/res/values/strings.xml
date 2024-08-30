@@ -30,4 +30,5 @@
     <string name="onboarding_description_2">스크린샷으로\n플레이리스트를 옮겨요.</string>
     <string name="onboarding_description_3">플레이리스트의 음악을\n정확도 높게 불러와요.</string>
     <string name="onboarding_description_4">다른 사람들과 함께\n플레이리스트를 공유해요.</string>
+    <string name="screenshot">스크린샷</string>
 </resources>

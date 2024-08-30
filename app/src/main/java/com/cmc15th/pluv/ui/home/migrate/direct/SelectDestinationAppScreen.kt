@@ -45,7 +45,8 @@ fun SelectDestinationAppScreen(
     onCloseClick: () -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectSource: () -> Unit,
-    navigateToDisplayMigrationPath: () -> Unit
+    navigateToDisplayMigrationPath: () -> Unit,
+    navigateToSelectMigrationMusic: () -> Unit = {}
 ) {
 
     val state = viewModel.uiState.collectAsState()
@@ -80,7 +81,13 @@ fun SelectDestinationAppScreen(
                     .size(58.dp),
                 isNextButtonEnabled = false,
                 onPreviousClick = { navigateToSelectSource() },
-                onMigrateClick = { navigateToDisplayMigrationPath() }
+                onMigrateClick = {
+                    if (state.value.selectedSourceApp.playListAppType == PlayListAppType.SCREEN_SHOT) {
+                        navigateToSelectMigrationMusic()
+                    } else {
+                        navigateToDisplayMigrationPath()
+                    }
+                }
             )
         }
     ) { paddingValues ->

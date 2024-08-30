@@ -5,6 +5,7 @@ import com.cmc15th.pluv.core.network.request.ChangeNickNameRequest
 import com.cmc15th.pluv.core.network.response.CommonResponse
 import com.cmc15th.pluv.core.network.response.HistoryDetailResponse
 import com.cmc15th.pluv.core.network.response.HistoryResponse
+import com.cmc15th.pluv.core.network.response.LoginTypeResponse
 import com.cmc15th.pluv.core.network.response.ReadSourceMusicResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -33,6 +34,6 @@ interface MemberService {
     @GET("history/{id}/music/fail")
     suspend fun getTransferFailedHistoryMusics(@Path("id") historyId: Int): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
-    @GET("history/recent")
-    suspend fun getRecentHistory(): ApiResult<CommonResponse<HistoryDetailResponse>>
+    @GET("login/type")
+    suspend fun getIntegratedSocialLoginType(): ApiResult<CommonResponse<List<LoginTypeResponse>>>
 }

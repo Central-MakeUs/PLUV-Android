@@ -3,12 +3,14 @@ package com.cmc15th.pluv.core.ui.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -90,11 +92,17 @@ fun MusicItemWithIndexed(
             .padding(start = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "${index + 1}",
-            style = Title6,
-            color = Gray800,
-        )
+        Box(
+            modifier = Modifier
+                .width(20.dp)  // Text를 위한 고정 너비 설정
+        ) {
+            Text(
+                text = "${index + 1}",
+                style = Title6,
+                color = Gray800,
+                modifier = Modifier.align(Alignment.Center)  // Text를 Box 내에서 중앙 정렬
+            )
+        }
         MusicItem(
             modifier = Modifier
                 .fillMaxWidth()

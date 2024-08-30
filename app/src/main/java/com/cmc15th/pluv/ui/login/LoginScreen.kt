@@ -2,10 +2,10 @@ package com.cmc15th.pluv.ui.login
 
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +28,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.R
+import com.cmc15th.pluv.core.designsystem.component.LoadingIndicator
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.theme.Content0
 import com.cmc15th.pluv.core.designsystem.theme.Content2
@@ -73,10 +76,24 @@ fun LoginScreen(
         }
     }
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Gray.copy(alpha = 0.4f)),
+                contentAlignment = Alignment.Center
+            ) {
+                LoadingIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,8 +128,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(36.dp))
                 LoginButtons(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(54.dp),
+                        .fillMaxWidth(),
                     onGoogleLoginClick = {
                         googleLoginResultLauncher.launch(1)
                     },
@@ -146,14 +162,16 @@ fun LoginButtons(
             modifier = modifier.border(
                 1.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp)
             ),
-            onClick = { onGoogleLoginClick() }
+            onClick = { onGoogleLoginClick() },
+            description = stringResource(id = R.string.google_login)
         )
 
         Spacer(modifier = Modifier.size(14.dp))
 
         SpotifyLoginButton(
             modifier = modifier,
-            onClick = { onSpotifyLoginClick() }
+            onClick = { onSpotifyLoginClick() },
+            description = stringResource(id = R.string.spotify_login)
         )
 
         Spacer(modifier = Modifier.size(14.dp))
@@ -164,13 +182,13 @@ fun LoginButtons(
 fun GoogleLoginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
+    description: String = ""
 ) {
     PLUVButton(
         modifier = modifier,
         onClick = { onClick() },
         containerColor = Color.White,
         contentColor = Color.Black,
-        contentPadding = PaddingValues(0.dp),
         content = {
             Box(
                 modifier = Modifier.fillMaxWidth()
@@ -185,7 +203,7 @@ fun GoogleLoginButton(
                     tint = Color.Unspecified
                 )
                 Text(
-                    text = stringResource(id = R.string.google_login),
+                    text = description,
                     style = GoogleLogin,
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -198,13 +216,13 @@ fun GoogleLoginButton(
 fun SpotifyLoginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
+    description: String = ""
 ) {
     PLUVButton(
         modifier = modifier,
         onClick = { onClick() },
         containerColor = Color(0xFF1ED760),
         contentColor = Color.Black,
-        contentPadding = PaddingValues(0.dp),
         content = {
             Box(
                 modifier = Modifier.fillMaxWidth()
@@ -218,7 +236,7 @@ fun SpotifyLoginButton(
                         .align(Alignment.CenterStart),
                     tint = Color.Unspecified
                 )
-                Text(text = stringResource(id = R.string.spotify_login), style = Content2, modifier = Modifier.align(Alignment.Center))
+                Text(text = description, style = Content2, modifier = Modifier.align(Alignment.Center))
             }
         }
     )

@@ -21,6 +21,7 @@ import com.cmc15th.pluv.ui.home.migrate.common.screen.MigratedResultScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.MigrationProcessScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.SelectSimilarMusicScreen
 import com.cmc15th.pluv.ui.home.migrate.common.screen.ShowNotFoundMusicScreen
+import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectDestinationAppScreen
 import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigratePlaylistScreen
@@ -285,6 +286,25 @@ fun PLUVNavHost(
                 )
             }
 
+            composable(route = DestinationScreens.UploadPlaylistScreenShot.route) { navBackStackEntry ->
+                UploadPlaylistScreenShotScreen(
+                    viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
+                        navBackStackEntry = navBackStackEntry
+                    ),
+                    totalStep = totalSteps,
+                    currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
+                    onCloseClick = {
+                        pluvNavController.navigate(
+                            BottomTab.HOME.route,
+                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+                        )
+                    },
+                    navigateToSelectDestinationApp = {
+                        pluvNavController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp.route)
+                    }
+                )
+            }
+
             composable(route = DestinationScreens.DirectMigrationSelectDestinationApp.route) { navBackStackEntry ->
                 val currentRoute = navBackStackEntry.destination.route
                 SelectDestinationAppScreen(
@@ -304,6 +324,9 @@ fun PLUVNavHost(
                     },
                     navigateToDisplayMigrationPath = {
                         pluvNavController.navigate(DestinationScreens.ExecuteDirectMigration.route)
+                    },
+                    navigateToSelectMigrationMusic = {
+                        pluvNavController.navigate(DestinationScreens.SelectMigrationMusic.route)
                     }
                 )
             }
@@ -468,14 +491,21 @@ fun PLUVNavHost(
             }
         }
 
-        navigation(
-            route = DestinationScreens.ScreenShotMigrationRoot.route,
-            startDestination = DestinationScreens.UploadPlaylistScreenShot.route
-        ) {
-            composable(route = DestinationScreens.UploadPlaylistScreenShot.route) {
-                UploadPlaylistScreenShotScreen()
-            }
-        }
+//        navigation(
+//            route = DestinationScreens.ScreenShotMigrationRoot.route,
+//            startDestination = DestinationScreens.UploadPlaylistScreenShot.route
+//        ) {
+//            composable(route = DestinationScreens.UploadPlaylistScreenShot.route) {
+//                UploadPlaylistScreenShotScreen(
+//                    onCloseClick = {
+//                        pluvNavController.navigate(
+//                            BottomTab.HOME.route,
+//                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
+//                        )
+//                    }
+//                )
+//            }
+//        }
     }
 }
 
@@ -483,7 +513,7 @@ fun PLUVNavHost(
 object DirectMigrationRoutes {
 
     private val selectSourceAndDestinationRoute = listOf(
-        DestinationScreens.DirectMigrationSelectSourceApp.route,
+        listOf(DestinationScreens.DirectMigrationSelectSourceApp.route, DestinationScreens.UploadPlaylistScreenShot.route),
         DestinationScreens.DirectMigrationSelectDestinationApp.route,
         DestinationScreens.ExecuteDirectMigration.route,
         DestinationScreens.SelectMigratePlaylist.route,
@@ -496,6 +526,13 @@ object DirectMigrationRoutes {
 
     fun getCurrentStep(currentRoute: String?): Int {
         selectSourceAndDestinationRoute.forEachIndexed { index, route ->
+            if (route is List<*>) {
+                route.forEach { subRoute ->
+                    if (subRoute == currentRoute) {
+                        return index + 1
+                    }
+                }
+            }
             if (route == currentRoute) {
                 return index + 1
             }

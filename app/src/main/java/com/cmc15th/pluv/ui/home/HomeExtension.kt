@@ -11,6 +11,7 @@ fun PlayListApp.getAppIconRes(): Int {
         PlayListApp.YoutubeMusic -> R.drawable.youtubemusic
         PlayListApp.History -> R.drawable.direct_icon
         PlayListApp.Feed -> R.drawable.feed_icon
+        PlayListApp.ScreenShot -> R.drawable.screenshot_migration_selected
     }
 }
 
@@ -22,6 +23,7 @@ fun PlayListApp.getSelectedIconRes(): Int {
         PlayListApp.YoutubeMusic -> R.drawable.youtubemusic_selected
         PlayListApp.History -> R.drawable.direct_icon
         PlayListApp.Feed -> R.drawable.feed_icon
+        PlayListApp.ScreenShot -> R.drawable.screenshot_migration_selected
     }
 }
 
@@ -33,5 +35,6 @@ fun PlayListApp.getAppNameRes(): Int {
         PlayListApp.YoutubeMusic -> R.string.youtube_music
         PlayListApp.History -> R.string.history
         PlayListApp.Feed -> R.string.saved_feed
+        PlayListApp.ScreenShot -> R.string.screenshot
     }
 }

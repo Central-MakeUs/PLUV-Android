@@ -2,10 +2,12 @@ package com.cmc15th.pluv.core.data.repository
 
 import com.cmc15th.pluv.core.data.mapper.toHistory
 import com.cmc15th.pluv.core.data.mapper.toHistoryDetail
+import com.cmc15th.pluv.core.data.mapper.toSocialAccount
 import com.cmc15th.pluv.core.data.mapper.toSourceMusic
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.History
 import com.cmc15th.pluv.core.model.HistoryDetail
+import com.cmc15th.pluv.core.model.SocialAccount
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.network.request.ChangeNickNameRequest
 import com.cmc15th.pluv.core.network.service.MemberService
@@ -63,4 +65,9 @@ class MemberRepositoryImpl @Inject constructor(
             })
         }.flowOn(Dispatchers.IO)
 
+    override fun getIntegratedSocialLoginType(): Flow<ApiResult<List<SocialAccount>>> = flow {
+        emit(memberService.getIntegratedSocialLoginType().map {
+            it.data.map { type -> type.toSocialAccount() }
+        })
+    }
 }

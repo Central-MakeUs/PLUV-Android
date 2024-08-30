@@ -12,6 +12,7 @@ import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
+import com.cmc15th.pluv.ui.common.ImageEncoder
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
@@ -35,7 +36,8 @@ class DirectMigrationViewModel @Inject constructor(
     private val playlistRepository: PlaylistRepository,
     private val loginRepository: LoginRepository,
     private val feedRepository: FeedRepository,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val imageEncoder: ImageEncoder
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DirectMigrationUiState> =
@@ -73,12 +75,25 @@ class DirectMigrationViewModel @Inject constructor(
     private fun handleEvent(event: DirectMigrationUiEvent) {
 
         when (event) {
+            is DirectMigrationUiEvent.OnAddScreenShot -> {
+                val currentUris = _uiState.value.screenshotUris.toMutableList()
+                currentUris.addAll(event.uris)
+                _uiState.update {
+                    it.copy(screenshotUris = currentUris)
+                }
+            }
+
             is DirectMigrationUiEvent.SelectSourceApp -> {
                 setSelectedSourceApp(event.selectedApp)
             }
 
             is DirectMigrationUiEvent.SelectDestinationApp -> {
                 setSelectedDestinationApp(event.selectedApp)
+            }
+
+            is DirectMigrationUiEvent.FetchScreenShot -> {
+                // uri를 base64로 인코딩
+                encodeUriToBase64()
             }
 
             is DirectMigrationUiEvent.FetchSavedFeed -> {
@@ -180,6 +195,29 @@ class DirectMigrationViewModel @Inject constructor(
                     it.copy(exitDialogState = it.exitDialogState.not())
                 }
             }
+
+        }
+    }
+
+    private fun encodeUriToBase64() {
+        viewModelScope.launch {
+            val uris = _uiState.value.screenshotUris
+            val base64 = uris.map { uri ->
+                imageEncoder.encodeImageUriToBase64(uri)
+            }
+            playlistRepository.fetchScreenshotPlaylist(base64).collect { result ->
+                result.onSuccess { musics ->
+                    _uiState.update {
+                        it.copy(
+                            allSourceMusics = musics
+                        )
+                    }
+                }
+                result.onFailure { i, s ->
+                    sendEffect(DirectMigrationUiEffect.OnFailure)
+                }
+            }
+            Log.d(TAG, "encodeUriToBase64: ${base64.size} ${base64[0].length}")
         }
     }
 
@@ -631,5 +669,6 @@ class DirectMigrationViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "DirectMigrationViewModel"
+        private const val READ_PLAYLIST_ERROR = "플레이리스트를 불러오는데 실패했습니다."
     }
 }

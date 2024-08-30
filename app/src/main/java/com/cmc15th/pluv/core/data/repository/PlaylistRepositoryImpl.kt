@@ -15,6 +15,7 @@ import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.ValidateMusic
 import com.cmc15th.pluv.core.network.request.MigratePlaylistRequest
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
+import com.cmc15th.pluv.core.network.request.ReadScreenshotPlaylistRequest
 import com.cmc15th.pluv.core.network.request.TransferFailMusics
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.service.MigrationService
@@ -28,6 +29,18 @@ import javax.inject.Inject
 class PlaylistRepositoryImpl @Inject constructor(
     private val migrationService: MigrationService
 ) : PlaylistRepository {
+    override fun fetchScreenshotPlaylist(base64EncodedImages: List<String>): Flow<ApiResult<List<SourceMusic>>> =
+        flow {
+            emit(
+                migrationService.fetchScreenshotPlaylists(
+                    ReadScreenshotPlaylistRequest(base64EncodedImages)
+                ).map { result ->
+                    result.map {
+                        it.toSourceMusic()
+                    }
+                }
+            )
+        }
 
     override fun fetchSpotifyPlaylists(
         accessToken: String

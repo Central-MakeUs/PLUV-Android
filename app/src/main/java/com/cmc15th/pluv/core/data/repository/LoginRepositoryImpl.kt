@@ -41,4 +41,16 @@ class LoginRepositoryImpl @Inject constructor(
             }
         )
     }
+
+    override fun addGoogleAccount(idToken: String): Flow<ApiResult<String>> = flow {
+        emit(loginService.addGoogleAccount(GoogleLoginRequest(idToken)).map {
+            it.data
+        })
+    }.flowOn(Dispatchers.IO)
+
+    override fun addSpotifyAccount(accessToken: String): Flow<ApiResult<String>> = flow {
+        emit(loginService.addSpotifyAccount(SpotifyLoginRequest(accessToken)).map {
+            it.data
+        })
+    }
 }

@@ -5,7 +5,9 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -214,19 +216,45 @@ fun PlayListRow(
             }
         }
 
-        LazyRow(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                .height(cardSize)
         ) {
-            items(playListItems) { playList ->
-                PlaylistCard(
-                    imageUrl = playList,
+            if (playListItems.isEmpty()) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.empty_icon), modifier = Modifier.size(60.dp),
+                        contentDescription = "Empty Icon",
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "${description}이 없어요",
+                        style = Content2,
+                    )
+                }
+            }
+            else {
+                LazyRow(
                     modifier = Modifier
-                        .size(cardSize),
-                    shape = RoundedCornerShape(8.dp)
-                )
+                        .fillMaxSize(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    items(playListItems) { playList ->
+                        PlaylistCard(
+                            imageUrl = playList,
+                            modifier = Modifier
+                                .size(cardSize),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                    }
+                }
             }
         }
         Spacer(modifier = Modifier.size(24.dp))
