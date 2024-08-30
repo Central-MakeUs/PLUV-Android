@@ -13,7 +13,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +26,10 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
     private val authRepository: AuthRepository
 ) : ViewModel() {
+
+    private val _uiState: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
+    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
     private val _uiEvent: MutableSharedFlow<LoginUiEvent> = MutableSharedFlow()
 
     private val _uiEffect: Channel<LoginUiEffect> = Channel()
@@ -108,15 +116,18 @@ class LoginViewModel @Inject constructor(
 
     private fun googleLogin(token: String) {
         viewModelScope.launch {
+            setLoadingState(true)
             loginRepository.googleLogin(token).collect { result ->
                 Log.d(TAG, "getAccessTokenBySocialToken: $token")
                 result.onSuccess {
                     saveJwtToken(it.accessToken)
                     sendEffect(LoginUiEffect.OnLoginSuccess)
+                    setLoadingState(false)
                 }
 
                 result.onFailure { i, s ->
                     sendEffect(LoginUiEffect.OnLoginFailure(s ?: "알 수 없는 오류가 발생하였습니다."))
+                    setLoadingState(false)
                 }
             }
         }
@@ -124,14 +135,18 @@ class LoginViewModel @Inject constructor(
 
     private fun spotifyLogin(token: String) {
         viewModelScope.launch {
+            setLoadingState(true)
             loginRepository.spotifyLogin(token).collect { result ->
                 result.onSuccess {
                     saveJwtToken(it.accessToken)
                     sendEffect(LoginUiEffect.OnLoginSuccess)
+                    setLoadingState(false)
+
                 }
 
                 result.onFailure { i, s ->
                     sendEffect(LoginUiEffect.OnLoginFailure(s ?: "알 수 없는 오류가 발생하였습니다."))
+                    setLoadingState(false)
                 }
             }
         }
@@ -141,6 +156,12 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d(TAG, "saveJwtToken: $token")
             authRepository.saveAccessToken(token)
+        }
+    }
+
+    private fun setLoadingState(state: Boolean) {
+        _uiState.update {
+            it.copy(isLoading = state)
         }
     }
 
