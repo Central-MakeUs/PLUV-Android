@@ -291,6 +291,8 @@ fun PLUVNavHost(
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry
                     ),
+                    totalStep = totalSteps,
+                    currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
                     onCloseClick = {
                         pluvNavController.navigate(
                             BottomTab.HOME.route,
@@ -508,7 +510,7 @@ fun PLUVNavHost(
 object DirectMigrationRoutes {
 
     private val selectSourceAndDestinationRoute = listOf(
-        DestinationScreens.DirectMigrationSelectSourceApp.route,
+        listOf(DestinationScreens.DirectMigrationSelectSourceApp.route, DestinationScreens.UploadPlaylistScreenShot.route),
         DestinationScreens.DirectMigrationSelectDestinationApp.route,
         DestinationScreens.ExecuteDirectMigration.route,
         DestinationScreens.SelectMigratePlaylist.route,
@@ -521,6 +523,13 @@ object DirectMigrationRoutes {
 
     fun getCurrentStep(currentRoute: String?): Int {
         selectSourceAndDestinationRoute.forEachIndexed { index, route ->
+            if (route is List<*>) {
+                route.forEach { subRoute ->
+                    if (subRoute == currentRoute) {
+                        return index + 1
+                    }
+                }
+            }
             if (route == currentRoute) {
                 return index + 1
             }

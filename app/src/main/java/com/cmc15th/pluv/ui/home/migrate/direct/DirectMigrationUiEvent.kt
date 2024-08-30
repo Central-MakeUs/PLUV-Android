@@ -13,10 +13,10 @@ sealed class DirectMigrationUiEvent {
     class SelectDestinationApp(val selectedApp: PlayListApp) : DirectMigrationUiEvent()
     data object FetchSavedFeed : DirectMigrationUiEvent()
     data object FetchHistory : DirectMigrationUiEvent()
-    data class GoogleLogin(val task: Task<GoogleSignInAccount>?): DirectMigrationUiEvent()
+    data class GoogleLogin(val task: Task<GoogleSignInAccount>?) : DirectMigrationUiEvent()
     data class SpotifyLogin(val task: AuthorizationResponse) : DirectMigrationUiEvent()
     data object OnSourceLoginSuccess : DirectMigrationUiEvent()
-    data object OnDestinationLoginSuccess: DirectMigrationUiEvent()
+    data object OnDestinationLoginSuccess : DirectMigrationUiEvent()
     class SelectPlaylist(val playlist: Playlist) : DirectMigrationUiEvent()
     data object FetchMusicsByPlaylist : DirectMigrationUiEvent()
     class SelectSourceMusic(val selectedMusic: SourceMusic) : DirectMigrationUiEvent()
@@ -26,4 +26,5 @@ sealed class DirectMigrationUiEvent {
     data object OnMigrationSucceed : DirectMigrationUiEvent()
     data object ShowExitMigrationDialog : DirectMigrationUiEvent()
     data class OnAddScreenShot(val uris: List<Uri>) : DirectMigrationUiEvent()
+    data object FetchScreenShot : DirectMigrationUiEvent()
 }

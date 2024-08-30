@@ -12,6 +12,7 @@ import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
+import com.cmc15th.pluv.ui.common.ImageEncoder
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
@@ -35,7 +36,8 @@ class DirectMigrationViewModel @Inject constructor(
     private val playlistRepository: PlaylistRepository,
     private val loginRepository: LoginRepository,
     private val feedRepository: FeedRepository,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val imageEncoder: ImageEncoder
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<DirectMigrationUiState> =
@@ -87,6 +89,11 @@ class DirectMigrationViewModel @Inject constructor(
 
             is DirectMigrationUiEvent.SelectDestinationApp -> {
                 setSelectedDestinationApp(event.selectedApp)
+            }
+
+            is DirectMigrationUiEvent.FetchScreenShot -> {
+                // uri를 base64로 인코딩
+                encodeUriToBase64()
             }
 
             is DirectMigrationUiEvent.FetchSavedFeed -> {
@@ -189,6 +196,16 @@ class DirectMigrationViewModel @Inject constructor(
                 }
             }
 
+        }
+    }
+
+    private fun encodeUriToBase64() {
+        viewModelScope.launch {
+            val uris = _uiState.value.screenshotUris
+            val base64 = uris.map { uri ->
+                imageEncoder.encodeImageUriToBase64(uri)
+            }
+            Log.d(TAG, "encodeUriToBase64: ${base64.size} ${base64[0].length}")
         }
     }
 

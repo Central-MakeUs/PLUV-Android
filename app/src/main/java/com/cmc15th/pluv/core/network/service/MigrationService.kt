@@ -3,6 +3,7 @@ package com.cmc15th.pluv.core.network.service
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.network.request.MigratePlaylistRequest
 import com.cmc15th.pluv.core.network.request.PlaylistAccessToken
+import com.cmc15th.pluv.core.network.request.ReadScreenshotPlaylistRequest
 import com.cmc15th.pluv.core.network.request.ValidateMusicRequest
 import com.cmc15th.pluv.core.network.response.CommonResponse
 import com.cmc15th.pluv.core.network.response.HistoryDetailResponse
@@ -16,6 +17,11 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface MigrationService {
+
+    @POST("playlist/ocr/read")
+    suspend fun fetchScreenshotPlaylists(
+        @Body readScreenshotPlaylistRequest: ReadScreenshotPlaylistRequest
+    ): ApiResult<List<ReadPlaylistResponse>>
 
     @POST("/playlist/spotify/read")
     suspend fun fetchSpotifyPlaylists(

@@ -131,6 +131,7 @@ fun DisplayMigrationPathScreen(
                     when (
                         uiState.value.selectedSourceApp
                     ) {
+                        PlayListApp.EMPTY -> {}
                         PlayListApp.Spotify -> {
                             spotifyLoginResultLauncher.launch(1)
                         }
@@ -146,7 +147,9 @@ fun DisplayMigrationPathScreen(
                         PlayListApp.History -> {
                             viewModel.setEvent(DirectMigrationUiEvent.FetchHistory)
                         }
-                        else -> {}
+                        PlayListApp.ScreenShot -> {
+                            viewModel.setEvent(DirectMigrationUiEvent.FetchScreenShot)
+                        }
                     }
                 }
             )
