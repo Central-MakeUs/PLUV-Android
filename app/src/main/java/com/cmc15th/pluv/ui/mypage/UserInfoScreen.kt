@@ -110,6 +110,7 @@ fun UserInfoScreen(
                     uiState.integratedSocialSocialAccount.filter { SocialAccount.entries.none { entry -> entry.name == it.name } }
                 if (notIntegratedSocialAccounts.contains(SocialAccount.google)) {
                     GoogleLoginButton()
+                    SocialAccount.entries.filter { uiState.integratedSocialSocialAccount.contains(it) }
                 }
                 if (notIntegratedSocialAccounts.contains(SocialAccount.spotify)) {
                     SpotifyLoginButton()
