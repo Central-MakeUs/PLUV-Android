@@ -24,6 +24,7 @@ accompanist = "0.29.1-alpha"
 
 
 [libraries]
+accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "material" }
