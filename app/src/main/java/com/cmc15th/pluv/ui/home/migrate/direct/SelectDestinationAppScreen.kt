@@ -46,7 +46,6 @@ fun SelectDestinationAppScreen(
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectSource: () -> Unit,
     navigateToDisplayMigrationPath: () -> Unit,
-    navigateToSelectMigrationMusic: () -> Unit = {}
 ) {
 
     val state = viewModel.uiState.collectAsState()

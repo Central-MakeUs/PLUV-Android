@@ -328,9 +328,6 @@ fun PLUVNavHost(
                     navigateToDisplayMigrationPath = {
                         pluvNavController.navigate(DestinationScreens.ExecuteDirectMigration.route)
                     },
-                    navigateToSelectMigrationMusic = {
-                        pluvNavController.navigate(DestinationScreens.SelectMigrationMusic.route)
-                    }
                 )
             }
 
@@ -345,6 +342,7 @@ fun PLUVNavHost(
                             NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
                         )
                     },
+                    showSnackBar = showSnackBar,
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
@@ -353,6 +351,9 @@ fun PLUVNavHost(
                     },
                     navigateToSelectPlaylist = {
                         pluvNavController.navigate(DestinationScreens.SelectMigratePlaylist.route)
+                    },
+                    navigateToSelectMigrationMusic = {
+                        pluvNavController.navigate(DestinationScreens.SelectMigrationMusic.route)
                     }
                 )
             }

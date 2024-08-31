@@ -46,9 +46,11 @@ fun DisplayMigrationPathScreen(
     currentStep: Int = 0,
     totalStep: Int = 0,
     onCloseClick: () -> Unit = {},
+    showSnackBar: (String) -> Unit = {},
     viewModel: DirectMigrationViewModel = hiltViewModel(),
     navigateToSelectDestinationApp: () -> Unit,
-    navigateToSelectPlaylist: () -> Unit = {}
+    navigateToSelectPlaylist: () -> Unit = {},
+    navigateToSelectMigrationMusic: () -> Unit = {}
 ) {
     val googleLoginResultLauncher = rememberLauncherForActivityResult(
         contract = GoogleApiContract()
@@ -74,11 +76,13 @@ fun DisplayMigrationPathScreen(
                 DirectMigrationUiEffect.OnFetchPlaylistSuccess -> {
                     navigateToSelectPlaylist()
                 }
-
-                DirectMigrationUiEffect.OnFailure -> {
-                    //TODO 에러 표시
+                DirectMigrationUiEffect.OnFetchMusicSuccess -> {
+                    navigateToSelectMigrationMusic()
                 }
 
+                DirectMigrationUiEffect.OnFailure -> {
+                    showSnackBar("플레이리스트를 불러오는데 실패했어요. 잠시후 시도해주세요.")
+                }
                 else -> {}
             }
         }

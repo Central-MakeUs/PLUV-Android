@@ -207,6 +207,7 @@ class DirectMigrationViewModel @Inject constructor(
 
     private fun encodeUriToBase64() {
         viewModelScope.launch {
+            setLoadingState(true)
             val uris = _uiState.value.screenshotUris
             val base64 = uris.map { uri ->
                 imageEncoder.encodeImageUriToBase64(uri)
@@ -215,11 +216,15 @@ class DirectMigrationViewModel @Inject constructor(
                 result.onSuccess { musics ->
                     _uiState.update {
                         it.copy(
+                            isLoading = false,
                             allSourceMusics = musics
                         )
                     }
+                    sendEffect(DirectMigrationUiEffect.OnFetchMusicSuccess)
                 }
                 result.onFailure { i, s ->
+                    Log.d(TAG, "encodeUriToBase64: $i, $s")
+                    setLoadingState(false)
                     sendEffect(DirectMigrationUiEffect.OnFailure)
                 }
             }
