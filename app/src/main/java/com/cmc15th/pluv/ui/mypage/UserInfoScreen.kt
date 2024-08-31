@@ -146,6 +146,7 @@ fun UserInfoScreen(
             text = "회원 탈퇴하기",
             style = Content0,
             modifier = Modifier
+                .fillMaxWidth()
                 .clickable { navigateToUnregister() }
                 .padding(vertical = 20.dp, horizontal = 24.dp)
         )

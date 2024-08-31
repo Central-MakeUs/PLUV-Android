@@ -229,6 +229,9 @@ fun PLUVNavHost(
                     onBackClick = {
                         pluvNavController.popBackStack()
                     },
+                    navigateToUnregister = {
+                        pluvNavController.navigate(DestinationScreens.Unregister.route)
+                    },
                     showSnackBar = showSnackBar
                 )
             }
