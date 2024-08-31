@@ -83,7 +83,14 @@ fun SelectMigratePlaylistScreen(
 
     if (uiState.isLoading) {
         LoadingDialog(
-            icon = { /*TODO*/ },
+            icon = {
+                Icon(
+                    painterResource(id = R.drawable.musicicon),
+                    contentDescription = "fetch playlist loading",
+                    tint = colorResource(id = R.color.destination_app_title_color),
+                    modifier = Modifier.size(50.dp)
+                )
+            },
             description = "음악을\n불러오는 중이에요!",
             onDismissRequest = {}
         )

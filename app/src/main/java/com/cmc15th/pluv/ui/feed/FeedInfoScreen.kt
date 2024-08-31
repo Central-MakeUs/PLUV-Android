@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.ui.feed
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -89,14 +90,25 @@ fun FeedInfoScreen(
                     .weight(1f)
             ) {
                 item {
-                    AsyncImage(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(390.dp),
-                        contentScale = ContentScale.Crop,
-                        model = feedInfo.imageUrl,
-                        contentDescription = "feed image"
-                    )
+                    if (feedInfo.imageUrl.isEmpty()) {
+                        Image(
+                            painterResource(id = R.drawable.default_music),
+                            contentDescription = "feed image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(390.dp)
+                        )
+                    } else {
+                        AsyncImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(390.dp),
+                            contentScale = ContentScale.Crop,
+                            model = feedInfo.imageUrl,
+                            contentDescription = "feed image"
+                        )
+                    }
                 }
                 stickyHeader {
                     PlaylistInfo(

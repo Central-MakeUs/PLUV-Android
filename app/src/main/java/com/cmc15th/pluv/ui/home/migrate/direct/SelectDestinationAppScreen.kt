@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc15th.pluv.R
 import com.cmc15th.pluv.core.designsystem.component.ExitDialog
+import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
@@ -62,6 +63,21 @@ fun SelectDestinationAppScreen(
         )
     }
 
+    if (state.value.isLoading) {
+        LoadingDialog(
+            icon = {
+                Icon(
+                    painterResource(id = R.drawable.musicicon),
+                    contentDescription = "fetch playlist loading",
+                    tint = colorResource(id = R.color.destination_app_title_color),
+                    modifier = Modifier.size(50.dp)
+                )
+            },
+            description = "음악을\n불러오는 중이에요!",
+            onDismissRequest = {}
+        )
+    }
+
     Scaffold(
         topBar = {
             TopBarWithProgress(
@@ -81,11 +97,7 @@ fun SelectDestinationAppScreen(
                 isNextButtonEnabled = false,
                 onPreviousClick = { navigateToSelectSource() },
                 onMigrateClick = {
-                    if (state.value.selectedSourceApp.playListAppType == PlayListAppType.SCREEN_SHOT) {
-                        navigateToSelectMigrationMusic()
-                    } else {
-                        navigateToDisplayMigrationPath()
-                    }
+                    navigateToDisplayMigrationPath()
                 }
             )
         }
