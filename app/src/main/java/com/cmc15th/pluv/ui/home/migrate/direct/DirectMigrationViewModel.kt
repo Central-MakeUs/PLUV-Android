@@ -49,7 +49,7 @@ class DirectMigrationViewModel @Inject constructor(
 //    private val _uiEffect: Channel<DirectMigrationUiEffect> = Channel()
 //    val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.receiveAsFlow()
 
-        private val _uiEffect: MutableSharedFlow<DirectMigrationUiEffect> = MutableSharedFlow()
+    private val _uiEffect: MutableSharedFlow<DirectMigrationUiEffect> = MutableSharedFlow()
     val uiEffect: Flow<DirectMigrationUiEffect> = _uiEffect.asSharedFlow()
 
     // 이전할 음악 목록들
@@ -201,6 +201,14 @@ class DirectMigrationViewModel @Inject constructor(
 
             DirectMigrationUiEvent.FetchProcess -> {
                 getMigrationProcess()
+            }
+
+            is DirectMigrationUiEvent.OnDeleteScreenShot -> {
+                val currentScreenShotUris = _uiState.value.screenshotUris.toMutableList()
+                currentScreenShotUris.removeAt(event.index)
+                _uiState.update {
+                    it.copy(screenshotUris = currentScreenShotUris)
+                }
             }
         }
     }
@@ -520,11 +528,11 @@ class DirectMigrationViewModel @Inject constructor(
         viewModelScope.launch {
             //FIXME 추후  수정예정
             var sourceName = _uiState.value.selectedSourceApp.sourceName
-            if (sourceName == "feed" || sourceName == "history") {
+            if (sourceName == "feed" || sourceName == "history" || sourceName == "screenshot") {
                 sourceName = _uiState.value.selectedDestinationApp.sourceName
             }
             val migrateTargetMusicIds =
-                destinationMusicsIds.value + _uiState.value.selectedSimilarMusicsId
+                destinationMusicsIds.value + (_uiState.value.selectedSimilarMusicsId.filter { it.isNotBlank() })
 
             val notTransferMusics = getNotTransferMusic()
 

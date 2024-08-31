@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -52,6 +52,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray100
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.pretendardFamily
+import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
@@ -91,6 +92,11 @@ fun UploadPlaylistScreenShotScreen(
             PLUVButton(
                 onClick = {
                     viewModel.setEvent(DirectMigrationUiEvent.SelectSourceApp(PlayListApp.ScreenShot))
+                    viewModel.setEvent(DirectMigrationUiEvent.SelectPlaylist(
+                        Playlist(
+                            name="스크린샷에서 옮긴 플레이리스트"
+                        )
+                    ))
                     navigateToSelectDestinationApp()
                 },
                 containerColor = Color.Black,
@@ -133,9 +139,8 @@ fun UploadPlaylistScreenShotScreen(
                     pickMedias.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 },
                 isHelpTextShow = showUploadHelpTextState,
-                onHelpTextCloseClick = { showUploadHelpTextState = false },
-                onHelpButtonClick = {
-                    //TODO Show Help BottomSheet
+                onImageDeleteClick = { index ->
+                    viewModel.setEvent(DirectMigrationUiEvent.OnDeleteScreenShot(index))
                 }
             )
         }
@@ -149,8 +154,7 @@ fun ScreenShotUploadArea(
     isHelpTextShow: Boolean = true,
     images: List<Uri> = emptyList(),
     onSelectImagesClick: () -> Unit = {},
-    onHelpTextCloseClick: () -> Unit = {},
-    onHelpButtonClick: () -> Unit = {}
+    onImageDeleteClick: (Int) -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -176,7 +180,7 @@ fun ScreenShotUploadArea(
                         .clickable { onSelectImagesClick() }
                 )
             }
-            items(images) { uri ->
+            itemsIndexed(images) { index, uri ->
                 Box(
                     modifier = Modifier
                         .width(206.dp)
@@ -188,6 +192,15 @@ fun ScreenShotUploadArea(
                         contentDescription = "uploaded image",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.trash_icon),
+                        contentDescription = "delete image",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(50.dp)
+                            .clickable { onImageDeleteClick(index) },
+                        tint = Color.Unspecified
                     )
                 }
             }
