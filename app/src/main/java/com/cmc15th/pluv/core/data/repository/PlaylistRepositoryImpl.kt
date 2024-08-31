@@ -35,7 +35,7 @@ class PlaylistRepositoryImpl @Inject constructor(
                 migrationService.fetchScreenshotPlaylists(
                     ReadScreenshotPlaylistRequest(base64EncodedImages)
                 ).map { result ->
-                    result.map {
+                    result.data.map {
                         it.toSourceMusic()
                     }
                 }

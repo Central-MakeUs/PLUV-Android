@@ -18,10 +18,10 @@ import retrofit2.http.Path
 
 interface MigrationService {
 
-    @POST("playlist/ocr/read")
+    @POST("/playlist/ocr/read")
     suspend fun fetchScreenshotPlaylists(
         @Body readScreenshotPlaylistRequest: ReadScreenshotPlaylistRequest
-    ): ApiResult<List<ReadSourceMusicResponse>>
+    ): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
     @POST("/playlist/spotify/read")
     suspend fun fetchSpotifyPlaylists(
