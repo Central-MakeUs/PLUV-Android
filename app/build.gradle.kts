@@ -1,24 +1,17 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.pluv.android.application)
+    alias(libs.plugins.pluv.android.hilt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    id("kotlin-kapt")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.cmc15th.pluv"
-    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.cmc15th.pluv"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 12
-        versionName = "1.0.2"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -41,19 +34,9 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
@@ -61,19 +44,23 @@ android {
         }
     }
 }
-
 fun getProperty(propertyKey: String): String {
     return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
-
 dependencies {
+    implementation(projects.core.data)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.model)
+    implementation(projects.core.network)
+    implementation(projects.core.datastore)
+    implementation(projects.core.ui)
+
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.androidx.compose.material)
     implementation(files("libs/spotify-auth-release-2.1.0.aar"))
     // collapse-toolbar
-    implementation(libs.androidx.datastore.preferences)
     // google auth
     implementation(libs.google.auth)
     //spotify auth
@@ -89,8 +76,8 @@ dependencies {
     implementation(libs.coil.compose)
     // hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)
     // navigation
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)

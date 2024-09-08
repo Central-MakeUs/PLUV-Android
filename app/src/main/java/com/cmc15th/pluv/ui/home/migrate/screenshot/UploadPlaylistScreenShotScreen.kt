@@ -52,8 +52,8 @@ import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray100
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.pretendardFamily
+import com.cmc15th.pluv.core.model.PlayListApp
 import com.cmc15th.pluv.core.model.Playlist
-import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationUiEvent
 import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
 

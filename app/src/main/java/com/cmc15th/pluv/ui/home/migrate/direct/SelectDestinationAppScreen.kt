@@ -31,8 +31,8 @@ import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.SelectedAppName
 import com.cmc15th.pluv.core.designsystem.theme.Title1
-import com.cmc15th.pluv.domain.model.PlayListApp
-import com.cmc15th.pluv.domain.model.PlayListAppType
+import com.cmc15th.pluv.core.model.PlayListApp
+import com.cmc15th.pluv.core.model.PlayListAppType
 import com.cmc15th.pluv.ui.home.getAppIconRes
 import com.cmc15th.pluv.ui.home.getAppNameRes
 import com.cmc15th.pluv.ui.home.getSelectedIconRes

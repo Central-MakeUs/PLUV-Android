@@ -39,9 +39,9 @@ import com.cmc15th.pluv.core.designsystem.theme.Content0
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Title1
+import com.cmc15th.pluv.core.model.PlayListApp
 import com.cmc15th.pluv.core.ui.component.MusicItem
 import com.cmc15th.pluv.core.ui.component.MusicsHeader
-import com.cmc15th.pluv.domain.model.PlayListApp
 import com.cmc15th.pluv.ui.common.contract.GoogleApiContract
 import com.cmc15th.pluv.ui.common.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.home.migrate.common.component.PreviousOrMigrateButton

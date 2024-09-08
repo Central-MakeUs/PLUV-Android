@@ -4,11 +4,11 @@ import android.net.Uri
 import com.cmc15th.pluv.core.model.DestinationMusic
 import com.cmc15th.pluv.core.model.HistoryDetail
 import com.cmc15th.pluv.core.model.MigrationProcess
+import com.cmc15th.pluv.core.model.PlayListApp
+import com.cmc15th.pluv.core.model.PlayListApp.Companion.getAllPlaylistApps
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
 import com.cmc15th.pluv.core.model.ValidateMusic
-import com.cmc15th.pluv.domain.model.PlayListApp
-import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
 
 data class DirectMigrationUiState(
     val isLoading: Boolean = false,

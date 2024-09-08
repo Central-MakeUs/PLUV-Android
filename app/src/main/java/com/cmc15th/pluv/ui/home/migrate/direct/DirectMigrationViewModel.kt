@@ -10,8 +10,8 @@ import com.cmc15th.pluv.core.data.repository.MemberRepository
 import com.cmc15th.pluv.core.data.repository.PlaylistRepository
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.model.DestinationMusic
-import com.cmc15th.pluv.domain.model.PlayListApp
-import com.cmc15th.pluv.domain.model.PlayListApp.Companion.getAllPlaylistApps
+import com.cmc15th.pluv.core.model.PlayListApp
+import com.cmc15th.pluv.core.model.PlayListApp.Companion.getAllPlaylistApps
 import com.cmc15th.pluv.ui.common.ImageEncoder
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException

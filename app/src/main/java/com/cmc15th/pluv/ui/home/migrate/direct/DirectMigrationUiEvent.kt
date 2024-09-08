@@ -1,9 +1,9 @@
 package com.cmc15th.pluv.ui.home.migrate.direct
 
 import android.net.Uri
+import com.cmc15th.pluv.core.model.PlayListApp
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.model.SourceMusic
-import com.cmc15th.pluv.domain.model.PlayListApp
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.spotify.sdk.android.auth.AuthorizationResponse

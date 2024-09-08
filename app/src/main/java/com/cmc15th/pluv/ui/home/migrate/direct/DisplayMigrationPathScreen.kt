@@ -33,7 +33,7 @@ import com.cmc15th.pluv.core.designsystem.component.ExitDialog
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
 import com.cmc15th.pluv.core.designsystem.theme.Title1
-import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.core.model.PlayListApp
 import com.cmc15th.pluv.ui.common.contract.GoogleApiContract
 import com.cmc15th.pluv.ui.common.contract.SpotifyAuthContract
 import com.cmc15th.pluv.ui.home.getAppNameRes

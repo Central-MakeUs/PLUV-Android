@@ -1,7 +1,7 @@
 package com.cmc15th.pluv.ui.home
 
 import com.cmc15th.pluv.R
-import com.cmc15th.pluv.domain.model.PlayListApp
+import com.cmc15th.pluv.core.model.PlayListApp
 
 fun PlayListApp.getAppIconRes(): Int {
     return when (this) {
