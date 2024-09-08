@@ -6,7 +6,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -39,30 +38,36 @@ class PLUVNavController(
 
     @Composable
     fun isVisibleBottomBar(): Boolean {
-        //Fixme
         return currentDestination?.route in BottomTab.entries.map { it.route }
     }
 
     fun navigate(route: String, navOptions: NavOptions? = null) {
-        navController.navigate(route, navOptions)
+        if (navOptions == null) {
+            navController.navigate(route) {
+                launchSingleTop = true
+            }
+        } else {
+            navController.navigate(route, navOptions)
+        }
     }
 
     fun navigateToLogin() {
         navController.navigate(DestinationScreens.Login.route) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                inclusive = true
+            popUpTo(navController.graph.id) {
+                inclusive = false
             }
             launchSingleTop = true
         }
     }
 
     fun popBackStack() {
+        // popBackStack 사
         navController.popBackStack()
     }
 
     fun navigateToBottomTab(tab: BottomTab) {
         val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
+            popUpTo(navController.graph.id) {
                 saveState = true
             }
             launchSingleTop = true
@@ -86,5 +91,9 @@ class PLUVNavController(
         }
 
         return hiltViewModel(parentEntry)
+    }
+
+    companion object {
+        private const val TAG = "PLUVNavController"
     }
 }

@@ -129,9 +129,7 @@ fun PLUVNavHost(
                     viewModel = pluvNavController.sharedViewModel<FeedViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
-                    onBackClick = {
-                        pluvNavController.popBackStack()
-                    },
+                    onBackClick = pluvNavController::popBackStack,
                     showSnackBar = showSnackBar
                 )
             }
