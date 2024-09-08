@@ -4,10 +4,9 @@ import com.cmc15th.pluv.core.model.Feed
 import com.cmc15th.pluv.core.model.FeedInfo
 import com.cmc15th.pluv.core.model.Playlist
 import com.cmc15th.pluv.core.network.response.FeedInfoResponse
-import com.cmc15th.pluv.core.network.response.FeedMusicResponse
 import com.cmc15th.pluv.core.network.response.FeedResponse
 
-fun FeedResponse.toFeed() = com.cmc15th.pluv.core.model.Feed(
+fun FeedResponse.toFeed() = Feed(
     id = id,
     title = title,
     thumbNailUrl = thumbNailUrl,
