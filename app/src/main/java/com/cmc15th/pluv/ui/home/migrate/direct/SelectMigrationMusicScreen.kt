@@ -220,43 +220,44 @@ fun SelectMigrationMusicScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 28.dp)
-            ) {
-
-                Text(text = "플레이리스트의 음악이\n일치하는지 확인해 주세요", style = Title1)
-
-                Spacer(modifier = Modifier.size(28.dp))
-
-                PlaylistInfo(
-                    imageUrl = uiState.selectedPlaylist.thumbNailUrl,
-                    appName = uiState.selectedSourceApp.appName,
-                    playlistName = uiState.selectedPlaylist.name,
-                    totalSongCount = uiState.selectedPlaylist.songCount
-                )
-
-                Spacer(modifier = Modifier.size(70.dp))
-
-                MusicsHeader(
-                    modifier = Modifier.fillMaxWidth(),
-                    selectedMusicCount = uiState.selectedSourceMusics.size,
-                    isSelectedAll = uiState.selectedSourceMusics.size == uiState.allSourceMusics.size,
-                    onAllSelectedClick = { isSelectedAll ->
-                        viewModel.setEvent(
-                            DirectMigrationUiEvent.SelectAllSourceMusic(
-                                isSelectedAll
-                            )
-                        )
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.size(12.dp))
-
             LazyColumn(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 24.dp, end = 24.dp, top = 28.dp)
+                    ) {
+
+                        Text(text = "플레이리스트의 음악이\n일치하는지 확인해 주세요", style = Title1)
+
+                        Spacer(modifier = Modifier.size(28.dp))
+
+                        PlaylistInfo(
+                            imageUrl = uiState.selectedPlaylist.thumbNailUrl,
+                            appName = uiState.selectedSourceApp.appName,
+                            playlistName = uiState.selectedPlaylist.name,
+                            totalSongCount = uiState.allSourceMusics.size
+                        )
+
+                        Spacer(modifier = Modifier.size(70.dp))
+
+                        MusicsHeader(
+                            modifier = Modifier.fillMaxWidth(),
+                            selectedMusicCount = uiState.selectedSourceMusics.size,
+                            isSelectedAll = uiState.selectedSourceMusics.size == uiState.allSourceMusics.size,
+                            onAllSelectedClick = { isSelectedAll ->
+                                viewModel.setEvent(
+                                    DirectMigrationUiEvent.SelectAllSourceMusic(
+                                        isSelectedAll
+                                    )
+                                )
+                            }
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(12.dp))
+                }
                 items(
                     uiState.allSourceMusics,
                 ) { music ->
