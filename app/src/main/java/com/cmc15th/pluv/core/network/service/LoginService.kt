@@ -27,12 +27,12 @@ interface LoginService {
         @Query("code") code: String
     ): ApiResult<CommonResponse<GoogleAccessTokenResponse>>
 
-    @POST("login/google/add")
+    @POST("/login/google/add")
     suspend fun addGoogleAccount(
         @Body idToken: GoogleLoginRequest
     ): ApiResult<CommonResponse<String>>
 
-    @POST("login/spotify/add")
+    @POST("/login/spotify/add")
     suspend fun addSpotifyAccount(
         @Body accessToken: SpotifyLoginRequest
     ): ApiResult<CommonResponse<String>>

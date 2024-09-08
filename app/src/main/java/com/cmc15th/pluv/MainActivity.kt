@@ -28,9 +28,9 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberPLUVNavController(navController = rememberNavController())
             PLUVTheme {
-                    MainScreen(
-                        pluvNavController = navController
-                    )
+                MainScreen(
+                    pluvNavController = navController
+                )
             }
         }
     }
