@@ -1,4 +1,5 @@
 plugins {
+    alias(libs.plugins.pluv.android.library)
     alias(libs.plugins.pluv.android.library.compose)
 }
 
