@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
-private const val MaxTimeout = 15_000L
+private const val MaxTimeout = 60_000L
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
