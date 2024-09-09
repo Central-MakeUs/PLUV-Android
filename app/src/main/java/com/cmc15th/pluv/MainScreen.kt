@@ -31,6 +31,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title6
 import com.cmc15th.pluv.navigation.BottomTab
+import com.cmc15th.pluv.navigation.BottomTabRoute
 import com.cmc15th.pluv.navigation.PLUVNavController
 import com.cmc15th.pluv.navigation.PLUVNavHost
 import com.cmc15th.pluv.navigation.rememberPLUVNavController
@@ -65,7 +66,7 @@ fun MainScreen(
                     .padding(horizontal = 33.dp),
                 isVisible = pluvNavController.isVisibleBottomBar(),
                 bottomTabs = pluvNavController.bottomTabs,
-                currentTab = pluvNavController.currentBottomTab?.route.orEmpty(),
+                currentTab = pluvNavController.currentBottomTab?.route,
                 onSelected = { tab ->
                     pluvNavController.navigateToBottomTab(tab)
                 }
@@ -102,7 +103,7 @@ fun PLUVBottomBar(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
     bottomTabs: List<BottomTab>,
-    currentTab: String,
+    currentTab: BottomTabRoute?,
     onSelected: (BottomTab) -> Unit
 ) {
     if (isVisible) {

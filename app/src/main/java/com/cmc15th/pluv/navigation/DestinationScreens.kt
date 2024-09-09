@@ -89,3 +89,13 @@ sealed interface DestinationScreens {
         val historyId: Long
     ) : DestinationScreens
 }
+
+@Serializable
+sealed interface BottomTabRoute : DestinationScreens {
+    @Serializable
+    data object Home : BottomTabRoute
+    @Serializable
+    data object Feed : BottomTabRoute
+    @Serializable
+    data object Mypage : BottomTabRoute
+}
