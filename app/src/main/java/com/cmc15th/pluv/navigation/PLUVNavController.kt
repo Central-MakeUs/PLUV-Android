@@ -6,6 +6,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -17,13 +19,13 @@ import androidx.navigation.navOptions
  */
 
 @Composable
-fun rememberPLUVNavController(
+internal fun rememberPLUVNavController(
     navController: NavHostController = rememberNavController()
 ): PLUVNavController = remember {
     PLUVNavController(navController)
 }
 
-class PLUVNavController(
+internal class PLUVNavController(
     val navController: NavHostController
 ) {
     private val currentDestination: NavDestination?
@@ -32,16 +34,20 @@ class PLUVNavController(
 
     val currentBottomTab: BottomTab?
         @Composable
-        get() = BottomTab.entries.find { it.route == currentDestination?.route }
+        get() = BottomTab.entries.find { bottomTab ->
+            currentDestination?.hierarchy?.any { it.hasRoute(route = bottomTab.route::class) } == true
+        }
 
     val bottomTabs: List<BottomTab> = BottomTab.entries
 
     @Composable
     fun isVisibleBottomBar(): Boolean {
-        return currentDestination?.route in BottomTab.entries.map { it.route }
+        return currentDestination?.hierarchy?.any { destination ->
+            BottomTab.entries.any { bottomTab -> destination.hasRoute(bottomTab.route::class) }
+        } ?: false
     }
 
-    fun navigate(route: String, navOptions: NavOptions? = null) {
+    fun navigate(route: DestinationScreens, navOptions: NavOptions? = null) {
         if (navOptions == null) {
             navController.navigate(route) {
                 launchSingleTop = true
@@ -52,7 +58,7 @@ class PLUVNavController(
     }
 
     fun navigateToLogin() {
-        navController.navigate(DestinationScreens.Login.route) {
+        navController.navigate(DestinationScreens.Login) {
             popUpTo(navController.graph.id) {
                 inclusive = false
             }
@@ -74,9 +80,9 @@ class PLUVNavController(
             restoreState = true
         }
         when (tab) {
-            BottomTab.HOME -> navController.navigate(BottomTab.HOME.route, navOptions)
-            BottomTab.FEED -> navController.navigate(DestinationScreens.Feed.route, navOptions)
-            BottomTab.MY_PAGE -> navController.navigate(DestinationScreens.Mypage.route, navOptions)
+            BottomTab.HOME -> navController.navigate(BottomTabRoute.Home, navOptions)
+            BottomTab.FEED -> navController.navigate(BottomTabRoute.Feed, navOptions)
+            BottomTab.MY_PAGE -> navController.navigate(DestinationScreens.Mypage, navOptions)
         }
     }
 

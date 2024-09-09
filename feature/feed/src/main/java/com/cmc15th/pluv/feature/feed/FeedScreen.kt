@@ -31,9 +31,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.cmc15th.pluv.core.designsystem.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cmc15th.pluv.core.designsystem.R
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
@@ -50,7 +50,7 @@ fun FeedScreen(
     modifier: Modifier = Modifier,
     viewModel: FeedViewModel = hiltViewModel(),
     showSnackBar: (String) -> Unit = {},
-    navigateToFeedInfo: () -> Unit
+    navigateToFeedInfo: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullRefreshState(
@@ -107,8 +107,7 @@ fun FeedScreen(
                     musicNames = feed.artistNames.split(", "),
                     userName = feed.creatorName,
                     onClick = {
-                        viewModel.setEvent(FeedUiEvent.SelectFeed(feed.id))
-                        navigateToFeedInfo()
+                        navigateToFeedInfo(feed.id)
                     },
                     modifier = Modifier.padding(bottom = 8.dp)
                 )

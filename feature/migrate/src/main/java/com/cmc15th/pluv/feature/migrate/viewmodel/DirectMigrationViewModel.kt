@@ -424,7 +424,7 @@ class DirectMigrationViewModel @Inject constructor(
                 }
 
                 PlayListApp.History -> {
-                    memberRepository.getTransferSucceedHistoryMusics(_uiState.value.selectedPlaylist.id.toInt())
+                    memberRepository.getTransferSucceedHistoryMusics(_uiState.value.selectedPlaylist.id.toLong())
                 }
 
                 PlayListApp.Feed -> {
@@ -651,7 +651,7 @@ class DirectMigrationViewModel @Inject constructor(
         }
     }
 
-    private fun getMigratedMusic(historyId: Int) {
+    private fun getMigratedMusic(historyId: Long) {
         viewModelScope.launch {
             memberRepository.getTransferSucceedHistoryMusics(historyId).collect { result ->
                 result.onSuccess { musics ->
@@ -663,7 +663,7 @@ class DirectMigrationViewModel @Inject constructor(
         }
     }
 
-    private fun getNotMigratedMusic(historyId: Int) {
+    private fun getNotMigratedMusic(historyId: Long) {
         viewModelScope.launch {
             memberRepository.getTransferFailedHistoryMusics(historyId).collect { result ->
                 result.onSuccess { musics ->

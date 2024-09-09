@@ -45,20 +45,20 @@ class MemberRepositoryImpl @Inject constructor(
         })
     }.flowOn(Dispatchers.IO)
 
-    override fun getHistoryDetail(historyId: Int): Flow<ApiResult<HistoryDetail>> = flow {
+    override fun getHistoryDetail(historyId: Long): Flow<ApiResult<HistoryDetail>> = flow {
         emit(memberService.getHistoryDetail(historyId).map {
             it.data.toHistoryDetail()
         })
     }.flowOn(Dispatchers.IO)
 
-    override fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>> =
+    override fun getTransferSucceedHistoryMusics(historyId: Long): Flow<ApiResult<List<SourceMusic>>> =
         flow {
             emit(memberService.getTransferSucceedHistoryMusics(historyId).map { result ->
                 result.data.map { it.toSourceMusic() }
             })
         }.flowOn(Dispatchers.IO)
 
-    override fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>> =
+    override fun getTransferFailedHistoryMusics(historyId: Long): Flow<ApiResult<List<SourceMusic>>> =
         flow {
             emit(memberService.getTransferFailedHistoryMusics(historyId).map { result ->
                 result.data.map { it.toSourceMusic() }

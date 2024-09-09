@@ -16,11 +16,11 @@ interface MemberRepository {
 
     fun getHistories(): Flow<ApiResult<List<History>>>
 
-    fun getHistoryDetail(historyId: Int): Flow<ApiResult<HistoryDetail>>
+    fun getHistoryDetail(historyId: Long): Flow<ApiResult<HistoryDetail>>
 
-    fun getTransferSucceedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>>
+    fun getTransferSucceedHistoryMusics(historyId: Long): Flow<ApiResult<List<SourceMusic>>>
 
-    fun getTransferFailedHistoryMusics(historyId: Int): Flow<ApiResult<List<SourceMusic>>>
+    fun getTransferFailedHistoryMusics(historyId: Long): Flow<ApiResult<List<SourceMusic>>>
 
     fun getIntegratedSocialLoginType(): Flow<ApiResult<List<SocialAccount>>>
 

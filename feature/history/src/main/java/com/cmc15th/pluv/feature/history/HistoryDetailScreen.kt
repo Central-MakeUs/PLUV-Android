@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -31,12 +32,14 @@ import com.cmc15th.pluv.core.designsystem.R
 import com.cmc15th.pluv.core.ui.component.MusicItemWithIndexed
 import com.cmc15th.pluv.core.ui.component.PlaylistInfo
 import com.cmc15th.pluv.core.ui.component.TransferredMusicTabRow
+import com.cmc15th.pluv.feature.history.viewmodel.HistoryUiEvent
 import com.cmc15th.pluv.feature.history.viewmodel.HistoryViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HistoryDetailScreen(
     viewModel: HistoryViewModel = hiltViewModel(),
+    historyId: Long,
     onBackClicked: () -> Unit = {},
 ) {
     val tabNames = listOf("옮긴 곡", "안 옮긴 곡")
@@ -50,6 +53,10 @@ fun HistoryDetailScreen(
     val musicItems =
         if (selectedTabIndex == 0) uiState.transferSuccessMusics
         else uiState.transferFailMusics
+
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(HistoryUiEvent.OnHistoryClicked(historyId))
+    }
 
     Scaffold(
         topBar = {

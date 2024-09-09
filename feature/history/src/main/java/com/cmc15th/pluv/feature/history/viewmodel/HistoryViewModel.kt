@@ -84,7 +84,7 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    private fun getHistoryDetail(historyId: Int) {
+    private fun getHistoryDetail(historyId: Long) {
         viewModelScope.launch {
             memberRepository.getHistoryDetail(historyId).collect { result ->
                 result.onSuccess { history ->
@@ -102,7 +102,7 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    private fun getTransferSuccessMusics(historyId: Int) {
+    private fun getTransferSuccessMusics(historyId: Long) {
         viewModelScope.launch {
             memberRepository.getTransferSucceedHistoryMusics(historyId).collect { result ->
                 result.onSuccess { musics ->
@@ -119,7 +119,7 @@ class HistoryViewModel @Inject constructor(
         }
     }
 
-    private fun getTransferFailMusics(historyId: Int) {
+    private fun getTransferFailMusics(historyId: Long) {
         viewModelScope.launch {
             memberRepository.getTransferFailedHistoryMusics(historyId).collect { result ->
                 result.onSuccess { musics ->

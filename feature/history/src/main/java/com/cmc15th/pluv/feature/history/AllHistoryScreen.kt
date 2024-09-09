@@ -35,7 +35,7 @@ import com.cmc15th.pluv.feature.history.viewmodel.HistoryViewModel
 fun AllHistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel(),
     onBackClicked: () -> Unit,
-    navigateToHistoryDetail: () -> Unit
+    navigateToHistoryDetail: (Long) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -78,8 +78,7 @@ fun AllHistoryScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                viewModel.setEvent(HistoryUiEvent.OnHistoryClicked(history.id))
-                                navigateToHistoryDetail()
+                                navigateToHistoryDetail(history.id)
                             }
                             .padding(horizontal = 24.dp, vertical = 10.dp),
                         thumbNailUrl = history.imageUrl,
