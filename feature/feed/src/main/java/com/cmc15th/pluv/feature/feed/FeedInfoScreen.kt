@@ -48,6 +48,7 @@ import com.cmc15th.pluv.feature.feed.viewmodel.FeedViewModel
 @Composable
 fun FeedInfoScreen(
     viewModel: FeedViewModel = hiltViewModel(),
+    feedId: Long,
     onBackClick: () -> Unit = {},
     showSnackBar: (String) -> Unit = {}
 ) {
@@ -55,6 +56,7 @@ fun FeedInfoScreen(
     val feedInfo = uiState.feedInfo
 
     LaunchedEffect(Unit) {
+        viewModel.setEvent(FeedUiEvent.SelectFeed(feedId))
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 is FeedUiEffect.OnSaveSuccess -> showSnackBar(effect.message)
@@ -189,5 +191,5 @@ fun FeedInfoScreen(
 @Composable
 @Preview
 fun FeedInfoScreenPreview() {
-    FeedInfoScreen()
+    FeedInfoScreen(feedId = 0, onBackClick = {})
 }

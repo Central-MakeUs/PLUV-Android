@@ -26,13 +26,13 @@ interface MemberService {
     suspend fun getHistories(): ApiResult<CommonResponse<List<HistoryResponse>>>
 
     @GET("history/{id}")
-    suspend fun getHistoryDetail(@Path("id") historyId: Int): ApiResult<CommonResponse<HistoryDetailResponse>>
+    suspend fun getHistoryDetail(@Path("id") historyId: Long): ApiResult<CommonResponse<HistoryDetailResponse>>
 
     @GET("history/{id}/music/success")
-    suspend fun getTransferSucceedHistoryMusics(@Path("id") historyId: Int): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
+    suspend fun getTransferSucceedHistoryMusics(@Path("id") historyId: Long): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
     @GET("history/{id}/music/fail")
-    suspend fun getTransferFailedHistoryMusics(@Path("id") historyId: Int): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
+    suspend fun getTransferFailedHistoryMusics(@Path("id") historyId: Long): ApiResult<CommonResponse<List<ReadSourceMusicResponse>>>
 
     @GET("login/type")
     suspend fun getIntegratedSocialLoginType(): ApiResult<CommonResponse<List<LoginTypeResponse>>>

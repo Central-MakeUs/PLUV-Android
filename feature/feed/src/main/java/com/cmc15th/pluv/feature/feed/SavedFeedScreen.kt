@@ -22,9 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.cmc15th.pluv.core.designsystem.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cmc15th.pluv.core.designsystem.R
 import com.cmc15th.pluv.core.designsystem.component.TopAppBar
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
@@ -39,7 +39,7 @@ fun SavedFeedScreen(
     viewModel: FeedViewModel = hiltViewModel(),
     showSnackBar: (String) -> Unit = {},
     onBackClicked: () -> Unit = {},
-    navigateToFeedDetail: () -> Unit = {},
+    navigateToFeedDetail: (Long) -> Unit = {},
     navigateToMigration: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -90,8 +90,7 @@ fun SavedFeedScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                viewModel.setEvent(FeedUiEvent.SelectFeed(feed.id))
-                                navigateToFeedDetail()
+                                navigateToFeedDetail(feed.id)
                             }
                             .padding(horizontal = 24.dp, vertical = 10.dp),
                         thumbNailUrl = feed.thumbNailUrl,
