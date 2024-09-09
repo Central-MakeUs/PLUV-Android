@@ -15,9 +15,6 @@ android {
 
     defaultConfig {
         buildConfigField("String", "server_url", getProperty("server_url"))
-        buildConfigField("String", "spotify_client_id", getProperty("spotify_client_id"))
-        buildConfigField("String", "spotify_redirect_uri", getProperty("spotify_redirect_uri"))
-        buildConfigField("String", "google_auth_client_id", getProperty("google_auth_client_id"))
     }
 
 }

@@ -29,3 +29,4 @@ val Gray600 = Color(0xFF5C5C5C)
 val Gray700 = Color(0xFF3D3D3D)
 val Gray800 = Color(0xFF1E1E1E)
 
+val BlueLight = Color(0xFFEFF7FE)

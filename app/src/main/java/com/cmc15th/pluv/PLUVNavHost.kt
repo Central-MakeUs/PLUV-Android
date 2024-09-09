@@ -8,33 +8,33 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.cmc15th.pluv.ui.common.WebViewScreen
-import com.cmc15th.pluv.ui.feed.FeedInfoScreen
-import com.cmc15th.pluv.ui.feed.FeedScreen
-import com.cmc15th.pluv.ui.feed.SavedFeedScreen
-import com.cmc15th.pluv.ui.feed.viewmodel.FeedViewModel
-import com.cmc15th.pluv.ui.history.AllHistoryScreen
-import com.cmc15th.pluv.ui.history.HistoryDetailScreen
-import com.cmc15th.pluv.ui.history.viewmodel.HistoryViewModel
-import com.cmc15th.pluv.ui.home.HomeScreen
-import com.cmc15th.pluv.ui.home.migrate.common.screen.MigratedResultScreen
-import com.cmc15th.pluv.ui.home.migrate.common.screen.MigrationProcessScreen
-import com.cmc15th.pluv.ui.home.migrate.common.screen.SelectSimilarMusicScreen
-import com.cmc15th.pluv.ui.home.migrate.common.screen.ShowNotFoundMusicScreen
-import com.cmc15th.pluv.ui.home.migrate.direct.DirectMigrationViewModel
-import com.cmc15th.pluv.ui.home.migrate.direct.DisplayMigrationPathScreen
-import com.cmc15th.pluv.ui.home.migrate.direct.SelectDestinationAppScreen
-import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigratePlaylistScreen
-import com.cmc15th.pluv.ui.home.migrate.direct.SelectMigrationMusicScreen
-import com.cmc15th.pluv.ui.home.migrate.direct.SelectSourceAppScreen
-import com.cmc15th.pluv.ui.home.migrate.screenshot.UploadPlaylistScreenShotScreen
-import com.cmc15th.pluv.ui.login.LoginScreen
-import com.cmc15th.pluv.ui.mypage.MypageScreen
-import com.cmc15th.pluv.ui.mypage.UnregisterScreen
-import com.cmc15th.pluv.ui.mypage.UserInfoScreen
-import com.cmc15th.pluv.ui.mypage.viewmodel.MypageViewModel
-import com.cmc15th.pluv.ui.onboarding.OnboardingScreen
-import com.cmc15th.pluv.ui.splash.SplashScreen
+import com.cmc15th.pluv.feature.common.WebViewScreen
+import com.cmc15th.pluv.feature.feed.FeedInfoScreen
+import com.cmc15th.pluv.feature.feed.FeedScreen
+import com.cmc15th.pluv.feature.feed.SavedFeedScreen
+import com.cmc15th.pluv.feature.feed.viewmodel.FeedViewModel
+import com.cmc15th.pluv.feature.history.AllHistoryScreen
+import com.cmc15th.pluv.feature.history.HistoryDetailScreen
+import com.cmc15th.pluv.feature.history.viewmodel.HistoryViewModel
+import com.cmc15th.pluv.feature.home.HomeScreen
+import com.cmc15th.pluv.feature.login.LoginScreen
+import com.cmc15th.pluv.feature.migrate.common.screen.MigratedResultScreen
+import com.cmc15th.pluv.feature.migrate.common.screen.MigrationProcessScreen
+import com.cmc15th.pluv.feature.migrate.common.screen.SelectSimilarMusicScreen
+import com.cmc15th.pluv.feature.migrate.common.screen.ShowNotFoundMusicScreen
+import com.cmc15th.pluv.feature.migrate.direct.DisplayMigrationPathScreen
+import com.cmc15th.pluv.feature.migrate.direct.SelectDestinationAppScreen
+import com.cmc15th.pluv.feature.migrate.direct.SelectMigratePlaylistScreen
+import com.cmc15th.pluv.feature.migrate.direct.SelectMigrationMusicScreen
+import com.cmc15th.pluv.feature.migrate.direct.SelectSourceAppScreen
+import com.cmc15th.pluv.feature.migrate.screenshot.UploadPlaylistScreenShotScreen
+import com.cmc15th.pluv.feature.migrate.viewmodel.DirectMigrationViewModel
+import com.cmc15th.pluv.feature.mypage.MypageScreen
+import com.cmc15th.pluv.feature.mypage.UnregisterScreen
+import com.cmc15th.pluv.feature.mypage.UserInfoScreen
+import com.cmc15th.pluv.feature.mypage.viewmodel.MypageViewModel
+import com.cmc15th.pluv.feature.onboarding.OnboardingScreen
+import com.cmc15th.pluv.feature.splash.SplashScreen
 
 @Composable
 fun PLUVNavHost(
@@ -47,7 +47,6 @@ fun PLUVNavHost(
         startDestination = DestinationScreens.Splash.route
 //        startDestination = DestinationScreens.History.route
     ) {
-
         composable(route = DestinationScreens.Splash.route) { navBackStackEntry ->
             val navOptions = NavOptions.Builder().setPopUpTo(
                 pluvNavController.navController.graph.findStartDestination().id,

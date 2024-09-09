@@ -23,7 +23,7 @@ import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Title4
-import com.cmc15th.pluv.core.ui.R
+import com.cmc15th.pluv.core.designsystem.R
 
 @Composable
 fun PlaylistItem(

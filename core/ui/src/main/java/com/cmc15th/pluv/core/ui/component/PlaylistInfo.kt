@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.cmc15th.pluv.core.designsystem.R
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title2
 import com.cmc15th.pluv.core.designsystem.theme.Title5
-import com.cmc15th.pluv.core.ui.R
 
 @Composable
 fun PlaylistInfo(
