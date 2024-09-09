@@ -61,6 +61,8 @@ dependencies {
     implementation(projects.feature.onboarding)
     implementation(projects.feature.splash)
 
+    implementation(libs.kotlinx.serialization.json)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
