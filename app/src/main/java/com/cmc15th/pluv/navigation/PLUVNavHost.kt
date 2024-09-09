@@ -36,7 +36,7 @@ import com.cmc15th.pluv.feature.onboarding.OnboardingScreen
 import com.cmc15th.pluv.feature.splash.SplashScreen
 
 @Composable
-fun PLUVNavHost(
+internal fun PLUVNavHost(
     pluvNavController: PLUVNavController,
     showSnackBar: (String) -> Unit = {}
 ) {

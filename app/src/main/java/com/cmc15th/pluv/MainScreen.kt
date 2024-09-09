@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 private const val SnackBarDuration = 1500L
 
 @Composable
-fun MainScreen(
+internal fun MainScreen(
     pluvNavController: PLUVNavController = rememberPLUVNavController()
 ) {
     val snackBarState = remember { SnackbarHostState() }
