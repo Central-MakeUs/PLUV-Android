@@ -1,4 +1,4 @@
-package com.cmc15th.pluv
+package com.cmc15th.pluv.navigation
 
 import android.net.Uri
 import androidx.compose.runtime.Composable

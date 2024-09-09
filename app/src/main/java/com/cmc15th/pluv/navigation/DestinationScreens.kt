@@ -1,4 +1,4 @@
-package com.cmc15th.pluv
+package com.cmc15th.pluv.navigation
 
 sealed class DestinationScreens(val route: String) {
     data object Splash : DestinationScreens(route = "Splash")

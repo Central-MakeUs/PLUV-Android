@@ -30,6 +30,10 @@ import com.cmc15th.pluv.core.designsystem.component.PLUVSnackBar
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title6
+import com.cmc15th.pluv.navigation.BottomTab
+import com.cmc15th.pluv.navigation.PLUVNavController
+import com.cmc15th.pluv.navigation.PLUVNavHost
+import com.cmc15th.pluv.navigation.rememberPLUVNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

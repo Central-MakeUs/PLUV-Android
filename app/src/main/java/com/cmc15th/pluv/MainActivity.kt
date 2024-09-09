@@ -7,6 +7,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.cmc15th.pluv.core.designsystem.theme.PLUVTheme
+import com.cmc15th.pluv.navigation.rememberPLUVNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
