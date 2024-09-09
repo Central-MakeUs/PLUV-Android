@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -60,21 +59,14 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToDirectMigration: () -> Unit = {},
     navigateToScreenShotMigration: () -> Unit = {},
+    navigateToHistoryDetail: (Long) -> Unit = {},
+    navigateToFeedDetail: (Long) -> Unit = {},
     navigateToHistory: () -> Unit = {},
     navigateToSavedFeed: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    val playlistItems = listOf(
-        "https://picsum.photos/140",
-        "https://picsum.photos/140",
-        "https://picsum.photos/140",
-        "https://picsum.photos/140",
-        "https://picsum.photos/140",
-    )
 
     Column(
         modifier = modifier
@@ -120,6 +112,7 @@ fun HomeScreen(
             title = R.string.migrated_play_list,
             playlistItems = uiState.historiesThumbnailUrl,
             modifier = Modifier.fillMaxWidth(),
+            onItemClick = { navigateToHistoryDetail(it) },
             onExpandClick = { navigateToHistory() }
         )
 
@@ -131,6 +124,7 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White),
+            onItemClick = { navigateToFeedDetail(it) },
             onExpandClick = { navigateToSavedFeed() }
         )
 
@@ -148,8 +142,9 @@ fun HomeScreen(
 @Composable
 fun HistoryArea(
     @StringRes title: Int,
-    playlistItems: List<String>,
+    playlistItems: List<Pair<Long, String>>,
     modifier: Modifier = Modifier,
+    onItemClick: (Long) -> Unit = {},
     onExpandClick: () -> Unit
 ) {
     // Content inside the rounded container
@@ -182,10 +177,11 @@ fun HistoryArea(
 
 @Composable
 fun PlayListRow(
-    playListItems: List<String>,
+    playListItems: List<Pair<Long, String>>,
     description: String,
     cardSize: Dp = 100.dp,
     modifier: Modifier = Modifier,
+    onItemClick: (Long) -> Unit = {},
     onExpandClick: () -> Unit = {}
 ) {
     Column(
@@ -228,7 +224,8 @@ fun PlayListRow(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.empty_icon), modifier = Modifier.size(60.dp),
+                        painterResource(id = R.drawable.empty_icon),
+                        modifier = Modifier.size(60.dp),
                         contentDescription = "Empty Icon",
                         tint = Color.Unspecified
                     )
@@ -238,8 +235,7 @@ fun PlayListRow(
                         style = Content2,
                     )
                 }
-            }
-            else {
+            } else {
                 LazyRow(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -248,9 +244,10 @@ fun PlayListRow(
                 ) {
                     items(playListItems) { playList ->
                         PlaylistCard(
-                            imageUrl = playList,
+                            imageUrl = playList.second,
                             modifier = Modifier
-                                .size(cardSize),
+                                .size(cardSize)
+                                .clickable(onClick = { onItemClick(playList.first) }),
                             shape = RoundedCornerShape(8.dp)
                         )
                     }

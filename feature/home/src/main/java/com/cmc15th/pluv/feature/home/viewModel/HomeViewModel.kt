@@ -32,7 +32,7 @@ class HomeViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             historiesThumbnailUrl = histories.take(7)
-                                .map { history -> history.imageUrl })
+                                .map { history -> history.id to history.imageUrl })
                     }
                 }
             }
@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             savedFeedsThumbnailUrl = feeds.take(7)
-                                .map { feed -> feed.thumbNailUrl })
+                                .map { feed -> feed.id to feed.thumbNailUrl })
                     }
                 }
             }
