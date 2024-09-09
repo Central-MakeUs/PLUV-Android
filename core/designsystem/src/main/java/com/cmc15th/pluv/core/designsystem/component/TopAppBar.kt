@@ -24,6 +24,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cmc15th.pluv.core.designsystem.R
+import com.cmc15th.pluv.core.designsystem.theme.Content2
+import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.TopAppBarProgress
 
 @Composable
@@ -70,7 +72,7 @@ fun TopBarWithProgress(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            SourceToDestinationText(sourceApp = sourceApp, destinationApp = destinationApp)
+            SourceToDestinationText(sourceApp = sourceApp, destinationApp = destinationApp)
             IconButton(
                 onClick = {
                     onCloseClick()
@@ -96,6 +98,20 @@ fun TopBarWithProgress(
             trackColor = Color.LightGray,
         )
     }
+}
+
+@Composable
+fun SourceToDestinationText(
+    sourceApp: String,
+    destinationApp: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        modifier = modifier,
+        text = if (sourceApp.isEmpty()) "" else "$sourceApp > $destinationApp",
+        style = Content2,
+        color = Gray800
+    )
 }
 
 @Preview

@@ -47,6 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc15th.pluv.core.designsystem.component.PLUVButton
 import com.cmc15th.pluv.core.designsystem.component.PlaylistCard
+import com.cmc15th.pluv.core.designsystem.component.SourceToDestinationText
 import com.cmc15th.pluv.core.designsystem.component.TopAppBar
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
@@ -60,7 +61,6 @@ import com.cmc15th.pluv.core.designsystem.theme.Title4
 import com.cmc15th.pluv.core.designsystem.theme.Title5
 import com.cmc15th.pluv.core.ui.component.MusicItemWithIndexed
 import com.cmc15th.pluv.core.ui.component.TransferredMusicTabRow
-import com.cmc15th.pluv.feature.migrate.common.component.SourceToDestinationText
 import com.cmc15th.pluv.feature.migrate.viewmodel.DirectMigrationUiEvent
 import com.cmc15th.pluv.feature.migrate.viewmodel.DirectMigrationViewModel
 
