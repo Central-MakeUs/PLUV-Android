@@ -1,30 +1,91 @@
 package com.cmc15th.pluv.navigation
 
-sealed class DestinationScreens(val route: String) {
-    data object Splash : DestinationScreens(route = "Splash")
-    data object Onboarding : DestinationScreens(route = "Onboarding")
-    data object Mypage : DestinationScreens(route = "Mypage")
-    data object Login : DestinationScreens(route = "Login")
-    data object DirectMigrationRoot : DestinationScreens(route = "DirectMigrationRoot")
-    data object DirectMigrationSelectSourceApp : DestinationScreens(route = "DirectMigrationSelectSourceApp")
-    data object DirectMigrationSelectDestinationApp : DestinationScreens(route = "DirectMigrationSelectDestinationApp")
-    data object ExecuteDirectMigration : DestinationScreens(route = "ExecuteDirectMigration")
-    data object SelectMigratePlaylist : DestinationScreens(route = "SelectMigratePlaylist")
-    data object SelectMigrationMusic : DestinationScreens(route = "SelectMigrationMusic")
-    data object SelectSimilarMusic : DestinationScreens(route = "SelectSimilarMusic")
-    data object ShowNotFoundMusic : DestinationScreens(route = "ShowNotFoundMusic")
-    data object UploadPlaylistScreenShot : DestinationScreens(route = "UploadPlaylistScreenShot")
-    data object MigrationProcess : DestinationScreens(route = "MigrationProcess")
-    data object MigratedResult : DestinationScreens(route = "MigratedResult")
-    data object Feed : DestinationScreens(route = "Feed")
-    data object FeedInfo : DestinationScreens(route = "FeedInfo")
-    data object SavedFeedRoot : DestinationScreens(route = "SavedFeedRoot")
-    data object SavedFeed : DestinationScreens(route = "SavedFeed")
-    data object SavedFeedDetail : DestinationScreens(route = "SavedFeedDetail")
-    data object UserInfo : DestinationScreens(route = "UserInfo")
-    data object WebView : DestinationScreens("webView?title={title}&url={url}")
-    data object Unregister : DestinationScreens(route = "Unregister")
-    data object History : DestinationScreens(route = "HistoryRoot")
-    data object AllHistory : DestinationScreens(route = "AllHistory")
-    data object HistoryDetail : DestinationScreens(route = "HistoryDetail")
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface DestinationScreens {
+    @Serializable
+    data object Splash : DestinationScreens
+
+    @Serializable
+    data object Onboarding : DestinationScreens
+
+    @Serializable
+    data object Mypage : DestinationScreens
+
+    @Serializable
+    data object Login : DestinationScreens
+
+    @Serializable
+    data object DirectMigrationRoot : DestinationScreens
+
+    @Serializable
+    data object DirectMigrationSelectSourceApp : DestinationScreens
+
+    @Serializable
+    data object DirectMigrationSelectDestinationApp : DestinationScreens
+
+    @Serializable
+    data object ExecuteDirectMigration : DestinationScreens
+
+    @Serializable
+    data object SelectMigratePlaylist : DestinationScreens
+
+    @Serializable
+    data object SelectMigrationMusic : DestinationScreens
+
+    @Serializable
+    data object SelectSimilarMusic : DestinationScreens
+
+    @Serializable
+    data object ShowNotFoundMusic : DestinationScreens
+
+    @Serializable
+    data object UploadPlaylistScreenShot : DestinationScreens
+
+    @Serializable
+    data object MigrationProcess : DestinationScreens
+
+    @Serializable
+    data object MigratedResult : DestinationScreens
+
+    @Serializable
+    data object Feed : DestinationScreens
+
+    @Serializable
+    data class FeedInfo(
+        val feedId: Long
+    ) : DestinationScreens
+
+    @Serializable
+    data object SavedFeedRoot : DestinationScreens
+
+    @Serializable
+    data object SavedFeed : DestinationScreens
+
+    @Serializable
+    data object SavedFeedDetail : DestinationScreens
+
+    @Serializable
+    data object UserInfo : DestinationScreens
+
+    @Serializable
+    data class WebView(
+        val title: String,
+        val url: String
+    ) : DestinationScreens
+
+    @Serializable
+    data object Unregister : DestinationScreens
+
+    @Serializable
+    data object History : DestinationScreens
+
+    @Serializable
+    data object AllHistory : DestinationScreens
+
+    @Serializable
+    data class HistoryDetail(
+        val historyId: Long
+    ) : DestinationScreens
 }
