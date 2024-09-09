@@ -1,7 +1,7 @@
 package com.cmc15th.pluv.core.network.response
 
 data class HistoryResponse(
-    val id: Int,
+    val id: Long,
     val transferredSongCount: Int,
     val transferredDate: String,
     val title: String,
@@ -9,7 +9,7 @@ data class HistoryResponse(
 )
 
 data class HistoryDetailResponse(
-    val id: Int,
+    val id: Long,
     val totalSongCount: Int,
     val transferredSongCount: Int,
     val title: String,
