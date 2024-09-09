@@ -92,9 +92,9 @@ pluv-android-application-compose = { id = "pluv.android.application.compose", ve
 pluv-android-hilt = { id = "pluv.android.hilt", version = "unspecified" }
 pluv-android-library = { id = "pluv.android.library", version = "unspecified" }
 pluv-android-library-compose = { id = "pluv.android.library.compose", version = "unspecified" }
+pluv-android-feature = { id = "pluv.android.feature", version = "unspecified" }
 
 [bundles]
-
 androidx-compose = [
     "androidx-compose-material",
     "androidx-ui",
