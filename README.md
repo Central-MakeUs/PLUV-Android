@@ -6,6 +6,7 @@
 서비스에서 서비스로, PLUV에서 서비스로 간편하게 플레이리스트를 이동해보세요.
 다른 유저들이 피드에 업로드한 플레이리스트를 저장할 수 있어요. 저장한 플레이리스트를 다른 서비스로 옮길 수도 있어요.
 ```
+[Google PlayStore 링크](https://play.google.com/store/apps/details?id=com.cmc15th.pluv)
 
 <img width="1920" alt="1_표지" src="https://github.com/user-attachments/assets/a6ad8b0a-d878-4553-a79a-2ef78133b9d5">
 <p align="center">
