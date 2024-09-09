@@ -57,7 +57,7 @@ internal fun PLUVNavHost(
                     pluvNavController.navigate(DestinationScreens.Onboarding, navOptions)
                 },
                 navigateToHome = {
-                    pluvNavController.navigate(BottomTabRoute.Home)
+                    pluvNavController.navigate(BottomTabRoute.Home, navOptions)
                 }
             )
         }
