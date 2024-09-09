@@ -170,6 +170,7 @@ fun HistoryArea(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White),
+            onItemClick = onItemClick,
             onExpandClick = onExpandClick
         )
     }

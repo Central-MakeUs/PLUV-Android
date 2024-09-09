@@ -127,6 +127,13 @@ fun PLUVNavHost(
                 navigateToScreenShotMigration = {
                     pluvNavController.navigate(DestinationScreens.UploadPlaylistScreenShot)
                 },
+                navigateToFeedDetail = { feedId ->
+                    pluvNavController.navigate(DestinationScreens.FeedInfo(feedId))
+
+                },
+                navigateToHistoryDetail = { historyId ->
+                    pluvNavController.navigate(DestinationScreens.HistoryDetail(historyId))
+                },
                 navigateToHistory = {
                     pluvNavController.navigate(DestinationScreens.AllHistory)
                 },
