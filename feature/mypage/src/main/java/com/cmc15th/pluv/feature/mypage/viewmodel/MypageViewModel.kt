@@ -3,6 +3,7 @@ package com.cmc15th.pluv.feature.mypage.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc15th.pluv.core.data.repository.AuthRepository
 import com.cmc15th.pluv.core.data.repository.LoginRepository
 import com.cmc15th.pluv.core.data.repository.MemberRepository
 import com.spotify.sdk.android.auth.AuthorizationResponse
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MypageViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<MypageUiState> = MutableStateFlow(MypageUiState())
     val uiState: StateFlow<MypageUiState> = _uiState.asStateFlow()
@@ -97,6 +99,16 @@ class MypageViewModel @Inject constructor(
                     }
                 }
             }
+
+            is MypageUiEvent.OnLogoutClicked -> {
+                logOut()
+            }
+        }
+    }
+
+    private fun logOut() {
+        viewModelScope.launch {
+            authRepository.saveAccessToken("")
         }
     }
 

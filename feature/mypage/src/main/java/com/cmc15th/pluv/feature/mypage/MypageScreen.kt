@@ -35,6 +35,7 @@ import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title2
 import com.cmc15th.pluv.core.designsystem.theme.Title3
+import com.cmc15th.pluv.feature.mypage.viewmodel.MypageUiEvent
 import com.cmc15th.pluv.feature.mypage.viewmodel.MypageViewModel
 
 @Composable
@@ -116,7 +117,10 @@ fun MypageScreen(
             item {
                 UserInteractionSection(
                     description = "로그아웃",
-                    onClick = { navigateToHome() }
+                    onClick = {
+                        viewModel.setEvent(MypageUiEvent.OnLogoutClicked)
+                        navigateToHome()
+                    }
                 )
             }
         }

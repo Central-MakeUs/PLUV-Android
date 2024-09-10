@@ -12,4 +12,6 @@ sealed class MypageUiEvent {
     data object OnUnregisterChecked: MypageUiEvent()
     data class OnAddGoogleAccount(val task: Task<GoogleSignInAccount>?) : MypageUiEvent()
     data class OnAddSpotifyAccount(val task: AuthorizationResponse) : MypageUiEvent()
+
+    data object OnLogoutClicked : MypageUiEvent()
 }
