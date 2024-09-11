@@ -133,7 +133,6 @@ internal fun PLUVNavHost(
                 },
                 navigateToFeedDetail = { feedId ->
                     pluvNavController.navigate(DestinationScreens.FeedInfo(feedId))
-
                 },
                 navigateToHistoryDetail = { historyId ->
                     pluvNavController.navigate(DestinationScreens.HistoryDetail(historyId))
@@ -249,10 +248,7 @@ internal fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
@@ -271,10 +267,7 @@ internal fun PLUVNavHost(
                     totalStep = totalSteps,
                     currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     navigateToSelectDestinationApp = {
                         pluvNavController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp)
@@ -288,10 +281,7 @@ internal fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
@@ -311,10 +301,7 @@ internal fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     showSnackBar = showSnackBar,
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
@@ -338,10 +325,7 @@ internal fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     navigateToDisplayMigrationPath = {
                         pluvNavController.popBackStack()
@@ -361,14 +345,10 @@ internal fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     navigateToSelectPlaylist = {
                         pluvNavController.popBackStack()
-//                navController.navigate(DestinationScreens.SelectMigratePlaylist.route)
                     },
                     navigateToSelectSimilarMusic = {
                         pluvNavController.navigate(DestinationScreens.SelectSimilarMusic)
@@ -398,10 +378,7 @@ internal fun PLUVNavHost(
                     currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
                     totalStep = totalSteps,
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     onShowSnackBar = showSnackBar,
                     navigateToSelectMigrationMusic = {
@@ -427,10 +404,7 @@ internal fun PLUVNavHost(
                     ),
                     onShowSnackBar = showSnackBar,
                     onCloseClick = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     navigateToMigrationProcess = {
                         val navOptions = NavOptions.Builder().setPopUpTo(
@@ -443,34 +417,25 @@ internal fun PLUVNavHost(
             }
 
             composable<DestinationScreens.MigrationProcess> { navBackStackEntry ->
+                val navOptions = NavOptions.Builder().setPopUpTo(
+                    pluvNavController.navController.graph.findStartDestination().id,
+                    false
+                ).build()
                 MigrationProcessScreen(
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     showSnackBar = showSnackBar,
                     navigateToHome = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
-                    onCloseClicked = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                    onCloseClick = {
+                        pluvNavController.clearBackStackToRoot()
                     },
                     onStopMigrationClicked = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     },
                     navigateToMigrationResult = {
-                        val navOptions = NavOptions.Builder().setPopUpTo(
-                            pluvNavController.navController.graph.findStartDestination().id,
-                            false
-                        ).build()
                         pluvNavController.navigate(DestinationScreens.MigratedResult, navOptions)
                     }
                 )
@@ -483,10 +448,7 @@ internal fun PLUVNavHost(
                     ),
                     showSnackBar = showSnackBar,
                     navigateToHome = {
-                        pluvNavController.navigate(
-                            BottomTab.HOME.route,
-                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-                        )
+                        pluvNavController.clearBackStackToRoot()
                     }
                 )
             }

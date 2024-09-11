@@ -60,7 +60,7 @@ fun MigrationProcessScreen(
     showSnackBar: (String) -> Unit = {},
     navigateToHome: () -> Unit = {},
     onStopMigrationClicked: () -> Unit = {},
-    onCloseClicked: () -> Unit = {},
+    onCloseClick: () -> Unit = {},
     navigateToMigrationResult: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -122,7 +122,7 @@ fun MigrationProcessScreen(
                             .size(14.dp)
                             .align(Alignment.CenterEnd)
                             .clickable {
-                                onCloseClicked()
+                                onCloseClick()
                             }
                     )
                 }

@@ -8,6 +8,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -66,8 +67,8 @@ internal class PLUVNavController(
         }
     }
 
-    fun clearBackStack() {
-        navController.popBackStack(navController.graph.id, false)
+    fun clearBackStackToRoot() {
+        navController.popBackStack(navController.graph.findStartDestination().id, false)
     }
 
     fun popBackStack() {
