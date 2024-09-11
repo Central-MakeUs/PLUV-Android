@@ -34,7 +34,7 @@ internal class PLUVNavController(
 
     val currentBottomTab: BottomTab?
         @Composable
-        get() = BottomTab.entries.find { bottomTab ->
+        get() = bottomTabs.find { bottomTab ->
             currentDestination?.hierarchy?.any { it.hasRoute(route = bottomTab.route::class) } == true
         }
 
@@ -43,7 +43,7 @@ internal class PLUVNavController(
     @Composable
     fun isVisibleBottomBar(): Boolean {
         return currentDestination?.hierarchy?.any { destination ->
-            BottomTab.entries.any { bottomTab -> destination.hasRoute(bottomTab.route::class) }
+            bottomTabs.any { bottomTab -> destination.hasRoute(bottomTab.route::class) }
         } ?: false
     }
 
@@ -64,6 +64,10 @@ internal class PLUVNavController(
             }
             launchSingleTop = true
         }
+    }
+
+    fun clearBackStack() {
+        navController.popBackStack(navController.graph.id, false)
     }
 
     fun popBackStack() {
