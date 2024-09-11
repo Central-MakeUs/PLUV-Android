@@ -42,7 +42,8 @@ private const val SnackBarDuration = 1500L
 
 @Composable
 internal fun MainScreen(
-    pluvNavController: PLUVNavController = rememberPLUVNavController()
+    pluvNavController: PLUVNavController = rememberPLUVNavController(),
+    isLoggedIn: Boolean = false
 ) {
     val snackBarState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -92,7 +93,8 @@ internal fun MainScreen(
                 pluvNavController = pluvNavController,
                 showSnackBar = { message ->
                     showSnackBar(message)
-                }
+                },
+                loginState = isLoggedIn
             )
         }
     }

@@ -38,12 +38,17 @@ import com.cmc15th.pluv.feature.splash.SplashScreen
 @Composable
 internal fun PLUVNavHost(
     pluvNavController: PLUVNavController,
+    loginState: Boolean,
     showSnackBar: (String) -> Unit = {}
 ) {
 
     NavHost(
         navController = pluvNavController.navController,
-        startDestination = DestinationScreens.Splash
+        startDestination = if (loginState) {
+            BottomTabRoute.Home
+        } else {
+            DestinationScreens.Onboarding
+        }
     ) {
         composable<DestinationScreens.Splash> { navBackStackEntry ->
             val navOptions = NavOptions.Builder().setPopUpTo(
