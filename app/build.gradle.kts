@@ -62,6 +62,7 @@ dependencies {
     implementation(projects.feature.splash)
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
