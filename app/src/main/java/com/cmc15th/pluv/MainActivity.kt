@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.cmc15th.MainActivityViewModel
 import com.cmc15th.pluv.core.designsystem.theme.PLUVTheme
 import com.cmc15th.pluv.navigation.rememberPLUVNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController

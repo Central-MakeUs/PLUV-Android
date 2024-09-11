@@ -1,4 +1,4 @@
-package com.cmc15th
+package com.cmc15th.pluv
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
