@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     keepSplashScreen = false
                     MainScreen(
                         pluvNavController = navController,
-                        isLoggedIn = state
+                        loginState = state
                     )
                 }
             }
