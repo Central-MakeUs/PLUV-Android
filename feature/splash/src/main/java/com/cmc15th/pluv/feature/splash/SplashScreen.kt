@@ -29,8 +29,6 @@ fun SplashScreen(
                         navigateToOnboarding()
                     }
                 }
-
-                else -> {}
             }
         }
     }
@@ -44,18 +42,5 @@ fun SplashScreen(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
-//        Column(
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Text(text = "오직 나만의 플레이리스트", style = Title4, color = Color.White)
-//            Spacer(modifier = Modifier.height(30.dp))
-//            Icon(
-//                painter = painterResource(id = R.drawable.splash_logo),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .width(125.dp)
-//                    .height(45.dp)
-//            )
-//        }
     }
 }

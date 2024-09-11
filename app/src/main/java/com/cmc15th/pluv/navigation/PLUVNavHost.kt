@@ -33,7 +33,6 @@ import com.cmc15th.pluv.feature.mypage.UnregisterScreen
 import com.cmc15th.pluv.feature.mypage.UserInfoScreen
 import com.cmc15th.pluv.feature.mypage.viewmodel.MypageViewModel
 import com.cmc15th.pluv.feature.onboarding.OnboardingScreen
-import com.cmc15th.pluv.feature.splash.SplashScreen
 
 @Composable
 internal fun PLUVNavHost(
@@ -50,22 +49,22 @@ internal fun PLUVNavHost(
             DestinationScreens.Onboarding
         }
     ) {
-        composable<DestinationScreens.Splash> { navBackStackEntry ->
-            val navOptions = NavOptions.Builder().setPopUpTo(
-                pluvNavController.navController.graph.findStartDestination().id,
-                inclusive = true
-            ).build()
-
-            SplashScreen(
-                viewModel = hiltViewModel(navBackStackEntry),
-                navigateToOnboarding = {
-                    pluvNavController.navigate(DestinationScreens.Onboarding, navOptions)
-                },
-                navigateToHome = {
-                    pluvNavController.navigate(BottomTabRoute.Home, navOptions)
-                }
-            )
-        }
+//        composable<DestinationScreens.Splash> { navBackStackEntry ->
+//            val navOptions = NavOptions.Builder().setPopUpTo(
+//                pluvNavController.navController.graph.findStartDestination().id,
+//                inclusive = true
+//            ).build()
+//
+//            SplashScreen(
+//                viewModel = hiltViewModel(navBackStackEntry),
+//                navigateToOnboarding = {
+//                    pluvNavController.navigate(DestinationScreens.Onboarding, navOptions)
+//                },
+//                navigateToHome = {
+//                    pluvNavController.navigate(BottomTabRoute.Home, navOptions)
+//                }
+//            )
+//        }
 
         composable<DestinationScreens.Onboarding> { navBackStackEntry ->
             OnboardingScreen(

@@ -59,7 +59,7 @@ dependencies {
     implementation(projects.feature.migrate)
     implementation(projects.feature.mypage)
     implementation(projects.feature.onboarding)
-    implementation(projects.feature.splash)
+//    implementation(projects.feature.splash)
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.splashscreen)
