@@ -15,4 +15,5 @@
     <color name="loading_playlist_icon_color">#F6EAFF</color>
     <color name="blue">#2E81FF</color>
     <color name="blue_light">#EFF7FE</color>
+    <color name="splash_background">#1D1D27</color>
 </resources>
