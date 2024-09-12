@@ -2,7 +2,7 @@ package com.cmc15th.pluv.navigation
 
 import com.cmc15th.pluv.core.designsystem.R
 
-enum class BottomTab(
+internal enum class BottomTab(
     val selectedIconId: Int,
     val unselectedIconId: Int,
     val iconTextId: Int,

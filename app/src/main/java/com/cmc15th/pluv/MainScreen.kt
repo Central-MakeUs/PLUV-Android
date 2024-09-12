@@ -101,7 +101,7 @@ internal fun MainScreen(
 }
 
 @Composable
-fun PLUVBottomBar(
+internal fun PLUVBottomBar(
     modifier: Modifier = Modifier,
     isVisible: Boolean,
     bottomTabs: List<BottomTab>,
@@ -129,7 +129,7 @@ fun PLUVBottomBar(
 }
 
 @Composable
-fun BottomBarItem(
+internal fun BottomBarItem(
     icon: Int,
     selectedIcon: Int,
     label: Int,

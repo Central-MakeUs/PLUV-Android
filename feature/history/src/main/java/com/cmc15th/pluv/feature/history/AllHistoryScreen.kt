@@ -28,12 +28,14 @@ import com.cmc15th.pluv.core.designsystem.component.TopAppBar
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Gray600
 import com.cmc15th.pluv.core.ui.component.PlaylistItem
+import com.cmc15th.pluv.feature.history.viewmodel.HistoryUiEffect
 import com.cmc15th.pluv.feature.history.viewmodel.HistoryUiEvent
 import com.cmc15th.pluv.feature.history.viewmodel.HistoryViewModel
 
 @Composable
 fun AllHistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel(),
+    showSnackBar: (String) -> Unit,
     onBackClicked: () -> Unit,
     navigateToHistoryDetail: (Long) -> Unit
 ) {
@@ -41,6 +43,13 @@ fun AllHistoryScreen(
 
     LaunchedEffect(Unit) {
         viewModel.setEvent(HistoryUiEvent.OnLoadHistories)
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is HistoryUiEffect.OnFailure -> {
+                    showSnackBar(effect.message)
+                }
+            }
+        }
     }
 
     Column(
