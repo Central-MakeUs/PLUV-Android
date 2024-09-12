@@ -33,6 +33,7 @@ import com.cmc15th.pluv.feature.mypage.UnregisterScreen
 import com.cmc15th.pluv.feature.mypage.UserInfoScreen
 import com.cmc15th.pluv.feature.mypage.viewmodel.MypageViewModel
 import com.cmc15th.pluv.feature.onboarding.OnboardingScreen
+import com.cmc15th.pluv.navigation.DestinationScreens.MigrationRoute
 
 @Composable
 internal fun PLUVNavHost(
@@ -77,6 +78,7 @@ internal fun PLUVNavHost(
         composable<DestinationScreens.AllHistory> { navBackStackEntry ->
             AllHistoryScreen(
                 viewModel = hiltViewModel(navBackStackEntry),
+                showSnackBar = showSnackBar,
                 onBackClicked = {
                     pluvNavController.popBackStack()
                 },
@@ -126,10 +128,10 @@ internal fun PLUVNavHost(
         composable<BottomTabRoute.Home> {
             HomeScreen(
                 navigateToDirectMigration = {
-                    pluvNavController.navigate(DestinationScreens.DirectMigrationRoot)
+                    pluvNavController.navigate(MigrationRoute)
                 },
                 navigateToScreenShotMigration = {
-                    pluvNavController.navigate(DestinationScreens.UploadPlaylistScreenShot)
+                    pluvNavController.navigate(MigrationRoute.UploadPlaylistScreenShot)
                 },
                 navigateToFeedDetail = { feedId ->
                     pluvNavController.navigate(DestinationScreens.FeedInfo(feedId))
@@ -236,16 +238,16 @@ internal fun PLUVNavHost(
             )
         }
 
-        navigation<DestinationScreens.DirectMigrationRoot>(
-            startDestination = DestinationScreens.DirectMigrationSelectSourceApp
+        navigation<MigrationRoute>(
+            startDestination = MigrationRoute.DirectMigrationSelectSourceApp
         ) {
 
-            val totalSteps = DirectMigrationRoutes.getRouteSize()
+            val totalSteps = MigrationRoute.routes.size
 
-            composable<DestinationScreens.DirectMigrationSelectSourceApp> { navBackStackEntry ->
+            composable<MigrationRoute.DirectMigrationSelectSourceApp> { navBackStackEntry ->
                 val currentRoute = navBackStackEntry.destination.route
                 SelectSourceAppScreen(
-                    currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
+                    currentStep = MigrationRoute.currentStep(pluvNavController.getMigrationDestination()),
                     totalStep = totalSteps,
                     onCloseClick = {
                         pluvNavController.clearBackStackToRoot()
@@ -254,31 +256,30 @@ internal fun PLUVNavHost(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     navigateToSelectDestinationApp = {
-                        pluvNavController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp)
+                        pluvNavController.navigate(MigrationRoute.DirectMigrationSelectDestinationApp)
                     }
                 )
             }
 
-            composable<DestinationScreens.UploadPlaylistScreenShot> { navBackStackEntry ->
+            composable<MigrationRoute.UploadPlaylistScreenShot> { navBackStackEntry ->
                 UploadPlaylistScreenShotScreen(
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry
                     ),
                     totalStep = totalSteps,
-                    currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
+                    currentStep = MigrationRoute.currentStep(pluvNavController.getMigrationDestination()),
                     onCloseClick = {
                         pluvNavController.clearBackStackToRoot()
                     },
                     navigateToSelectDestinationApp = {
-                        pluvNavController.navigate(DestinationScreens.DirectMigrationSelectDestinationApp)
+                        pluvNavController.navigate(MigrationRoute.DirectMigrationSelectDestinationApp)
                     }
                 )
             }
 
-            composable<DestinationScreens.DirectMigrationSelectDestinationApp> { navBackStackEntry ->
-                val currentRoute = navBackStackEntry.destination.route
+            composable<MigrationRoute.DirectMigrationSelectDestinationApp> { navBackStackEntry ->
                 SelectDestinationAppScreen(
-                    currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
+                    currentStep = MigrationRoute.currentStep(pluvNavController.getMigrationDestination()),
                     totalStep = totalSteps,
                     onCloseClick = {
                         pluvNavController.clearBackStackToRoot()
@@ -290,15 +291,14 @@ internal fun PLUVNavHost(
                         pluvNavController.popBackStack()
                     },
                     navigateToDisplayMigrationPath = {
-                        pluvNavController.navigate(DestinationScreens.ExecuteDirectMigration)
+                        pluvNavController.navigate(MigrationRoute.ExecuteDirectMigration)
                     },
                 )
             }
 
-            composable<DestinationScreens.ExecuteDirectMigration> { navBackStackEntry ->
-                val currentRoute = navBackStackEntry.destination.route
+            composable<MigrationRoute.ExecuteDirectMigration> { navBackStackEntry ->
                 DisplayMigrationPathScreen(
-                    currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
+                    currentStep = MigrationRoute.currentStep(pluvNavController.getMigrationDestination()),
                     totalStep = totalSteps,
                     onCloseClick = {
                         pluvNavController.clearBackStackToRoot()
@@ -311,18 +311,17 @@ internal fun PLUVNavHost(
                         pluvNavController.popBackStack()
                     },
                     navigateToSelectPlaylist = {
-                        pluvNavController.navigate(DestinationScreens.SelectMigratePlaylist)
+                        pluvNavController.navigate(MigrationRoute.SelectMigratePlaylist)
                     },
                     navigateToSelectMigrationMusic = {
-                        pluvNavController.navigate(DestinationScreens.SelectMigrationMusic)
+                        pluvNavController.navigate(MigrationRoute.SelectMigrationMusic)
                     }
                 )
             }
 
-            composable<DestinationScreens.SelectMigratePlaylist> { navBackStackEntry ->
-                val currentRoute = navBackStackEntry.destination.route
+            composable<MigrationRoute.SelectMigratePlaylist> { navBackStackEntry ->
                 SelectMigratePlaylistScreen(
-                    currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
+                    currentStep = MigrationRoute.currentStep(pluvNavController.getMigrationDestination()),
                     totalStep = totalSteps,
                     onCloseClick = {
                         pluvNavController.clearBackStackToRoot()
@@ -334,15 +333,14 @@ internal fun PLUVNavHost(
                         navBackStackEntry = navBackStackEntry,
                     ),
                     navigateToSelectMigrationMusic = {
-                        pluvNavController.navigate(DestinationScreens.SelectMigrationMusic)
+                        pluvNavController.navigate(MigrationRoute.SelectMigrationMusic)
                     }
                 )
             }
 
-            composable<DestinationScreens.SelectMigrationMusic> { navBackStackEntry ->
-                val currentRoute = navBackStackEntry.destination.route
+            composable<MigrationRoute.SelectMigrationMusic> { navBackStackEntry ->
                 SelectMigrationMusicScreen(
-                    currentStep = DirectMigrationRoutes.getCurrentStep(currentRoute),
+                    currentStep = MigrationRoute.currentStep(pluvNavController.getMigrationDestination()),
                     totalStep = totalSteps,
                     onCloseClick = {
                         pluvNavController.clearBackStackToRoot()
@@ -351,10 +349,10 @@ internal fun PLUVNavHost(
                         pluvNavController.popBackStack()
                     },
                     navigateToSelectSimilarMusic = {
-                        pluvNavController.navigate(DestinationScreens.SelectSimilarMusic)
+                        pluvNavController.navigate(MigrationRoute.SelectSimilarMusic)
                     },
                     navigateToShowNotFoundMusic = {
-                        pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic)
+                        pluvNavController.navigate(MigrationRoute.ShowNotFoundMusic)
                     },
                     onShowSnackBar = showSnackBar,
                     navigateToMigrationProcess = {
@@ -362,7 +360,7 @@ internal fun PLUVNavHost(
                             pluvNavController.navController.graph.findStartDestination().id,
                             false
                         ).build()
-                        pluvNavController.navigate(DestinationScreens.MigrationProcess, navOptions)
+                        pluvNavController.navigate(MigrationRoute.MigrationProcess, navOptions)
                     },
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
@@ -370,12 +368,12 @@ internal fun PLUVNavHost(
                 )
             }
 
-            composable<DestinationScreens.SelectSimilarMusic> { navBackStackEntry ->
+            composable<MigrationRoute.SelectSimilarMusic> { navBackStackEntry ->
                 SelectSimilarMusicScreen(
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
                     ),
-                    currentStep = DirectMigrationRoutes.getCurrentStep(navBackStackEntry.destination.route),
+                    currentStep = MigrationRoute.currentStep(pluvNavController.getMigrationDestination()),
                     totalStep = totalSteps,
                     onCloseClick = {
                         pluvNavController.clearBackStackToRoot()
@@ -385,19 +383,19 @@ internal fun PLUVNavHost(
                         pluvNavController.popBackStack()
                     },
                     navigateToShowNotFoundMusic = {
-                        pluvNavController.navigate(DestinationScreens.ShowNotFoundMusic)
+                        pluvNavController.navigate(MigrationRoute.ShowNotFoundMusic)
                     },
                     navigateToMigrationProcess = {
                         val navOptions = NavOptions.Builder().setPopUpTo(
                             pluvNavController.navController.graph.findStartDestination().id,
                             false
                         ).build()
-                        pluvNavController.navigate(DestinationScreens.MigrationProcess, navOptions)
+                        pluvNavController.navigate(MigrationRoute.MigrationProcess, navOptions)
                     },
                 )
             }
 
-            composable<DestinationScreens.ShowNotFoundMusic> { navBackStackEntry ->
+            composable<MigrationRoute.ShowNotFoundMusic> { navBackStackEntry ->
                 ShowNotFoundMusicScreen(
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
@@ -411,12 +409,12 @@ internal fun PLUVNavHost(
                             pluvNavController.navController.graph.findStartDestination().id,
                             false
                         ).build()
-                        pluvNavController.navigate(DestinationScreens.MigrationProcess, navOptions)
+                        pluvNavController.navigate(MigrationRoute.MigrationProcess, navOptions)
                     },
                 )
             }
 
-            composable<DestinationScreens.MigrationProcess> { navBackStackEntry ->
+            composable<MigrationRoute.MigrationProcess> { navBackStackEntry ->
                 val navOptions = NavOptions.Builder().setPopUpTo(
                     pluvNavController.navController.graph.findStartDestination().id,
                     false
@@ -436,12 +434,12 @@ internal fun PLUVNavHost(
                         pluvNavController.clearBackStackToRoot()
                     },
                     navigateToMigrationResult = {
-                        pluvNavController.navigate(DestinationScreens.MigratedResult, navOptions)
+                        pluvNavController.navigate(MigrationRoute.MigratedResult, navOptions)
                     }
                 )
             }
 
-            composable<DestinationScreens.MigratedResult> { navBackStackEntry ->
+            composable<MigrationRoute.MigratedResult> { navBackStackEntry ->
                 MigratedResultScreen(
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
@@ -453,58 +451,6 @@ internal fun PLUVNavHost(
                 )
             }
         }
-
-
-//        navigation(
-//            route = DestinationScreens.ScreenShotMigrationRoot.route,
-//            startDestination = DestinationScreens.UploadPlaylistScreenShot.route
-//        ) {
-//            composable(route = DestinationScreens.UploadPlaylistScreenShot.route) {
-//                UploadPlaylistScreenShotScreen(
-//                    onCloseClick = {
-//                        pluvNavController.navigate(
-//                            BottomTab.HOME.route,
-//                            NavOptions.Builder().setPopUpTo(BottomTab.HOME.route, false).build()
-//                        )
-//                    }
-//                )
-//            }
-//        }
-    }
-}
-
-/** 플레이리스트 직접 이전하기 Navigation Route (위에 LinearProgressBar 표시하기 위한 Object) */
-object DirectMigrationRoutes {
-
-    private val selectSourceAndDestinationRoute = listOf(
-        listOf(
-            DestinationScreens.DirectMigrationSelectSourceApp,
-            DestinationScreens.UploadPlaylistScreenShot
-        ),
-        DestinationScreens.DirectMigrationSelectDestinationApp,
-        DestinationScreens.ExecuteDirectMigration,
-        DestinationScreens.SelectMigratePlaylist,
-        DestinationScreens.SelectMigrationMusic,
-        DestinationScreens.SelectSimilarMusic,
-        DestinationScreens.ShowNotFoundMusic
-    )
-
-    fun getRouteSize(): Int = selectSourceAndDestinationRoute.size
-
-    fun getCurrentStep(currentRoute: String?): Int {
-        selectSourceAndDestinationRoute.forEachIndexed { index, route ->
-            if (route is List<*>) {
-                route.forEach { subRoute ->
-                    if (subRoute == currentRoute) {
-                        return index + 1
-                    }
-                }
-            }
-            if (route == currentRoute) {
-                return index + 1
-            }
-        }
-        return 0
     }
 }
 

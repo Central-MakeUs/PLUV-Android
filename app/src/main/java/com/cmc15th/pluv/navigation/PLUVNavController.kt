@@ -92,6 +92,12 @@ internal class PLUVNavController(
     }
 
     @Composable
+    fun getMigrationDestination(): DestinationScreens? {
+        val currentRoute = currentDestination?.route?.substringAfterLast(".")
+        return DestinationScreens.MigrationRoute.routes.find { it::class.simpleName == currentRoute }
+    }
+
+    @Composable
     inline fun <reified T : ViewModel> sharedViewModel(
         navBackStackEntry: NavBackStackEntry
     ): T {
