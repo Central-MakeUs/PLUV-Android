@@ -42,7 +42,6 @@ fun HistoryDetailScreen(
     historyId: Long,
     onBackClicked: () -> Unit = {},
 ) {
-    val tabNames = listOf("옮긴 곡", "안 옮긴 곡")
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val historyDetail = uiState.selectedHistory
 
@@ -85,7 +84,9 @@ fun HistoryDetailScreen(
                         .fillMaxWidth()
                         .height(390.dp),
                     contentScale = ContentScale.Crop,
-                    model = historyDetail.imageUrl,
+                    model = historyDetail.imageUrl.ifBlank {
+                        R.drawable.default_music
+                    },
                     contentDescription = "feed image"
                 )
             }

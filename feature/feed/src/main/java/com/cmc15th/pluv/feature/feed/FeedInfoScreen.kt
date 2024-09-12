@@ -1,7 +1,6 @@
 package com.cmc15th.pluv.feature.feed
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -92,25 +91,16 @@ fun FeedInfoScreen(
                     .weight(1f)
             ) {
                 item {
-                    if (feedInfo.imageUrl.isEmpty()) {
-                        Image(
-                            painterResource(id = R.drawable.default_music),
-                            contentDescription = "feed image",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(390.dp)
-                        )
-                    } else {
-                        AsyncImage(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(390.dp),
-                            contentScale = ContentScale.Crop,
-                            model = feedInfo.imageUrl,
-                            contentDescription = "feed image"
-                        )
-                    }
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(390.dp),
+                        contentScale = ContentScale.Crop,
+                        model = feedInfo.imageUrl.ifBlank {
+                            R.drawable.default_music
+                        },
+                        contentDescription = "feed image"
+                    )
                 }
                 stickyHeader {
                     PlaylistInfo(
@@ -149,7 +139,8 @@ fun FeedInfoScreen(
                             .weight(0.33f)
                             .height(58.dp),
                         onClick = {
-                            viewModel.setEvent(FeedUiEvent.ToggleBookmark(feedInfo.id)) },
+                            viewModel.setEvent(FeedUiEvent.ToggleBookmark(feedInfo.id))
+                        },
                         containerColor = Color.White,
                         contentColor = Color.Black,
                         content = {
