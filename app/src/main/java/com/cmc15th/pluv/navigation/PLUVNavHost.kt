@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
 import com.cmc15th.pluv.feature.common.WebViewScreen
-import com.cmc15th.pluv.feature.feed.FeedInfoScreen
+import com.cmc15th.pluv.feature.feed.FeedDetailScreen
 import com.cmc15th.pluv.feature.feed.FeedScreen
 import com.cmc15th.pluv.feature.feed.SavedFeedScreen
 import com.cmc15th.pluv.feature.feed.viewmodel.FeedViewModel
@@ -160,7 +160,7 @@ internal fun PLUVNavHost(
 
         composable<DestinationScreens.FeedInfo> { navBackStackEntry ->
             val feedId = navBackStackEntry.toRoute<DestinationScreens.FeedInfo>().feedId
-            FeedInfoScreen(
+            FeedDetailScreen(
                 feedId = feedId,
                 viewModel = hiltViewModel(navBackStackEntry),
                 onBackClick = {

@@ -45,7 +45,7 @@ import com.cmc15th.pluv.feature.feed.viewmodel.FeedViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeedInfoScreen(
+fun FeedDetailScreen(
     viewModel: FeedViewModel = hiltViewModel(),
     feedId: Long,
     onBackClick: () -> Unit = {},
@@ -182,5 +182,5 @@ fun FeedInfoScreen(
 @Composable
 @Preview
 fun FeedInfoScreenPreview() {
-    FeedInfoScreen(feedId = 0, onBackClick = {})
+    FeedDetailScreen(feedId = 0, onBackClick = {})
 }
