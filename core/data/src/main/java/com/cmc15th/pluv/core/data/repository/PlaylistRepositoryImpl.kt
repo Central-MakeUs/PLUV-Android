@@ -48,7 +48,7 @@ class PlaylistRepositoryImpl @Inject constructor(
         emit(
             migrationService.fetchSpotifyPlaylists(PlaylistAccessToken(accessToken))
                 .map { result ->
-                    result.map {
+                    result.data.map {
                         it.toPlaylist()
                     }
                 }
@@ -61,7 +61,7 @@ class PlaylistRepositoryImpl @Inject constructor(
         emit(
             migrationService.fetchYoutubeMusicPlaylists(PlaylistAccessToken(accessToken))
                 .map { result ->
-                    result.map {
+                    result.data.map {
                         it.toPlaylist()
                     }
                 }

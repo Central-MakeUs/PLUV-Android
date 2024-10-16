@@ -26,12 +26,12 @@ interface MigrationService {
     @POST("/playlist/spotify/read")
     suspend fun fetchSpotifyPlaylists(
         @Body accessToken: PlaylistAccessToken
-    ): ApiResult<List<ReadPlaylistResponse>>
+    ): ApiResult<CommonResponse<List<ReadPlaylistResponse>>>
 
     @POST("/playlist/youtube/read")
     suspend fun fetchYoutubeMusicPlaylists(
         @Body accessToken: PlaylistAccessToken
-    ): ApiResult<List<ReadPlaylistResponse>>
+    ): ApiResult<CommonResponse<List<ReadPlaylistResponse>>>
 
     @POST("/playlist/spotify/{id}/read")
     suspend fun fetchSpotifyMusicsByPlaylistId(
