@@ -1,6 +1,7 @@
 package com.cmc15th.pluv.core.network.adapter
 
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.network.response.CommonResponse
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
@@ -24,10 +25,10 @@ class ApiResultCall<T : Any>(private val delegate: Call<T>) : Call<ApiResult<T>>
                 if (response.isSuccessful) {
                     val body = response.body()
 
-                    val apiResult = if (body != null) {
-                        ApiResult.Success(body)
+                    val apiResult = if (body !is CommonResponse<*> || body.data == null) {
+                        ApiResult.Failure(response.code(), "Invalid response body")
                     } else {
-                        ApiResult.Failure(response.code(), "Empty body")
+                        ApiResult.Success(body)
                     }
 
                     callback.onResponse(this@ApiResultCall, Response.success(apiResult))
