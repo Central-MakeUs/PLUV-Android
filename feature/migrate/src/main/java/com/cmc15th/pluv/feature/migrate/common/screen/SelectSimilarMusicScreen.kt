@@ -150,7 +150,7 @@ fun SelectSimilarMusicScreen(
                     MusicWithSimilarMusic(
                         modifier = Modifier.fillMaxWidth(),
                         checkedMusicId = uiState.selectedSimilarMusicsId[index],
-                        imageUrl = music.sourceMusic.thumbNailUrl,
+                        imageUrl = music.sourceMusic.imageUrl,
                         musicName = music.sourceMusic.title,
                         artistName = music.sourceMusic.artistName,
                         similarMusics = music.destinationMusic,

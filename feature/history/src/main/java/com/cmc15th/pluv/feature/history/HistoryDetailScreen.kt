@@ -111,7 +111,7 @@ fun HistoryDetailScreen(
             itemsIndexed(musicItems) { index, music ->
                 MusicItemWithIndexed(
                     index = index,
-                    imageUrl = music.thumbNailUrl,
+                    imageUrl = music.imageUrl,
                     musicName = music.title,
                     artistName = music.artistName
                 )

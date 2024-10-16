@@ -270,7 +270,7 @@ fun SelectMigrationMusicScreen(
                         isChecked = uiState.selectedSourceMusics.contains(music),
                         thumbNailContent = {
                             MusicThumbNail(
-                                imageUrl = music.thumbNailUrl,
+                                imageUrl = music.imageUrl,
                                 modifier = Modifier.size(50.dp)
                             )
                         },

@@ -23,13 +23,13 @@ fun ReadSourceMusicResponse.toSourceMusic() = SourceMusic(
     title = title,
     artistName = artistName ?: "",
     isrcCode = isrcCode ?: "",
-    thumbNailUrl = thumbNailUrl
+    imageUrl = thumbNailUrl
 )
 
 fun ReadValidateSourceResponse.toSourceMusic() = SourceMusic(
     title = title,
     artistName = artistName,
-    thumbNailUrl = thumbNailUrl,
+    imageUrl = thumbNailUrl,
 )
 
 fun ReadDestinationMusicResponse.toDestinationMusic() = DestinationMusic(

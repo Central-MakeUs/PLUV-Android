@@ -174,7 +174,7 @@ fun MigratedResultScreen(
                         index = index,
                         musicName = music.title,
                         artistName = music.artistName,
-                        imageUrl = music.thumbNailUrl,
+                        imageUrl = music.imageUrl,
                     )
                 }
             }
