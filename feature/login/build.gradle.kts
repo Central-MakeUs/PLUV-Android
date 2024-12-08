@@ -9,5 +9,8 @@ android {
 dependencies {
     implementation(projects.feature.common)
     implementation(libs.google.auth)
-    implementation(libs.spotify.auth)
+
+//    implementation(libs.spotify.auth)
+    implementation(files("../../libs/spotify-auth-release-2.1.0.aar"))
+
 }
