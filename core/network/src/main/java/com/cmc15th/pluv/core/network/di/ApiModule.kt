@@ -18,21 +18,22 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideMigrationService(@NetworkModule.AuthenticatedClient retrofit: Retrofit): MigrationService =
-        retrofit.create(MigrationService::class.java)
+        createService<MigrationService>(retrofit)
 
     @Provides
     @Singleton
     fun provideLoginService(@NetworkModule.BaseClient retrofit: Retrofit): LoginService =
-        retrofit.create(LoginService::class.java)
-
+        createService<LoginService>(retrofit)
     @Provides
     @Singleton
     fun provideFeedService(@NetworkModule.AuthenticatedClient retrofit: Retrofit): FeedService =
-        retrofit.create(FeedService::class.java)
+        createService<FeedService>(retrofit)
 
     @Provides
     @Singleton
     fun provideMemberService(@NetworkModule.AuthenticatedClient retrofit: Retrofit): MemberService =
-        retrofit.create(MemberService::class.java)
+        createService<MemberService>(retrofit)
+
+    private inline fun <reified T> createService(retrofit: Retrofit) = retrofit.create(T::class.java)
 
 }
