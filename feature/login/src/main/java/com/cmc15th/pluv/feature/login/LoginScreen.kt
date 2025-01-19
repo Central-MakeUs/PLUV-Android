@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +49,8 @@ import com.cmc15th.pluv.feature.login.viewmodel.LoginViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit = {}
+    navigateToHome: () -> Unit = {},
+    navigateToTestLogin: () -> Unit = {},
 ) {
     val googleLoginResultLauncher = rememberLauncherForActivityResult(
         contract = GoogleApiContract()
@@ -76,6 +81,12 @@ fun LoginScreen(
     }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var testClickCount by remember { mutableIntStateOf(0) }
+
+    if (testClickCount > 3) {
+        testClickCount = 0
+        navigateToTestLogin()
+    }
 
     Box(
         modifier = modifier.fillMaxSize(),
@@ -93,13 +104,14 @@ fun LoginScreen(
                 )
             }
         }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = 136.dp),
+                .padding(top = 136.dp)
+                .clickable { testClickCount++ },
             horizontalAlignment = Alignment.CenterHorizontally,
-
             ) {
             Icon(
                 modifier = Modifier
@@ -107,7 +119,7 @@ fun LoginScreen(
                     .height(39.dp),
                 painter = painterResource(id = R.drawable.pluvlogo),
                 contentDescription = "Pluv Logo",
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
         }
 

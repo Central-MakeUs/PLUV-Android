@@ -64,12 +64,30 @@ class LoginViewModel @Inject constructor(
             is LoginUiEvent.AppleLogin -> {
                 //TODO 애플 로그인
             }
+            is LoginUiEvent.TestLogin -> {
+                testLogin(event.id, event.password)
+            }
         }
     }
 
     private fun sendEffect(effect: LoginUiEffect) {
         viewModelScope.launch {
             _uiEffect.send(effect)
+        }
+    }
+
+    private fun testLogin(id: String, password: String) {
+        viewModelScope.launch {
+            loginRepository.testLogin(id, password).collect {
+                it.onSuccess { result ->
+                    saveJwtToken(result.accessToken)
+                    sendEffect(LoginUiEffect.OnLoginSuccess)
+                }
+
+                it.onFailure { _, s ->
+                    sendEffect(LoginUiEffect.OnLoginFailure(s))
+                }
+            }
         }
     }
 

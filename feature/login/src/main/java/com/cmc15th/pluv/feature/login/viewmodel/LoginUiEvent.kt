@@ -8,4 +8,5 @@ sealed class LoginUiEvent {
     data class GoogleLogin(val task: Task<GoogleSignInAccount>?): LoginUiEvent()
     data class SpotifyLogin(val task: AuthorizationResponse) : LoginUiEvent()
     data object AppleLogin: LoginUiEvent()
+    data class TestLogin(val id: String, val password: String): LoginUiEvent()
 }
