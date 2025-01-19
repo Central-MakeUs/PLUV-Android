@@ -17,6 +17,7 @@ import com.cmc15th.pluv.feature.history.AllHistoryScreen
 import com.cmc15th.pluv.feature.history.HistoryDetailScreen
 import com.cmc15th.pluv.feature.home.HomeScreen
 import com.cmc15th.pluv.feature.login.LoginScreen
+import com.cmc15th.pluv.feature.login.TestLoginScreen
 import com.cmc15th.pluv.feature.migrate.common.screen.MigratedResultScreen
 import com.cmc15th.pluv.feature.migrate.common.screen.MigrationProcessScreen
 import com.cmc15th.pluv.feature.migrate.common.screen.SelectSimilarMusicScreen
@@ -121,7 +122,20 @@ internal fun PLUVNavHost(
                 viewModel = hiltViewModel(navBackStackEntry),
                 navigateToHome = {
                     pluvNavController.navigateToBottomTab(BottomTab.HOME)
+                },
+                navigateToTestLogin = {
+                    pluvNavController.navigate(DestinationScreens.TestLogin)
                 }
+            )
+        }
+
+        composable<DestinationScreens.TestLogin> { navBackStackEntry ->
+            TestLoginScreen(
+                viewModel = hiltViewModel(navBackStackEntry),
+                navigateToHome = {
+                    pluvNavController.navigateToBottomTab(BottomTab.HOME)
+                },
+                showSnackBar = showSnackBar
             )
         }
 
@@ -356,11 +370,7 @@ internal fun PLUVNavHost(
                     },
                     onShowSnackBar = showSnackBar,
                     navigateToMigrationProcess = {
-                        val navOptions = NavOptions.Builder().setPopUpTo(
-                            pluvNavController.navController.graph.findStartDestination().id,
-                            false
-                        ).build()
-                        pluvNavController.navigate(MigrationRoute.MigrationProcess, navOptions)
+                        pluvNavController.navigate(MigrationRoute.MigrationProcess)
                     },
                     viewModel = pluvNavController.sharedViewModel<DirectMigrationViewModel>(
                         navBackStackEntry = navBackStackEntry,
@@ -405,11 +415,11 @@ internal fun PLUVNavHost(
                         pluvNavController.clearBackStackToRoot()
                     },
                     navigateToMigrationProcess = {
-                        val navOptions = NavOptions.Builder().setPopUpTo(
-                            pluvNavController.navController.graph.findStartDestination().id,
-                            false
-                        ).build()
-                        pluvNavController.navigate(MigrationRoute.MigrationProcess, navOptions)
+//                        val navOptions = NavOptions.Builder().setPopUpTo(
+//                            pluvNavController.navController.graph.findStartDestination().id,
+//                            false
+//                        ).build()
+                        pluvNavController.navigate(MigrationRoute.MigrationProcess)
                     },
                 )
             }

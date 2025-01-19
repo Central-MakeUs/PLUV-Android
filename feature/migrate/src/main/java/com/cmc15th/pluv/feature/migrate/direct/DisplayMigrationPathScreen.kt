@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.cmc15th.pluv.core.designsystem.R
 import com.cmc15th.pluv.core.designsystem.component.ExitDialog
 import com.cmc15th.pluv.core.designsystem.component.LoadingDialog
 import com.cmc15th.pluv.core.designsystem.component.TopBarWithProgress
@@ -35,7 +36,6 @@ import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.model.PlayListApp
 import com.cmc15th.pluv.feature.common.contract.GoogleApiContract
 import com.cmc15th.pluv.feature.common.contract.SpotifyAuthContract
-import com.cmc15th.pluv.core.designsystem.R
 import com.cmc15th.pluv.feature.migrate.common.component.FetchPlaylistLoadingIcon
 import com.cmc15th.pluv.feature.migrate.common.component.PreviousOrMigrateButton
 import com.cmc15th.pluv.feature.migrate.common.getAppNameRes
@@ -206,26 +206,31 @@ fun DestinationAppText(
     textStyle: TextStyle,
     modifier: Modifier = Modifier
 ) {
+    val titleText = stringResource(id = title)
+
+    // 받침 유무에 따른 조사 결정
+    val destinationTitle = if (hasKoreanFinalConsonant(titleText)) "으로" else "로"
+
     Column(
         modifier = modifier
     ) {
         Row {
             Text(
-                text = stringResource(id = title),
+                text = titleText,
                 style = textStyle,
                 color = PrimaryDefault
             )
             Text(
-                text = "으로",
+                text = destinationTitle,
                 style = textStyle
             )
         }
+        Spacer(modifier = Modifier.size(5.dp))
         Text(
             text = stringResource(id = R.string.ask_migrate_playlist),
             style = textStyle
         )
     }
-
 }
 
 @Composable
@@ -276,5 +281,16 @@ fun DisplayMigrationPathPreview() {
             onCloseClick = {}
         )
     }
+}
+
+private fun hasKoreanFinalConsonant(text: String): Boolean {
+    if (text.isEmpty()) return false
+
+    val lastChar = text.last()
+    if (lastChar.code < 0xAC00 || lastChar.code > 0xD7A3) {
+        return false // 한글 유니코드 범위를 벗어난 경우
+    }
+
+    return (lastChar.code - 0xAC00) % 28 != 0
 }
 

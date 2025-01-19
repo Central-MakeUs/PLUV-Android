@@ -84,8 +84,8 @@ fun LoginScreen(
     var testClickCount by remember { mutableIntStateOf(0) }
 
     if (testClickCount > 3) {
-        testClickCount = 0
         navigateToTestLogin()
+        testClickCount = 0
     }
 
     Box(
@@ -109,14 +109,14 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
-                .padding(top = 136.dp)
-                .clickable { testClickCount++ },
+                .padding(top = 136.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             ) {
             Icon(
                 modifier = Modifier
                     .width(109.dp)
-                    .height(39.dp),
+                    .height(39.dp)
+                    .clickable { testClickCount++ },
                 painter = painterResource(id = R.drawable.pluvlogo),
                 contentDescription = "Pluv Logo",
                 tint = Color.Unspecified,

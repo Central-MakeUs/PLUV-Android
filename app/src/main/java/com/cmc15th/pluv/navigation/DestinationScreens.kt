@@ -43,6 +43,9 @@ internal sealed interface DestinationScreens {
     ) : DestinationScreens
 
     @Serializable
+    data object TestLogin : DestinationScreens
+
+    @Serializable
     data object MigrationRoute : DestinationScreens {
         @Serializable
         data object DirectMigrationSelectSourceApp : DestinationScreens
