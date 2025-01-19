@@ -12,6 +12,8 @@ interface LoginRepository {
 
     fun spotifyLogin(accessToken: String): Flow<ApiResult<JwtToken>>
 
+    fun testLogin(id: String, password: String): Flow<ApiResult<JwtToken>>
+
     fun addGoogleAccount(idToken: String): Flow<ApiResult<String>>
 
     fun addSpotifyAccount(accessToken: String): Flow<ApiResult<String>>

@@ -9,3 +9,8 @@ data class GoogleLoginRequest(
 data class SpotifyLoginRequest(
     @SerializedName("accessToken") val accessToken: String = ""
 )
+
+data class TestLoginRequest(
+    @SerializedName("id") val id: String = "",
+    @SerializedName("password") val password: String = ""
+)

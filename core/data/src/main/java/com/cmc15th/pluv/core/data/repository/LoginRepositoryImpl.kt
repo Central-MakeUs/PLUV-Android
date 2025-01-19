@@ -7,6 +7,7 @@ import com.cmc15th.pluv.core.model.GoogleAccessToken
 import com.cmc15th.pluv.core.model.JwtToken
 import com.cmc15th.pluv.core.network.request.GoogleLoginRequest
 import com.cmc15th.pluv.core.network.request.SpotifyLoginRequest
+import com.cmc15th.pluv.core.network.request.TestLoginRequest
 import com.cmc15th.pluv.core.network.service.LoginService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +38,14 @@ class LoginRepositoryImpl @Inject constructor(
     override fun spotifyLogin(accessToken: String): Flow<ApiResult<JwtToken>> = flow {
         emit(
             loginService.spotifyLogin(SpotifyLoginRequest(accessToken)).map { result ->
+                result.data.toJwtToken()
+            }
+        )
+    }
+
+    override fun testLogin(id: String, password: String): Flow<ApiResult<JwtToken>> = flow {
+        emit(
+            loginService.testLogin(TestLoginRequest(id, password)).map { result ->
                 result.data.toJwtToken()
             }
         )

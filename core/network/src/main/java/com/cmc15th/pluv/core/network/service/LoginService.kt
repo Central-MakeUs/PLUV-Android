@@ -3,6 +3,7 @@ package com.cmc15th.pluv.core.network.service
 import com.cmc15th.pluv.core.model.ApiResult
 import com.cmc15th.pluv.core.network.request.GoogleLoginRequest
 import com.cmc15th.pluv.core.network.request.SpotifyLoginRequest
+import com.cmc15th.pluv.core.network.request.TestLoginRequest
 import com.cmc15th.pluv.core.network.response.CommonResponse
 import com.cmc15th.pluv.core.network.response.GoogleAccessTokenResponse
 import com.cmc15th.pluv.core.network.response.LoginResponse
@@ -20,6 +21,11 @@ interface LoginService {
     @POST("/login/spotify")
     suspend fun spotifyLogin(
         @Body accessToken: SpotifyLoginRequest
+    ): ApiResult<CommonResponse<LoginResponse>>
+
+    @POST("/login/tester")
+    suspend fun testLogin(
+        @Body testLoginRequest: TestLoginRequest
     ): ApiResult<CommonResponse<LoginResponse>>
 
     @GET("/oauth/youtube/token")
