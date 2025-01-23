@@ -23,6 +23,7 @@ okhttp = "4.12.0"
 spotify = "1.2.5"
 jetbrainsKotlinJvm = "1.9.0"
 googleAuth = "21.0.0"
+googleServices = "4.3.15"
 dataStore = "1.1.1"
 collapseTollbar = "2.3.5"
 material = "1.6.8"
@@ -37,6 +38,7 @@ splashScreen = "1.0.1"
 firebaseAnalytics = "21.2.0"
 firebaseCrashlytics = "18.2.0"
 firebaseBom = "31.2.3"
+runtimeAndroid = "1.7.6"
 
 [libraries]
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine" }
@@ -56,11 +58,14 @@ androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", vers
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "activityCompose" }
+
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -92,6 +97,7 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -102,6 +108,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
 # Custom Convention Plugin
 pluv-android-application = { id = "pluv.android.application", version = "unspecified" }
