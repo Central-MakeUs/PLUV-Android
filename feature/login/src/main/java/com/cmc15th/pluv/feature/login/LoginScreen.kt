@@ -49,6 +49,7 @@ import com.cmc15th.pluv.feature.login.viewmodel.LoginViewModel
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
+    showSnackBar: (String) -> Unit = {},
     navigateToHome: () -> Unit = {},
     navigateToTestLogin: () -> Unit = {},
 ) {
@@ -73,8 +74,7 @@ fun LoginScreen(
                 }
                 is LoginUiEffect.OnLoginFailure -> {
                     Log.d("LoginScreen", "LoginScreen: LoginF")
-
-                    //TODO show error message
+                    showSnackBar(effect.message)
                 }
             }
         }

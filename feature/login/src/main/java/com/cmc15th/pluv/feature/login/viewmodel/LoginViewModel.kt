@@ -94,7 +94,7 @@ class LoginViewModel @Inject constructor(
     private fun handleGoogleSignInResult(task: Task<GoogleSignInAccount>?) {
         if (task == null) {
             Log.d(TAG, "handleGoogleSignInResult:   task is null")
-            sendEffect(LoginUiEffect.OnLoginFailure("task is null"))
+            sendEffect(LoginUiEffect.OnLoginFailure(LOGIN_ERROR_MESSAGE))
             return
         }
 
@@ -104,7 +104,7 @@ class LoginViewModel @Inject constructor(
 
             if (idToken.isNullOrEmpty()) {
                 Log.d(TAG, "handleGoogleSignInResult:   idToken is null")
-                sendEffect(LoginUiEffect.OnLoginFailure("null"))
+                sendEffect(LoginUiEffect.OnLoginFailure(LOGIN_ERROR_MESSAGE))
                 return
             }
 
@@ -112,7 +112,7 @@ class LoginViewModel @Inject constructor(
 
         } catch (e: ApiException) {
             Log.e(TAG, "Google sign in failed: ${e.statusCode} + ${e.message}")
-            sendEffect(LoginUiEffect.OnLoginFailure("Google sign in failed: ${e.statusCode} + ${e.message}"))
+            sendEffect(LoginUiEffect.OnLoginFailure(LOGIN_ERROR_MESSAGE))
         }
     }
 
@@ -185,5 +185,6 @@ class LoginViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "LoginViewModel"
+        private const val LOGIN_ERROR_MESSAGE = "일시적인 문제로 로그인에 실패하였습니다. 잠시후 다시 시도해주세요"
     }
 }

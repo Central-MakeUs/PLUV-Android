@@ -120,6 +120,7 @@ internal fun PLUVNavHost(
         composable<DestinationScreens.Login> { navBackStackEntry ->
             LoginScreen(
                 viewModel = hiltViewModel(navBackStackEntry),
+                showSnackBar = showSnackBar,
                 navigateToHome = {
                     pluvNavController.navigateToBottomTab(BottomTab.HOME)
                 },

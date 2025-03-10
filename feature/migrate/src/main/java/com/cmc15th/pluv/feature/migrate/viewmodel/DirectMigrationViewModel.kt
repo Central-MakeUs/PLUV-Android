@@ -598,7 +598,7 @@ class DirectMigrationViewModel @Inject constructor(
         val notTransferMusics = _uiState.value.notFoundMusics + notSelectedSimilarSourceMusics.map {
             DestinationMusic(
                 id = "",
-                thumbNailUrl = it.thumbNailUrl,
+                thumbNailUrl = it.imageUrl,
                 title = it.title,
                 artistName = it.artistName
             )
