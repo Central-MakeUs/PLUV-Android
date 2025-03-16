@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -16,6 +17,7 @@ import javax.inject.Qualifier
 import javax.inject.Singleton
 
 private const val MaxTimeout = 60_000L
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -28,11 +30,24 @@ object NetworkModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class AuthenticatedClient
 
+    @Singleton
+    @Provides
+    internal fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        }
+    }
+
     @BaseClient
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient =
+    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
             .readTimeout(MaxTimeout, TimeUnit.MILLISECONDS)
             .writeTimeout(MaxTimeout, TimeUnit.MILLISECONDS)
             .build()
@@ -40,9 +55,13 @@ object NetworkModule {
     @AuthenticatedClient
     @Singleton
     @Provides
-    fun provideOkHttpClientWithInterceptor(authDataSource: AuthDataSource): OkHttpClient =
+    fun provideOkHttpClientWithInterceptor(
+        authDataSource: AuthDataSource,
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor(authDataSource))
+            .addInterceptor(httpLoggingInterceptor)
             .readTimeout(MaxTimeout, TimeUnit.MILLISECONDS)
             .writeTimeout(MaxTimeout, TimeUnit.MILLISECONDS)
             .build()

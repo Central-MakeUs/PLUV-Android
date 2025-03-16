@@ -28,5 +28,5 @@ dependencies {
     implementation(projects.core.model)
     implementation(libs.retrofit.gson)
     implementation(libs.retrofit)
-
+    implementation(libs.okhttp.logging.interceptor)
 }
