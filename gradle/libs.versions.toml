@@ -1,8 +1,8 @@
 [versions]
 projectApplicationId = "com.cmc15th.pluv"
 projectTargetSdkVersion = "34"
-projectVersionCode = "12"
-projectVersionName = "1.0.2"
+projectVersionCode = "13"
+projectVersionName = "1.0.3"
 agp = "8.3.0"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
@@ -79,6 +79,7 @@ androidx-browser = { group = "androidx.browser", name = "browser", version.ref =
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
 
 google-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+google-firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx", version.ref = "firebaseAnalytics" }
 google-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 
@@ -86,7 +87,7 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp" }
-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 #spotify-auth = { group = "com.spotify.android", name = "auth", version.ref = "spotify" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
