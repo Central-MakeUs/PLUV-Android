@@ -397,11 +397,7 @@ internal fun PLUVNavHost(
                         pluvNavController.navigate(MigrationRoute.ShowNotFoundMusic)
                     },
                     navigateToMigrationProcess = {
-                        val navOptions = NavOptions.Builder().setPopUpTo(
-                            pluvNavController.navController.graph.findStartDestination().id,
-                            false
-                        ).build()
-                        pluvNavController.navigate(MigrationRoute.MigrationProcess, navOptions)
+                        pluvNavController.navigate(MigrationRoute.MigrationProcess)
                     },
                 )
             }
