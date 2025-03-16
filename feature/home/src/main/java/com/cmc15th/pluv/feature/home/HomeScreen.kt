@@ -26,6 +26,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ import com.cmc15th.pluv.core.designsystem.theme.HomeWhite
 import com.cmc15th.pluv.core.designsystem.theme.PrimaryDefault
 import com.cmc15th.pluv.core.designsystem.theme.Title2
 import com.cmc15th.pluv.core.designsystem.theme.Title4
+import com.cmc15th.pluv.feature.home.viewModel.HomeUiEvent
 import com.cmc15th.pluv.feature.home.viewModel.HomeViewModel
 
 @Composable
@@ -68,6 +70,12 @@ fun HomeScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(key1 = Unit) {
+        with(viewModel) {
+            setEvent(HomeUiEvent.OnLoadHistories)
+            setEvent(HomeUiEvent.OnLoadSavedFeeds)
+        }
+    }
     Column(
         modifier = modifier
             .fillMaxSize()

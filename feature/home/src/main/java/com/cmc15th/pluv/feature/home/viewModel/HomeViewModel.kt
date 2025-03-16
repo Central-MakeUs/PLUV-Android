@@ -5,9 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.cmc15th.pluv.core.data.repository.FeedRepository
 import com.cmc15th.pluv.core.data.repository.MemberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,9 +23,28 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent: MutableSharedFlow<HomeUiEvent> = MutableSharedFlow()
     init {
-        getHistories()
-        getSavedFeed()
+        handleEvent()
+    }
+
+    fun setEvent(event: HomeUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.emit(event)
+        }
+    }
+
+    private fun handleEvent() {
+        _uiEvent.onEach {  event ->
+            when (event) {
+                is HomeUiEvent.OnLoadHistories -> {
+                    getHistories()
+                }
+                is HomeUiEvent.OnLoadSavedFeeds -> {
+                    getSavedFeed()
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     private fun getHistories() {
