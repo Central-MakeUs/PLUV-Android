@@ -214,11 +214,9 @@ fun MusicWithSimilarMusic(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
                 .border(width = 1.dp, color = Gray200, shape = RoundedCornerShape(4.dp))
+                .clickable { isExpanded = !isExpanded }
                 .padding(horizontal = 9.dp, vertical = 12.dp),
             isExpanded = isExpanded,
-            onExpandClick = {
-                isExpanded = it
-            }
         )
     }
 }
@@ -227,12 +225,9 @@ fun MusicWithSimilarMusic(
 fun ExpandSectionHeader(
     modifier: Modifier = Modifier,
     isExpanded: Boolean = false,
-    onExpandClick: (Boolean) -> Unit = {},
 ) {
     Row(
-        modifier = modifier.clickable {
-            onExpandClick(!isExpanded)
-        },
+        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
