@@ -1,6 +1,8 @@
 package com.cmc15th.pluv.core.network.adapter
 
+import android.util.Log
 import com.cmc15th.pluv.core.model.ApiResult
+import com.cmc15th.pluv.core.network.GsonProvider
 import com.cmc15th.pluv.core.network.response.CommonResponse
 import okhttp3.Request
 import okio.Timeout
@@ -23,6 +25,7 @@ class ApiResultCall<T : Any>(private val delegate: Call<T>) : Call<ApiResult<T>>
         delegate.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
+                    Log.d(TAG, "onResponse: ${response.body()}")
                     val body = response.body()
 
                     val apiResult = if (body !is CommonResponse<*> || body.data == null) {
@@ -33,12 +36,14 @@ class ApiResultCall<T : Any>(private val delegate: Call<T>) : Call<ApiResult<T>>
 
                     callback.onResponse(this@ApiResultCall, Response.success(apiResult))
                 } else {
+                    val errorBody = response.errorBody()?.string()
+                    val errorResponse = GsonProvider.instance.fromJson(errorBody, CommonResponse::class.java)
                     callback.onResponse(
                         this@ApiResultCall,
                         Response.success(
                             ApiResult.Failure(
-                                response.code(),
-                                response.errorBody()?.string()
+                                errorResponse.code,
+                                errorResponse.message
                             )
                         )
                     )
@@ -69,4 +74,8 @@ class ApiResultCall<T : Any>(private val delegate: Call<T>) : Call<ApiResult<T>>
     override fun request(): Request = delegate.request()
 
     override fun timeout(): Timeout = delegate.timeout()
+
+    companion object {
+        private const val TAG = "ApiResultCallAAAAA"
+    }
 }
