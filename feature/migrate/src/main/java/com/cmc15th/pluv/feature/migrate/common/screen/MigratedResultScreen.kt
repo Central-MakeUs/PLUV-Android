@@ -52,9 +52,7 @@ import com.cmc15th.pluv.core.designsystem.component.TopAppBar
 import com.cmc15th.pluv.core.designsystem.theme.Content1
 import com.cmc15th.pluv.core.designsystem.theme.Content2
 import com.cmc15th.pluv.core.designsystem.theme.Gray100
-import com.cmc15th.pluv.core.designsystem.theme.Gray200
 import com.cmc15th.pluv.core.designsystem.theme.Gray300
-import com.cmc15th.pluv.core.designsystem.theme.Gray800
 import com.cmc15th.pluv.core.designsystem.theme.Title1
 import com.cmc15th.pluv.core.designsystem.theme.Title3
 import com.cmc15th.pluv.core.designsystem.theme.Title4
@@ -119,7 +117,9 @@ fun MigratedResultScreen(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().weight(1f)
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
         ) {
             TopAppBar(
                 description = "옮긴 플레이리스트",
@@ -140,7 +140,8 @@ fun MigratedResultScreen(
                             transferredMusicCount = uiState.migrationResult.transferredSongCount,
                             totalMusicCount = uiState.migrationResult.totalSongCount
                         )
-                        PLUVButton(
+                        Spacer(modifier = Modifier.height(20.dp))
+                       /* PLUVButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 105.dp, vertical = 20.dp)
@@ -156,7 +157,7 @@ fun MigratedResultScreen(
                             onClick = {
                                 isSheetVisible = true
                             },
-                        )
+                        )*/
                     }
                 }
                 stickyHeader {
